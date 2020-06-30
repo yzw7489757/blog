@@ -123,8 +123,9 @@
         </span></div>
     </header>
 
-    <div class="post-content"><h2 id="技术背景-技术目标"><a href="#技术背景-技术目标" class="headerlink" title="技术背景/技术目标"></a>技术背景/技术目标</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>表单域能力逻辑需要一层安全层过滤能力，预防传入的表单协议含有敏感数据或者调用原生能力造成 XSS 攻击。</p>
-<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>轻量体积，符合 eval 同步运算结果，可定制规则、过滤关键词、运算符，剔除冗余能力(原型链、Symbol、继承)，屏蔽原生能力，自成体系，定位是计算表达式且具备执行一定长度下符合脚本规则的能力。</p>
+    <div class="post-content"><p><img src="https://static.yuanziwen.cn/blog/eval/1.png_plain" alt></p>
+<h3 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h3><p>表单域能力逻辑需要一层安全层过滤能力，预防传入的表单协议含有敏感数据或者调用原生能力造成 XSS 攻击。</p>
+<h3 id="技术目标"><a href="#技术目标" class="headerlink" title="技术目标"></a>技术目标</h3><p>轻量体积，符合 eval 同步运算结果，可定制规则、过滤关键词、运算符，剔除冗余能力(原型链、Symbol、继承)，屏蔽原生能力，自成体系，定位是计算表达式且具备执行一定长度下符合脚本规则的能力。</p>
           <div class="read-more">
             <a href="/2020/06/30/实现简版eval/" class="read-more-link">Read more..</a>
           </div>
@@ -319,7 +320,7 @@
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
   <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1593502174043')
+  navigator.serviceWorker.register('/sw.js?t=1593502596546')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

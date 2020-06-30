@@ -30,9 +30,9 @@ var precacheUrls = [];
 
   precacheUrls.push('/2019/09/13/制定专属自己的-React-Hooks/');
 
-  precacheUrls.push('/2019/10/06/重学原型与继承/');
-
   precacheUrls.push('/2020/06/30/实现简版eval/');
+
+  precacheUrls.push('/2019/09/24/React传-1/');
 
 toolbox.precache(precacheUrls);
 toolbox.options = {"networkTimeoutSeconds":5};
