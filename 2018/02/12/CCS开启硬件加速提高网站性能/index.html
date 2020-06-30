@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="CCS开启硬件加速提高网站性能"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2018/02/12/CCS开启硬件加速提高网站性能/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>CCS开启硬件加速提高网站性能 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music(NoAuto)
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music(NoAuto)
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">CCS开启硬件加速提高网站性能
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-02-12
+        </span></div>
+    </header>
+
+    <div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><p>国外一篇文章，有点意思，转载过来，准备尝试下~<br><a href="http://www.cnblogs.com/yzw7489757/" target="_blank" rel="noopener">中文地址</a>，我的另一个博客<br><a href="http://blog.teamtreehouse.com/increase-your-sites-performance-with-hardware-accelerated-css" target="_blank" rel="noopener">原文地址</a>，国外的网站，打开的比较慢</p>
+<blockquote><p>你知道我们可以在浏览器中用css开启硬件加速，使<span class="myText">GPU (Graphics Processing Unit)</span> 发挥功能，从而提升性能吗？</p>
+<p>现在大多数电脑的显卡都支持硬件加速。鉴于此，我们可以发挥GPU的力量，从而使我们的网站或应用表现的更为流畅。</p>
+<a id="more"></a></blockquote>
+<p><img src="https://static.yuanziwen.cn/CSS%E6%80%A7%E8%83%BD.jpg_plain" alt="alt"></p>
+<blockquote><p>在桌面端和移动端用CSS开启硬件加速 </p>
+</blockquote>
+<blockquote><p><span class="myText">CSS animations</span>  <span class="myText">transforms</span>  以及 <span class="myText">transitions</span>  不会自动开启GPU加速，而是由浏览器的缓慢的软件渲染引擎来执行。那我们怎样才可以切换到GPU模式呢，很多浏览器提供了某些触发的CSS规则。<br>现在，像Chrome, FireFox, Safari, IE9+和最新版本的Opera都支持硬件加速，当它们检测到页面中某个DOM元素应用了某些CSS规则时就会开启，最显著的特征的元素的3D变换。<br>例如：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.cube</span> &#123;</span><br><span class="line">        <span class="attribute">-webkit-transform</span>: <span class="built_in">translate3d</span>(<span class="number">250px</span>,<span class="number">250px</span>,<span class="number">250px</span>)</span><br><span class="line">        <span class="built_in">rotate3d</span>(<span class="number">250px</span>,<span class="number">250px</span>,<span class="number">250px</span>,-<span class="number">120deg</span>)</span><br><span class="line">        <span class="built_in">scale3d</span>(<span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">0.5</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></blockquote>
+<p>可是在一些情况下，我们并不需要对元素应用3D变换的效果，那怎么办呢？这时候我们可以使用个小技巧“欺骗”浏览器来开启硬件加速。</p>
+<p>虽然我们可能不想对元素应用3D变换，可我们一样可以开启3D引擎。例如我们可以用<span class="myText">transform: translateZ(0);</span>  来开启硬件加速 </p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.cube</span> &#123;</span><br><span class="line">        <span class="attribute">-webkit-transform</span>: <span class="built_in">translateZ</span>(<span class="number">0</span>);</span><br><span class="line">        <span class="attribute">-moz-transform</span>: <span class="built_in">translateZ</span>(<span class="number">0</span>);</span><br><span class="line">        <span class="attribute">-ms-transform</span>: <span class="built_in">translateZ</span>(<span class="number">0</span>);</span><br><span class="line">        <span class="attribute">-o-transform</span>: <span class="built_in">translateZ</span>(<span class="number">0</span>);</span><br><span class="line">        <span class="attribute">transform</span>: <span class="built_in">translateZ</span>(<span class="number">0</span>);</span><br><span class="line">        <span class="comment">/* Other transform properties here */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 Chrome and Safari中，当我们使用CSS<span class="myText"> transforms</span>  或者 <span class="myText">animations</span> 时可能会有页面闪烁的效果，下面的代码可以修复此情况：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.cube</span> &#123;</span><br><span class="line">   <span class="attribute">-webkit-backface-visibility</span>: hidden;</span><br><span class="line">   <span class="attribute">-moz-backface-visibility</span>: hidden;</span><br><span class="line">   <span class="attribute">-ms-backface-visibility</span>: hidden;</span><br><span class="line">   <span class="attribute">backface-visibility</span>: hidden;</span><br><span class="line"> </span><br><span class="line">   <span class="attribute">-webkit-perspective</span>: <span class="number">1000</span>;</span><br><span class="line">   <span class="attribute">-moz-perspective</span>: <span class="number">1000</span>;</span><br><span class="line">   <span class="attribute">-ms-perspective</span>: <span class="number">1000</span>;</span><br><span class="line">   <span class="attribute">perspective</span>: <span class="number">1000</span>;</span><br><span class="line">   <span class="comment">/* Other transform properties here */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在webkit内核的浏览器中，另一个行之有效的方法是</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.cube</span> &#123;</span><br><span class="line">   <span class="attribute">-webkit-backface-visibility</span>: hidden</span><br><span class="line">   -moz-backface-visibility: hidden;</span><br><span class="line">   <span class="attribute">-ms-backface-visibility</span>: hidden;</span><br><span class="line">   <span class="attribute">backface-visibility</span>: hidden;</span><br><span class="line"> </span><br><span class="line">   <span class="attribute">-webkit-perspective</span>: <span class="number">1000</span>;</span><br><span class="line">   <span class="attribute">-moz-perspective</span>: <span class="number">1000</span>;</span><br><span class="line">   <span class="attribute">-ms-perspective</span>: <span class="number">1000</span>;</span><br><span class="line">   <span class="attribute">perspective</span>: <span class="number">1000</span>;</span><br><span class="line">   <span class="comment">/* Other transform properties here */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在webkit内核的浏览器中，另一个行之有效的方法是</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.cube</span> &#123;</span><br><span class="line">   <span class="attribute">-webkit-transform</span>: <span class="built_in">translate3d</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">   <span class="attribute">-moz-transform</span>: <span class="built_in">translate3d</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">   <span class="attribute">-ms-transform</span>: <span class="built_in">translate3d</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">   <span class="attribute">transform</span>: <span class="built_in">translate3d</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  <span class="comment">/* Other transform properties here */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote><p>原生的移动端应用<span class="myText">(Native mobile applications)</span>总是可以很好的运用GPU，这是为什么它比网页应用<span class="myText">(Web apps)</span>表现更好的原因。硬件加速在移动端尤其有用，因为它可以有效的减少资源的利用(麦时注：移动端本身资源有限)。</p>
+</blockquote>
+<blockquote><p>总结 </p>
+</blockquote>
+<blockquote><p>只对我们需要实现动画效果的元素应用以上方法，如果仅仅为了开启硬件加速而随便乱用，那是不明智的。</p>
+<p>小心使用这些方法，如果通过你的测试，结果确是提高了性能，你才可以使用这些方法。使用GPU可能会导致严重的性能问题，因为它增加了内存的使用，而且它会减少移动端设备的电池寿命。</p>
+</blockquote>
+
+
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2018/02/12/CCS开启硬件加速提高网站性能/">blog.yuanziwen.cn/2018/02/12/CCS开启硬件加速提高网站性能/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/CSS/">CSS</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/02/16/babel-runtime和babel-polyfill/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">babel-runtime和babel-polyfill两者区别优缺点</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/01/28/doT-js模板语法实现原理/">
+        <span class="next-text nav-default">doT.js模板语法实现原理</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1593502174043')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

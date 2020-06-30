@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Web-API"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2017/06/20/Web-API/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>Web-API - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music(NoAuto)
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music(NoAuto)
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Web-API
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-06-20
+        </span></div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#BOM"><span class="toc-text">BOM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#window-navigator"><span class="toc-text">window.navigator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#window-screen"><span class="toc-text">window.screen</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#window-location"><span class="toc-text">window.location</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#window-history"><span class="toc-text">window.history</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DOM"><span class="toc-text">DOM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#获取-DOM-节点"><span class="toc-text">获取 DOM 节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#property"><span class="toc-text">property</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#attribute"><span class="toc-text">attribute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DOM-树操作"><span class="toc-text">DOM 树操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#新增节点"><span class="toc-text">新增节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取父元素"><span class="toc-text">获取父元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取子元素"><span class="toc-text">获取子元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#删除节点"><span class="toc-text">删除节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取前一个节点"><span class="toc-text">获取前一个节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取后一个节点"><span class="toc-text">获取后一个节点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事件"><span class="toc-text">事件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#事件绑定"><span class="toc-text">事件绑定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#事件冒泡"><span class="toc-text">事件冒泡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#事件代理"><span class="toc-text">事件代理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ajax"><span class="toc-text">Ajax</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XMLhttpRequest"><span class="toc-text">XMLhttpRequest</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#状态码说明"><span class="toc-text">状态码说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fetch-API"><span class="toc-text">Fetch API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跨域"><span class="toc-text">跨域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决跨域-JSONP"><span class="toc-text">解决跨域 - JSONP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决跨域-服务器端设置-http-header"><span class="toc-text">解决跨域 - 服务器端设置 http header</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储"><span class="toc-text">存储</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cookie-和-localStorage-区别"><span class="toc-text">cookie 和 localStorage 区别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#cookie"><span class="toc-text">cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#locationStorage-和-sessionStorage"><span class="toc-text">locationStorage 和 sessionStorage</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><img src="http://static.didao-zx.com/upload/media/plantform/29ada1218e263b16cfe213624914fab0/image/20180320/1521541045959790.png_plain"><a id="more"></a>
+<h2 id="BOM"><a href="#BOM" class="headerlink" title="BOM"></a>BOM</h2><blockquote><p>BOM（浏览器对象模型）是浏览器本身的一些信息的设置和获取，例如获取浏览器的宽度、高度，设置让浏览器跳转到哪个地址。</p>
+<ul class="myUl"><li><span style="border-bottom: 1px dashed #389fff;"><span class="hint--top hint--rounded hint--info" aria-label="返回一个navigator对象的引用,可以用它来查询一些关于运行当前脚本的应用程序的相关信息." ontouchstart>navigator</span></span></li><li><span style="border-bottom: 1px dashed #389fff;"><span class="hint--top hint--rounded hint--info" aria-label="window.screen 对象包含有关用户屏幕的信息。" ontouchstart>screen</span></span></li><li><span style="border-bottom: 1px dashed #389fff;"><span class="hint--top hint--rounded hint--info" aria-label="用于获得当前页面的地址 (URL)信息" ontouchstart>location</span></span></li><li><span style="border-bottom: 1px dashed #389fff;"><span class="hint--top hint--rounded hint--info" aria-label="提供了操作浏览器会话历史（浏览器地址栏中访问的页面，以及当前页面中通过框架加载的页面）的接口。" ontouchstart>history</span></span></li></ul></blockquote>
+
+<h3 id="window-navigator"><a href="#window-navigator" class="headerlink" title="window.navigator"></a>window.navigator</h3><p>navigator获取浏览器特性（即俗称的UA）然后识别客户端，例如判断是不是 Chrome 浏览器</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> ua = navigator.userAgent</span><br><span class="line"><span class="keyword">var</span> isChrome = ua.indexOf(<span class="string">'Chrome'</span>)</span><br><span class="line"><span class="built_in">console</span>.log(isChrome)</span><br></pre></td></tr></table></figure>
+
+<h3 id="window-screen"><a href="#window-screen" class="headerlink" title="window.screen"></a>window.screen</h3><p>获取屏幕的宽度和高度</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(screen.width)</span><br><span class="line"><span class="built_in">console</span>.log(screen.height)</span><br></pre></td></tr></table></figure>
+
+<h3 id="window-location"><a href="#window-location" class="headerlink" title="window.location"></a>window.location</h3><p>获取网址、协议、path、参数、hash 等</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 例如当前网址是 http://static.yuanziwen.cn/2018/03/20/Web-API/?a=10&amp;b=10#some</span></span><br><span class="line"><span class="built_in">console</span>.log(location.href)  <span class="comment">// http://static.yuanziwen.cn/2018/03/20/Web-API/?a=10&amp;b=10#some</span></span><br><span class="line"><span class="built_in">console</span>.log(location.protocol) <span class="comment">// 返回当前URL 的协议 http:</span></span><br><span class="line"><span class="built_in">console</span>.log(location.pathname) <span class="comment">// 返回当前主机名 /2018/03/20/Web-API/</span></span><br><span class="line"><span class="built_in">console</span>.log(location.search) <span class="comment">// 返回当前参数 ?a=10&amp;b=10</span></span><br><span class="line"><span class="built_in">console</span>.log(location.hash) <span class="comment">// 返回当前网址的锚链接 #some</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="window-history"><a href="#window-history" class="headerlink" title="window.history"></a>window.history</h3><p>另外，还有调用浏览器的前进、后退功能等</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">history.back()</span><br><span class="line">history.forward()</span><br></pre></td></tr></table></figure>
+
+<p>这里要注意的是 虽然属性名为<span class="codes">window.history</span> ，但在调用的时候千万不能加<span class="codes">window</span>前缀，否则会报错。</p>
+<h2 id="DOM"><a href="#DOM" class="headerlink" title="DOM"></a>DOM</h2><p>什么是DOM<br> <blockquote><p>题目：DOM 和 HTML 区别和联系 </p>
+</blockquote><br>讲<span class="codes">DOM</span>先从 <span class="codes">HTML</span> 讲起，讲 <span class="codes">HTML</span> 先从 <span class="codes">XML</span> 讲起。<span class="codes">XML</span> 是一种可扩展的标记语言，所谓可扩展就是它可以描述任何结构化的数据，它是一棵树！</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">to</span>&gt;</span>Tove<span class="tag">&lt;/<span class="name">to</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">from</span>&gt;</span>Jani<span class="tag">&lt;/<span class="name">from</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">heading</span>&gt;</span>Reminder<span class="tag">&lt;/<span class="name">heading</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span>Don't forget me this weekend!<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">other</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">b</span>&gt;</span><span class="tag">&lt;/<span class="name">b</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">other</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote><p>HTML 是一个有既定标签标准的 XML 格式，标签的名字、层级关系和属性，都被标准化（否则浏览器无法解析）。同样，它也是一棵树。 </p>
+</blockquote>
+
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>this is p<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们开发完的 <span class="codes">HTML</span> 代码会保存到一个文档中（一般以.html或者.htm结尾），文档放在服务器上，浏览器请求服务器，这个文档被返回。因此，最终浏览器拿到的是一个文档而已，文档的内容就是 HTML 格式的代码。<br>但是浏览器要把这个文档中的 HTML 按照标准渲染成一个页面，此时浏览器就需要将这堆代码处理成自己能理解的东西，也得处理成 <span class="codes">JS</span> 能理解的东西，因为还得允许 <span class="codes">JS</span> 修改页面内容呢。<br>基于以上需求，浏览器就需要把 <span class="codes">HTML</span> 转变成 <span class="codes">DOM</span>，<span class="codes">HTML</span> 是一棵树，<span class="codes">DOM</span> 也是一棵树。对 <span class="codes">DOM</span> 的理解，可以暂时先抛开浏览器的内部因素，先从 <span class="codes">JavaScript</span> 着手，即可以认为 <span class="codes">DOM</span> 就是 <span class="codes">JavaScript</span> 能识别的 <span class="codes">HTML</span> 结构，一个普通的 <span class="codes">JS</span> 对象或者数组</p>
+<blockquote><img src="https://static.yuanziwen.cn/WebApi.png_plain"></blockquote>
+<h3 id="获取-DOM-节点"><a href="#获取-DOM-节点" class="headerlink" title="获取 DOM 节点"></a>获取 DOM 节点</h3><p>最常用的 <span class="codes">DOM API</span> 就是获取节点，其中常用的获取方法如下面代码示例：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 通过 id 获取</span></span><br><span class="line"><span class="keyword">var</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">'div1'</span>) <span class="comment">// 元素</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过 tagname 获取</span></span><br><span class="line"><span class="keyword">var</span> divList = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'div'</span>)  <span class="comment">// 集合</span></span><br><span class="line"><span class="built_in">console</span>.log(divList.length)</span><br><span class="line"><span class="built_in">console</span>.log(divList[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过 class 获取</span></span><br><span class="line"><span class="keyword">var</span> containerList = <span class="built_in">document</span>.getElementsByClassName(<span class="string">'container'</span>) <span class="comment">// 集合</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过 CSS 选择器获取</span></span><br><span class="line"><span class="keyword">var</span> pList = <span class="built_in">document</span>.querySelectorAll(<span class="string">'p'</span>) <span class="comment">// 集合</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="property"><a href="#property" class="headerlink" title="property"></a>property</h3><blockquote><p>property 和 attribute 的区别 </p>
+</blockquote>
+
+<p> <span class="codes">DOM</span>节点就是一个 <span class="codes">JS</span> 对象，它符合之前讲述的对象的特征 —— 可扩展属性，因为 <span class="codes">DOM</span> 节点本质上也是一个 <span class="codes">Javascript</span> 对象。因此，如下代码所示，<span class="codes">p</span>可以有<span class="codes">style</span>属性，有<span class="codes">className</span> <span class="codes">nodeName</span> <span class="codes">nodeType</span>属性。注意，这些都是 <span class="codes">JS</span> 范畴的属性，符合 <span class="codes">JS</span> 语法标准的。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> pList = <span class="built_in">document</span>.querySelectorAll(<span class="string">'p'</span>)</span><br><span class="line"><span class="keyword">var</span> p = pList[<span class="number">0</span>]</span><br><span class="line"><span class="built_in">console</span>.log(p.style.width)  <span class="comment">// 获取样式</span></span><br><span class="line">p.style.width = <span class="string">'100px'</span>  <span class="comment">// 修改样式</span></span><br><span class="line"><span class="built_in">console</span>.log(p.className)  <span class="comment">// 获取 class</span></span><br><span class="line">p.className = <span class="string">'p1'</span>  <span class="comment">// 修改 class</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取 nodeName 和 nodeType</span></span><br><span class="line"><span class="built_in">console</span>.log(p.nodeName)</span><br><span class="line"><span class="built_in">console</span>.log(p.nodeType)</span><br></pre></td></tr></table></figure>
+
+<h3 id="attribute"><a href="#attribute" class="headerlink" title="attribute"></a>attribute</h3><p> <span class="codes">property</span>的获取和修改，是直接改变 <span class="codes">JS</span> 对象，而 <span class="codes">attribute</span> 是直接改变 <span class="codes">HTML</span> 的属性，两种有很大的区别。<span class="codes">attribute</span> 就是对 <span class="codes">HTML</span> 属性的 <span class="codes">get</span> 和 <span class="codes">set</span>，和 <span class="codes">DOM</span> 节点的 <span class="codes">JS范畴的 property</span>  没有关系。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> pList = <span class="built_in">document</span>.querySelectorAll(<span class="string">'p'</span>)</span><br><span class="line"><span class="keyword">var</span> p = pList[<span class="number">0</span>]</span><br><span class="line">p.getAttribute(<span class="string">'data-name'</span>)</span><br><span class="line">p.setAttribute(<span class="string">'data-name'</span>, <span class="string">'juejin'</span>)</span><br><span class="line">p.getAttribute(<span class="string">'style'</span>)</span><br><span class="line">p.setAttribute(<span class="string">'style'</span>, <span class="string">'font-size:30px;'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>而且，<span class="codes">get</span> 和 <span class="codes">set </span> <span class="codes">attribute</span>时，还会触发 <span class="codes">DOM</span> 的查询或者重绘、重排，频繁操作会影响页面性能。</p>
+<blockquote><p>DOM 操作的基本 API  </p>
+</blockquote>
+<h3 id="DOM-树操作"><a href="#DOM-树操作" class="headerlink" title="DOM 树操作"></a>DOM 树操作</h3><h4 id="新增节点"><a href="#新增节点" class="headerlink" title="新增节点"></a>新增节点</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">ar div1 = <span class="built_in">document</span>.getElementById(<span class="string">'div1'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加新节点</span></span><br><span class="line"><span class="keyword">var</span> p1 = <span class="built_in">document</span>.createElement(<span class="string">'p'</span>)</span><br><span class="line">p1.innerHTML = <span class="string">'this is p1'</span></span><br><span class="line">div1.appendChild(p1) <span class="comment">// 添加新创建的元素</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 移动已有节点。注意，这里是“移动”，并不是拷贝</span></span><br><span class="line"><span class="keyword">var</span> p2 = <span class="built_in">document</span>.getElementById(<span class="string">'p2'</span>)</span><br><span class="line">div1.appendChild(p2)</span><br></pre></td></tr></table></figure>
+
+<h4 id="获取父元素"><a href="#获取父元素" class="headerlink" title="获取父元素"></a>获取父元素</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">'div1'</span>)</span><br><span class="line"><span class="keyword">var</span> parent = div1.parentElement;</span><br></pre></td></tr></table></figure>
+
+<h4 id="获取子元素"><a href="#获取子元素" class="headerlink" title="获取子元素"></a>获取子元素</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">'div1'</span>)</span><br><span class="line"><span class="keyword">var</span> child = div1.childNodes</span><br></pre></td></tr></table></figure>
+
+<h4 id="删除节点"><a href="#删除节点" class="headerlink" title="删除节点"></a>删除节点</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">'div1'</span>)</span><br><span class="line"><span class="keyword">var</span> child = div1.childNodes</span><br><span class="line">div1.removeChild(child[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+
+<h4 id="获取前一个节点"><a href="#获取前一个节点" class="headerlink" title="获取前一个节点"></a>获取前一个节点</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">'div1'</span>)</span><br><span class="line"><span class="keyword">var</span> pre = div1.previousSibling</span><br></pre></td></tr></table></figure>
+
+<h4 id="获取后一个节点"><a href="#获取后一个节点" class="headerlink" title="获取后一个节点"></a>获取后一个节点</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">'div1'</span>)</span><br><span class="line"><span class="keyword">var</span> child = div1.nextSibling</span><br></pre></td></tr></table></figure>
+
+<h2 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h2><h3 id="事件绑定"><a href="#事件绑定" class="headerlink" title="事件绑定"></a>事件绑定</h3><p>普通的时间绑定写法如下：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> btn = <span class="built_in">document</span>.getElementById(<span class="string">'btn1'</span>)</span><br><span class="line">btn.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// event.preventDefault() // 阻止默认行为</span></span><br><span class="line">    <span class="comment">// event.stopPropagation() // 阻止冒泡</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'clicked'</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>为了编写简单的事件绑定，可以编写通用的事件绑定函数。这里虽然比较简单，但是会随着后文的讲解，来继续完善和丰富这个函数。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">/ 通用的事件绑定函数</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bindEvent</span>(<span class="params">elem, type, fn</span>) </span>&#123;</span><br><span class="line">    elem.addEventListener(type, fn)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a = <span class="built_in">document</span>.getElementById(<span class="string">'link1'</span>)</span><br><span class="line"><span class="comment">// 写起来更加简单了</span></span><br><span class="line">bindEvent(a, <span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    e.preventDefault() <span class="comment">// 阻止默认行为</span></span><br><span class="line">    alert(<span class="string">'clicked'</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>关于<span class="codes">IE兼容</span>的问题，个人认为现在除了政府部门外用IE的很少了，大部分互联网流量都在App上，浪费时间不值得，多去考虑App相关的工作</p>
+<h3 id="事件冒泡"><a href="#事件冒泡" class="headerlink" title="事件冒泡"></a>事件冒泡</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"div1"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"p1"</span>&gt;</span>激活<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"p2"</span>&gt;</span>取消<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"p3"</span>&gt;</span>取消<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"p4"</span>&gt;</span>取消<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"div2"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"p5"</span>&gt;</span>取消<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"p6"</span>&gt;</span>取消<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>对于以上 HTML 代码结构，要求点击<span class="codes">p1</span>时候进入激活状态，点击其他任何<code class="codes">&lt;p&gt;</code>都取消激活状态，如何实现？代码如下，注意看注释：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> body = <span class="built_in">document</span>.body</span><br><span class="line">bindEvent(body, <span class="string">'click'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 所有 p 的点击都会冒泡到 body 上，因为 DOM 结构中 body 是 p 的上级节点，事件会沿着 DOM 树向上冒泡</span></span><br><span class="line">    alert(<span class="string">'取消'</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> p1 = <span class="built_in">document</span>.getElementById(<span class="string">'p1'</span>)</span><br><span class="line">bindEvent(p1, <span class="string">'click'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    e.stopPropagation() <span class="comment">// 阻止冒泡</span></span><br><span class="line">    alert(<span class="string">'激活'</span>)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>如果我们在<span class="codes">p1</span> <span class="codes">div1</span> <span class="codes">body</span>中都绑定了事件，它是会根据 <span class="codes">DOM</span> 的结构来冒泡，从下到上挨个执行的。但是我们使用<span class="codes">e.stopPropagation()</span>就可以阻止冒泡</p>
+<h3 id="事件代理"><a href="#事件代理" class="headerlink" title="事件代理"></a>事件代理</h3><p>我们设定一种场景，如下代码，一个<code class="codes">&lt;div&gt;</code>中包含了若干个<code class="codes">&lt;a&gt;</code>，而且还能继续增加。那如何快捷方便地为所有<code class="codes">&lt;a&gt;</code>绑定事件呢？</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"div1"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span>&gt;</span>a1<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span>&gt;</span>a2<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span>&gt;</span>a3<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span>&gt;</span>a4<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span>&gt;</span>点击增加一个 a 标签<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里就会用到事件代理。我们要监听<code class="codes">&lt;a&gt;</code>的事件，但要把具体的事件绑定到<code class="codes">&lt;div&gt;</code>上，然后看事件的触发点是不是<code class="codes">&lt;a&gt;</code>。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">'div1'</span>)</span><br><span class="line">div1.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// e.target 可以监听到触发点击事件的元素是哪一个</span></span><br><span class="line">    <span class="keyword">var</span> target = e.target</span><br><span class="line">    <span class="keyword">if</span> (e.nodeName === <span class="string">'A'</span>) &#123;</span><br><span class="line">        <span class="comment">// 点击的是 &lt;a&gt; 元素</span></span><br><span class="line">        alert(target.innerHTML)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>我们现在完善一下之前写的通用事件绑定函数，加上事件代理。<br>使用代理的优点可以使代码简捷，减少浏览器的内存占用</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">function</span> <span class="title">bindEvent</span>(<span class="params">elem, type, selector, fn</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 这样处理，可接收两种调用方式 bindEvent(div1, 'click', 'a', function () &#123;...&#125;) 和 bindEvent(div1, 'click', function () &#123;...&#125;) 这两种</span></span><br><span class="line">    <span class="keyword">if</span> (fn == <span class="literal">null</span>) &#123;</span><br><span class="line">        fn = selector</span><br><span class="line">        selector = <span class="literal">null</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 绑定事件</span></span><br><span class="line">    elem.addEventListener(type, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> target</span><br><span class="line">        <span class="keyword">if</span> (selector) &#123;</span><br><span class="line">            <span class="comment">// 有 selector 说明需要做事件代理</span></span><br><span class="line">            <span class="comment">// 获取触发时间的元素，即 e.target</span></span><br><span class="line">            target = e.target</span><br><span class="line">            <span class="comment">// element.matches(String selector);在SELECTORS API Level 2规范中，为DOM节点添加了一个方法，主要是用来判断当前DOM节点不否能完全匹配对应的CSS选择器规则；如果匹配成功，返回true，反之则返回false。</span></span><br><span class="line">            <span class="comment">// 看是否符合 selector 这个条件</span></span><br><span class="line">            <span class="keyword">if</span> (target.matches(selector)) &#123;</span><br><span class="line">                fn.call(target, e)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 无 selector ，说明不需要事件代理</span></span><br><span class="line">            fn(e)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h2><h3 id="XMLhttpRequest"><a href="#XMLhttpRequest" class="headerlink" title="XMLhttpRequest"></a>XMLhttpRequest</h3><p>手写XMLHttpRequest 不借助任何库</p>
+<p>可以参考<a href="http://javascript.ruanyifeng.com/bom/ajax.html#toc19" target="_blank" rel="noopener">阮一峰大神的文章</a></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest()</span><br><span class="line">xhr.open(<span class="string">"GET"</span>, <span class="string">"/api"</span>, <span class="literal">false</span>)</span><br><span class="line">xhr.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 这里的函数异步执行，可参考之前 JS 基础中的异步模块</span></span><br><span class="line">    <span class="keyword">if</span> (xhr.readyState == <span class="number">4</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (xhr.status == <span class="number">200</span>) &#123;</span><br><span class="line">            alert(xhr.responseText)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">xhr.send(<span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+
+<blockquote><p>当然，使用 <span class="codes">jQuery</span>、<span class="codes">Zepto</span> 或 <span class="codes">Fetch</span> 等库来写就更加简单了，这里不再赘述。</p>
+</blockquote>
+
+<h3 id="状态码说明"><a href="#状态码说明" class="headerlink" title="状态码说明"></a>状态码说明</h3><blockquote><p>上述代码中，有两处状态码需要说明。<span class="codes">xhr.readyState</span>是浏览器判断请求过程中各个阶段的，<span class="codes">xhr.status</span>是 <span class="codes">HTTP 协议</span>中规定的不同结果的返回状态说明。</p>
+</blockquote>
+
+
+<p><span class="codes">xhr.readyState</span>的状态码说明：</p>
+<ul><li>0 - <span class="codes">(未初始化）</span>还没有调用<span class="codes">send()</span>方法</li><li>1 -<span class="codes">（载入）</span>已调用<span class="codes">send()</span>方法，正在发送请求</li><li>2 -<span class="codes">（载入完成）</span><span class="codes">send()</span>方法执行完成，已经接收到全部响应内容</li><li>3 -<span class="codes">（交互）</span>正在解析响应内容</li><li>4 -<span class="codes">（完成）</span>响应内容解析完成，可以在客户端调用了</li></ul>
+
+<blockquote><p><span class="codes">HTTP 协议</span>中，常见的<span class="codes">response</span> 的状态码  </p>
+</blockquote>
+<p><span class="codes">xhr.status</span>即 <span class="codes">HTTP</span> 状态码，有 <span class="codes">2xx</span> <span class="codes">3xx</span> <span class="codes">4xx</span> <span class="codes">5xx</span> 这几种，比较常用的有以下几种：</p>
+<ul><li><span class="codes">200</span> 正常</li><li><span class="codes">3xx</span><ul><li><span class="codes">301</span> 永久重定向。如 http://xxx.com 这个 <span class="codes">GET</span> 请求（最后没有/），就会被301到 <span class="codes">http://xxx.com/</span> （最后是<span class="codes">/</span>）</li><li><span class="codes">302</span> 临时重定向。临时的，不是永久的</li><li><span class="codes">304</span> 资源找到但是不符合请求条件，不会返回任何主体。如发送 <span class="codes">GET</span> 请求时，<span class="codes">head</span> 中有<span class="codes">If-Modified-Since: xxx</span>（要求返回更新时间是xxx时间之后的资源），如果此时服务器 端资源未更新，则会返回<span class="codes">304</span>，即不符合要求</li></ul></li><li><span class="codes">404</span> 找不到资源</li><li><span class="codes">5xx</span> 服务器端出错了</li></ul>
+看完要明白，为何上述代码中要同时满足<span class="codes">xhr.readyState == 4</span>和<span class="codes">xhr.status == 200</span>
+
+<h3 id="Fetch-API"><a href="#Fetch-API" class="headerlink" title="Fetch API"></a>Fetch API</h3><p>目前已经有一个获取 <span class="codes">HTTP</span> 请求更加方便的API：<span class="codes">Fetch</span>，通过<span class="codes">Fetch</span>提供的<span class="codes">fetch()</span>这个全局函数方法可以很简单地发起异步请求，并且支持<span class="codes">Promise</span>的回调。但是 <span class="codes">Fetch API</span> 是比较新的 <span class="codes">API</span>，具体使用的时候还需要查查 <span class="codes">caniuse</span>，看下其浏览器兼容情况。<br>看一个简单的例子：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">fetch(<span class="string">'some/api/data.json'</span>, &#123;</span><br><span class="line">  method:<span class="string">'POST'</span>, <span class="comment">//请求类型 GET、POST</span></span><br><span class="line">  headers:&#123;&#125;, <span class="comment">// 请求的头信息，形式为 Headers 对象或 ByteString</span></span><br><span class="line">  body:&#123;&#125;, <span class="comment">//请求发送的数据 blob、BufferSource、FormData、URLSearchParams（get 或head 方法中不能包含 body）</span></span><br><span class="line">  mode:<span class="string">''</span>, <span class="comment">//请求的模式，是否跨域等，如 cors、 no-cors 或 same-origin</span></span><br><span class="line">  credentials:<span class="string">''</span>, <span class="comment">//cookie 的跨域策略，如 omit、same-origin 或 include</span></span><br><span class="line">  cache:<span class="string">''</span>, <span class="comment">//请求的 cache 模式: default、no-store、reload、no-cache、 force-cache 或 only-if-cached</span></span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123; ... &#125;);</span><br></pre></td></tr></table></figure>
+<p><span class="codes">Fetch</span> 支持headers定义，通过headers自定义可以方便地实现多种请求方法<span class="codes">（ PUT、GET、POST 等）</span>、<span class="codes">请求头（包括跨域）</span>和<span class="codes">cache策略</span>等；除此之外还支持 <span class="codes">response（返回数据）</span>多种类型，比如支持二进制文件、字符串和formData等。</p>
+<h3 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h3><blockquote><p>跨域 </p>
+</blockquote>
+<p>浏览器中有 <span class="codes">同源策略</span> ，即一个域下的页面中，无法通过 <span class="codes">Ajax</span> 获取到其他域的接口。例如有一个接口<span class="codes">http:// m.baidu.com/course/ajaxcourserecom?cid=444</span>，页面 <span class="codes">http: //static.yuanziwen.cn/page1.html</span> 中的 <span class="codes">Ajax</span> 无法获取这个接口。这正是命中了<span class="codes">“同源策略”</span>。如果浏览器哪些地方忽略了同源策略，那就是浏览器的安全漏洞，需要紧急修复。</p>
+<table><thead><tr><th>URL</th><th align="center">说明</th><th align="right">是否允许通信</th></tr></thead><tbody><tr><td><a href="http://www.a.com/a.js" target="_blank">http://www.a.com/a.js</a><br><a href="http://www.a.com/b.js" target="_blank">http://www.a.com/b.js</a></td><td align="center">同一域名下</td><td align="right">允许</td></tr><tr><td><a href="http://www.a.com/lab/a.js" target="_blank">http://www.a.com/lab/a.js</a><br><a href="http://www.a.com/script/b.js" target="_blank">http://www.a.com/script/b.js</a></td><td align="center">同一域名下不同文件夹</td><td align="right">允许</td></tr><tr><td><a href="http://www.a.com" target="_blank">http://www.a.com</a>：8000/a.js<br><a href="http://www.a.com/b.js" target="_blank">http://www.a.com/b.js</a></td><td align="center">同一域名，不同端口</td><td align="right">不允许</td></tr><tr><td><a href="http://www.a.com/a.js" target="_blank">http://www.a.com/a.js</a><br><a href="https://www.a.com/b.js" target="_blank">https://www.a.com/b.js</a></td><td align="center">同一域名，不同协议</td><td align="right">不允许</td></tr><tr><td><a href="http://www.a.com/a.js" target="_blank">http://www.a.com/a.js</a><br><a href="https://123.456.78.9/b.js" target="_blank">https://123.456.78.9/b.js</a></td><td align="center">域名不同</td><td align="right">不允许</td></tr><tr><td><a href="http://www.a.com/a.js" target="_blank">http://www.a.com/a.js</a><br><a href="https://script.a.com/b.js" target="_blank">https://script.a.com/b.js</a></td><td align="center">主域相同，子域不同</td><td align="right">不允许</td></tr><tr><td><a href="http://www.a.com/a.js" target="_blank">http://www.a.com/a.js</a><br><a href="https://a.com/b.js" target="_blank">https://a.com/b.js</a></td><td align="center">同一域名，不同二级域名</td><td align="right">不允许</td></tr></tbody>
+</table>
+url 哪些地方不同算作跨域？
+<ul><li>协议</li><li>端口</li><li>域名</li></ul>
+但是 HTML 中几个标签能逃避过同源策略——<code class="codes">&lt;script src="xxx"&gt;</code>、<code class="codes">&lt;img src="xxxx"/&gt;</code>、<code class="codes">&lt;link href="xxxx"&gt;</code>，这三个标签的src/href可以加载其他域的资源，不受同源策略限制。
+因此，这使得这三个标签可以做一些特殊的事情。
+<ul><li><code class="codes">&lt;img&gt;</code>可以做打点统计，因为统计方并不一定是同域的，在讲解 JS 基础知识异步的时候有过代码示例。除了能跨域之外，<code class="codes">&lt;img&gt;</code>几乎没有浏览器兼容问题，它是一个非常古老的标签。</li><li><code class="codes">&lt;script&gt;</code>和<code class="codes">&lt;link&gt;</code>可以使用 CDN，CDN 基本都是其他域的链接。</li><li>另外<code class="codes">&lt;script&gt;</code>还可以实现 JSONP，能获取其他域接口的信息，接下来马上讲解。</li></ul>
+
+<p>但是请注意，所有的跨域请求方式，最终都需要信息提供方来做出相应的支持和改动，也就是要经过信息提供方的同意才行，否则接收方是无法得到它们的信息的，浏览器是不允许的。</p>
+<h3 id="解决跨域-JSONP"><a href="#解决跨域-JSONP" class="headerlink" title="解决跨域 - JSONP"></a>解决跨域 - JSONP</h3><p>首先，有一个概念你要明白，例如访问 <span class="codes">baidu.com/classindex.html</span>的时候，服务器端就一定有一个classindex.html文件吗？—— 不一定，服务器可以拿到这个请求，动态生成一个文件，然后返回。 同理，<code class="codes">&lt;script src='http:// yuanziwen.cn/api.js' &gt;</code>也不一定加载一个服务器端的静态文件，服务器也可以动态生成文件并返回。OK，接下来正式开始。</p>
+<p>例如我们的网站,肯定不是一个域。我们需要其他网站提供一个接口，供我们来获取。首先，我们在自己的页面这样定义<br> <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line"><span class="built_in">window</span>.callback = <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 这是我们跨域得到信息</span></span><br><span class="line">    <span class="built_in">console</span>.log(data)</span><br><span class="line">&#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后百度给我提供了一个<code class="codes">http:// coding.m.baidu.com/api.js</code>，内容如下（之前说过，服务器可动态生成内容）</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">callback(&#123;<span class="attr">x</span>:<span class="number">100</span>, <span class="attr">y</span>:<span class="number">200</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>最后我们在页面中加入<code class="codes">&lt;script src="http:// coding.m.juejin.com/api.js"&gt;&lt;/script&gt;</code>;，那么这个js加载之后，就会执行内容，我们就得到内容了。</p>
+<h3 id="解决跨域-服务器端设置-http-header"><a href="#解决跨域-服务器端设置-http-header" class="headerlink" title="解决跨域 - 服务器端设置 http header"></a>解决跨域 - 服务器端设置 http header</h3><p>这是需要在服务器端设置的，作为前端工程师我们不用详细掌握，但是要知道有这么个解决方案。而且，现在推崇的跨域解决方案是这一种，比 JSONP 简单许多。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">response.setHeader(<span class="string">"Access-Control-Allow-Origin"</span>, <span class="string">"http://m.juejin.com/"</span>);  <span class="comment">// 第二个参数填写允许跨域的域名称，不建议直接写 "*"</span></span><br><span class="line">response.setHeader(<span class="string">"Access-Control-Allow-Headers"</span>, <span class="string">"X-Requested-With"</span>);</span><br><span class="line">response.setHeader(<span class="string">"Access-Control-Allow-Methods"</span>, <span class="string">"PUT,POST,GET,DELETE,OPTIONS"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接收跨域的cookie</span></span><br><span class="line">response.setHeader(<span class="string">"Access-Control-Allow-Credentials"</span>, <span class="string">"true"</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h2><h3 id="cookie-和-localStorage-区别"><a href="#cookie-和-localStorage-区别" class="headerlink" title="cookie 和 localStorage 区别"></a>cookie 和 localStorage 区别</h3><h4 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h4><p><span class="codes">cookie</span> 本身不是用来做服务器端存储的（计算机领域有很多这种“狗拿耗子”的例子，例如 CSS 中的 float），它是设计用来在服务器和客户端进行信息传递的，因此我们的每个 HTTP 请求都带着 <span class="codes">cookie</span>。但是 <span class="codes">cookie</span> 也具备浏览器端存储的能力（例如记住用户名和密码），因此就被开发者用上了。<br>使用起来也非常简单，<span class="codes">document.cookie = ….</span>即可。<br>但是 cookie 有它致命的缺点：</p>
+<ul><li>存储量太小，只有 4KB</li><li>所有 HTTP 请求都带着，会影响获取资源的效率</li><li>API 简单，需要封装才能用</li></ul>
+
+<h4 id="locationStorage-和-sessionStorage"><a href="#locationStorage-和-sessionStorage" class="headerlink" title="locationStorage 和 sessionStorage"></a>locationStorage 和 sessionStorage</h4><p>后来，HTML5 标准就带来了<span class="codes">sessionStorage</span>和<span class="codes">localStorage</span>，先拿<span class="codes">localStorage</span>来说，它是专门为了浏览器端缓存而设计的。其优点有：</p>
+<ul><li>存储量增大到 5MB</li><li>不会带到 HTTP 请求中</li><li>API 适用于数据存储 localStorage.setItem(key, value) localStorage.getItem(key)</li></ul>
+<span class="codes">sessionStorage</span>的区别就在于它是根据 <span class="codes">session</span> 过去时间而实现，而<span class="codes">localStorage</span>会永久有效，应用场景不同。例如，一些需要及时失效的重要信息放在<span class="codes">sessionStorage</span>中，一些不重要但是不经常设置的信息，放在<span class="codes">localStorage</span>中。
+另外告诉大家一个小技巧，针对<span class="codes">localStorage.setItem</span>，使用时尽量加入到<span class="codes">try-catch</span>中，某些浏览器是禁用这个 <span class="codes">API</span> 的，要注意。
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2017/06/20/Web-API/">blog.yuanziwen.cn/2017/06/20/Web-API/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/HTML/">HTML</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2017/11/18/gitBook/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">git Command</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2017/03/04/布局笔记/">
+        <span class="next-text nav-default">布局笔记</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1593502174043')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

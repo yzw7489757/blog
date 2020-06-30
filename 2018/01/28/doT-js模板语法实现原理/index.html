@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="doT.js模板语法实现原理"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2018/01/28/doT-js模板语法实现原理/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>doT.js模板语法实现原理 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music(NoAuto)
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music(NoAuto)
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">doT.js模板语法实现原理
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-01-28
+        </span></div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#doT-js模板引擎"><span class="toc-text">doT.js模板引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#it-xxx-·-赋值"><span class="toc-text">{ { = it.xxx }·} 赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for-循环"><span class="toc-text">{ { for } }  循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#it-array-value-index-数组数据"><span class="toc-text">{ {~it.array:value:index}}  数组数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#it-xxx-赋值"><span class="toc-text">{ { = it.xxx }}  赋值</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><p>时至今日，基于后端JavaScript（Node.js）和MVC思想也开始流行起来。模板引擎是数据和页面分离工作中最重要的一环，在各大门户网站均有利用到模板引擎。</p>
+<p>模板引擎有很多种，但是原理了解也是非常必要的。</p>
+<p>什么是模板引擎，其根本原理就是将数据转换成“String”，再通过模板引擎抓取数据进行页面数据渲染。</p>
+<a id="more"></a>
+<p>看一个栗子</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;script type=<span class="string">"template"</span> id=<span class="string">"template"</span>&gt;</span><br><span class="line">    &lt;h2&gt;</span><br><span class="line">      &lt;a href=<span class="string">"&#123;&#123;href&#125;&#125;"</span>&gt;</span><br><span class="line">       &#123;&#123;title&#125;&#125;</span><br><span class="line">     &lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>h2&gt;</span><br><span class="line">    &lt;img src=<span class="string">"&#123;&#123;imgSrc&#125;&#125;"</span> alt=<span class="string">"&#123;&#123;title&#125;&#125;"</span>&gt;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这样的方法类似Angular和Vue中双向数据绑定。  是需要进行替换的数据。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> data = [</span><br><span class="line">    &#123;</span><br><span class="line">      title: <span class="string">"我是标题1"</span>,</span><br><span class="line">      href: <span class="string">"我是链接1"</span>,</span><br><span class="line">      imgSrc: <span class="string">"我是图片1.jpg"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      title: <span class="string">"我是标题2"</span>,</span><br><span class="line">      href: <span class="string">"我是链接2"</span>,</span><br><span class="line">      imgSrc: <span class="string">"我是图片2.jpg"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ];</span><br></pre></td></tr></table></figure>
+
+<p>  可以通过replace和正则的方法进行替换导入。</p>
+<p>replace方法：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">template = <span class="built_in">document</span>.querySelector(<span class="string">'#template'</span>).innerHTML,</span><br><span class="line">result = <span class="built_in">document</span>.querySelector(<span class="string">'.result'</span>),</span><br><span class="line">attachTemplateToData;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 将模板和数据作为参数，通过数据里所有的项将值替换到模板的标签上（注意不是遍历模板标签，因为标签可能不在数据里存在）。</span></span><br><span class="line">attachTemplateToData = <span class="function"><span class="keyword">function</span>(<span class="params">template, data</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> i = <span class="number">0</span>,</span><br><span class="line">            len = data.length,</span><br><span class="line">            fragment = <span class="string">''</span>;</span><br><span class="line"> </span><br><span class="line">        <span class="comment">// 遍历数据集合里的每一个项，做相应的替换</span></span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">replace</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> t, key, reg;</span><br><span class="line"> 　　　　　　</span><br><span class="line">　　　　　　　<span class="comment">//遍历该数据项下所有的属性，将该属性作为key值来查找标签，然后替换</span></span><br><span class="line">            <span class="keyword">for</span> (key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">                reg = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">'&#123;&#123;'</span> + key + <span class="string">'&#125;&#125;'</span>, <span class="string">'ig'</span>);</span><br><span class="line">                t = (t || template).replace(reg, obj[key]);</span><br><span class="line">            &#125;</span><br><span class="line"> </span><br><span class="line">            <span class="keyword">return</span> t;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">for</span> (; i &lt; len; i++) &#123;</span><br><span class="line">            fragment += replace(data[i]);</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">return</span> fragment;</span><br><span class="line">    &#125;;</span><br><span class="line"> </span><br><span class="line">result.innerHTML = attachTemplateToData(template, data);</span><br></pre></td></tr></table></figure>
+
+<h2 id="doT-js模板引擎"><a href="#doT-js模板引擎" class="headerlink" title="doT.js模板引擎"></a>doT.js模板引擎</h2><h3 id="it-xxx-·-赋值"><a href="#it-xxx-·-赋值" class="headerlink" title="{ { = it.xxx }·} 赋值"></a>{ { = it.xxx }·} 赋值</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"interpolation"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">"interpolationtmpl"</span> <span class="attr">type</span>=<span class="string">"text/x-dot-template"</span>&gt;</span>  </span><br><span class="line"><span class="xml">    <span class="comment">&lt;!--script的ID是为了被doT模板引擎抓取语法和模板 type必须为该类--&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>Hi &#123;&#123;=it.name&#125;&#125;!<span class="tag">&lt;/<span class="name">div</span>&gt;</span>  <span class="comment">&lt;!--it在模板里为数据源 it.name 等同于 dataInter.name --&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123;=it.age || ''&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span> <span class="comment">&lt;!-- = 为赋值，如果不存在改数据，||'' 为空 --&gt;</span></span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./doT.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./jquery.min.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">   <span class="comment">//定义数据源</span></span></span><br><span class="line"><span class="javascript">   <span class="keyword">var</span> dataInter =  &#123;<span class="string">"name"</span>:<span class="string">"jake"</span>,<span class="string">"age"</span>:<span class="number">31</span>&#125;;</span></span><br><span class="line"><span class="javascript">　　<span class="comment">// doT使用模板方法进行抓取script标签里的模板语法和布局</span></span></span><br><span class="line"><span class="javascript">   <span class="keyword">var</span> interText = doT.template($(<span class="string">"#interpolationtmpl"</span>).text());</span></span><br><span class="line"><span class="javascript">　　<span class="comment">//  将数据赋值给id对应的div进行渲染。</span></span></span><br><span class="line"><span class="javascript">   $(<span class="string">"#interpolation"</span>).html(interText(dataInter));</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="for-循环"><a href="#for-循环" class="headerlink" title="{ { for } }  循环"></a>{ { for } }  循环</h3><p>   语法：  { { for var KEY in DATA {  } }<br>                { {= key } }<br>                { {  }  } }</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"evaluation"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">"evaluationtmpl"</span> <span class="attr">type</span>=<span class="string">"text/x-dot-template"</span>&gt;</span></span><br><span class="line"><span class="javascript">    &#123;&#123; <span class="keyword">for</span>(<span class="keyword">var</span> prop <span class="keyword">in</span> it) &#123; &#125;&#125;</span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>KEY:&#123;&#123;= prop &#125;&#125;--------VALUE:&#123;&#123;= it[prop] &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="comment">&lt;!--将值进行赋值循环--&gt;</span></span></span><br><span class="line">    &#123;&#123; &#125; &#125;&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./doT.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./jquery.min.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">   <span class="keyword">var</span> dataEval = &#123;</span></span><br><span class="line"><span class="javascript">        <span class="string">"name"</span>:<span class="string">"Jake"</span>,</span></span><br><span class="line"><span class="javascript">        <span class="string">"age"</span>:<span class="number">31</span>,</span></span><br><span class="line"><span class="javascript">        <span class="string">"interests"</span>:[<span class="string">"basketball"</span>,<span class="string">"hockey"</span>,<span class="string">"photography"</span>],<span class="string">"contact"</span>:&#123;<span class="string">"email"</span>:<span class="string">"122@123.com"</span>,<span class="string">"phone"</span>:<span class="string">"999999999"</span>&#125;</span></span><br><span class="line">       &#125;;</span><br><span class="line"><span class="javascript">   <span class="keyword">var</span> evalText = doT.template($(<span class="string">"#evaluationtmpl"</span>).text());</span></span><br><span class="line"><span class="javascript">   $(<span class="string">"#evaluation"</span>).html(evalText(dataEval));</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>要注意 { { for(var prop in it) { } }  …  { {  } } }   为闭合标签，是为了让其中的模板进行输出，以及让{ { … } } 的表达式进行执行。<br>可能这种语法很多小伙伴们看不懂，但是 改变一下</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">for(var prop in it) &#123;       </span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>KEY:&#123;&#123;= prop &#125;&#125;--------VALUE:&#123;&#123;= it[prop] &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span> <span class="comment">&lt;!--将循环进行赋值--&gt;</span></span><br><span class="line">     &#125; </span><br><span class="line"></span><br><span class="line">把外面的花括号去掉了就能看懂了把。和上相比，只是将表达式都用双花括号包围起来，以便给doT模板引擎识别。</span><br><span class="line">&#123;&#123; for(var prop in it) &#123; &#125;&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>KEY:&#123;&#123;= prop &#125;&#125;--------VALUE:&#123;&#123;= it[prop] &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="comment">&lt;!--将值进行赋值循环--&gt;</span></span><br><span class="line">    &#123;&#123; &#125; &#125;&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h3 id="it-array-value-index-数组数据"><a href="#it-array-value-index-数组数据" class="headerlink" title="{ {~it.array:value:index}}  数组数据"></a>{ {~it.array:value:index}}  数组数据</h3><p> 语法：<br>     { {~data.array :value:index } }<br>       …</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"arrays"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">"arraystmpl"</span> <span class="attr">type</span>=<span class="string">"text/x-dot-template"</span>&gt;</span></span><br><span class="line"><span class="xml">        &#123;&#123;~it.array:value:index&#125;&#125;  <span class="tag">&lt;<span class="name">--</span> ~ 为循环数组<span class="attr">it.data</span> <span class="attr">--</span>&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123;= index+1 &#125;&#125;&#123;&#123;= value&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span>   <span class="comment">&lt;!--index为下标，初始值为0 ，可以进行计算--&gt;</span></span></span><br><span class="line">        &#123;&#123;~&#125;&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./doT.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./jquery.min.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">   <span class="keyword">var</span> dataArr = &#123;<span class="string">"array"</span>:[<span class="string">"banana"</span>,<span class="string">"apple"</span>,<span class="string">"orange"</span>]&#125;;</span></span><br><span class="line"><span class="javascript">   <span class="keyword">var</span> arrText = doT.template($(<span class="string">"#arraystmpl"</span>).text());</span></span><br><span class="line"><span class="javascript">   $(<span class="string">"#arrays"</span>).html(arrText(dataArr));</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="it-xxx-赋值"><a href="#it-xxx-赋值" class="headerlink" title="{ { = it.xxx }}  赋值"></a>{ { = it.xxx }}  赋值</h3><p> 语法：</p>
+<pre><code>{ {? }} if
+{ {?? }} else if
+{ {??}} else</code></pre><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span>   </span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"condition"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">"conditionstmpl"</span> <span class="attr">type</span>=<span class="string">"text/x-dot-template"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="xml">        &#123;&#123;? !it.name &#125;&#125;<span class="comment">&lt;!--if有数据就跳过--&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">div</span>&gt;</span>Oh, I love your name, &#123;&#123;=it.name&#125;&#125;!<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">        &#123;&#123;?? it.age === 1&#125;&#125;<span class="comment">&lt;!-- else if （age=31）执行此 --&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">div</span>&gt;</span>当前值为&#123;&#123;= it.age&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">        &#123;&#123;?? !(it.age === 0)&#125;&#125;<span class="comment">&lt;!-- else if （age不为0）执行此 --&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">div</span>&gt;</span>Guess nobody named you yet!<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">        &#123;&#123;?? !it.age == 0)&#125;&#125;<span class="comment">&lt;!-- 0本身为false  所有age为true 取反 --&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">div</span>&gt;</span>Guess nobody named you yet!<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        &#123;&#123;??&#125;&#125;</span><br><span class="line">             You are &#123;&#123;=it.age&#125;&#125; and still dont have a name?</span><br><span class="line">        &#123;&#123;?&#125;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./doT.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./jquery.min.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> dataEncode = &#123;<span class="string">"name"</span>:<span class="string">"yzw"</span>,<span class="string">"age"</span>:<span class="number">1</span>&#125;;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> EncodeText = doT.template($(<span class="string">"#conditionstmpl"</span>).text());</span></span><br><span class="line"><span class="javascript">    $(<span class="string">"#condition"</span>).html(EncodeText(dataEncode));</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>提示：！it.age  当age为0的时候为true，非0为false，但是进行数据恒等（===）的时候，</p>
+<p>如果想要将数据的结果进行取反，必须加个括号!(it.age === 0)  当age为0  ，为false  不等于!it.age === 0;</p>
+<p>模板引擎还是非常好用的，其余的{ {for 插值 with encoding }}、{ { ## } }就不在本文叙述了，在使用过程中至今还未使用到。</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2018/01/28/doT-js模板语法实现原理/">blog.yuanziwen.cn/2018/01/28/doT-js模板语法实现原理/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/模板语法/">模板语法</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/02/12/CCS开启硬件加速提高网站性能/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">CCS开启硬件加速提高网站性能</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/01/26/canvas特效大全/">
+        <span class="next-text nav-default">canvas特效大全</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1593502174043')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

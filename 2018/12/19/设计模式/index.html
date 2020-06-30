@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="JavaScript设计模式"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2018/12/19/设计模式/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>JavaScript设计模式 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music(NoAuto)
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music(NoAuto)
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">JavaScript设计模式
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-12-19
+        </span></div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#设计模式是什么妖"><span class="toc-text">设计模式是什么妖</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-工厂模式"><span class="toc-text">1.工厂模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#不用设计模式之前"><span class="toc-text">不用设计模式之前</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ES5时期传统方式是"><span class="toc-text">ES5时期传统方式是</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-单例模式"><span class="toc-text">2.单例模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-适配器模式"><span class="toc-text">3.适配器模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-装饰器模式"><span class="toc-text">4.装饰器模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-代理模式"><span class="toc-text">5.代理模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#面试题"><span class="toc-text">面试题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-公司业务有快车和专车，快车每公里1元-专车每公里2元，每辆车有车牌号和车名称，如果实际行驶为5公里，请画出UML类图和代码实现"><span class="toc-text">1.公司业务有快车和专车，快车每公里1元 专车每公里2元，每辆车有车牌号和车名称，如果实际行驶为5公里，请画出UML类图和代码实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-停车场"><span class="toc-text">2.停车场</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><h2 id="设计模式是什么妖"><a href="#设计模式是什么妖" class="headerlink" title="设计模式是什么妖"></a>设计模式是什么妖</h2><p><img src="'https://static.yuanziwen.cn/blog/design/book.png'" alt="alt"></p>
+<a id="more"></a>
+<h3 id="1-工厂模式"><a href="#1-工厂模式" class="headerlink" title="1.工厂模式"></a>1.工厂模式</h3><p>工厂模式是用来创建对象的一种最常用的设计模式，不会暴露具体逻辑，而是把逻辑封装在函数体内，只需要根据外界传入的即可返回所需要的对象。<br>比如又一个需求</p>
+<blockquote><p>新建一个用户，有系统管理员，管理员，和普通用户，对应的权限各不同，怎么去设计</p>
+</blockquote>
+<p>那这个时候，可以着手去设计</p>
+<h4 id="不用设计模式之前"><a href="#不用设计模式之前" class="headerlink" title="不用设计模式之前"></a>不用设计模式之前</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> systemAdmin = [<span class="string">'系统管理'</span>,<span class="string">'用户管理'</span>,<span class="string">'发现页'</span>,<span class="string">'首页'</span>,<span class="string">'我的消息'</span>];</span><br><span class="line"><span class="keyword">var</span> system = [<span class="string">'用户管理'</span>,<span class="string">'发现页'</span>,<span class="string">'首页'</span>,<span class="string">'我的消息'</span>];</span><br><span class="line"><span class="keyword">var</span> user = [<span class="string">'发现页'</span>,<span class="string">'首页'</span>,<span class="string">'我的消息'</span>];</span><br><span class="line"><span class="keyword">var</span> systemAdmin = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">systemAdmin.name = <span class="string">'系统管理员'</span>;</span><br><span class="line">systemAdmin.page = system;</span><br></pre></td></tr></table></figure>
+
+<p>很不直观，而且不利于复用，手动创建<br>用工厂模式</p>
+<h4 id="ES5时期传统方式是"><a href="#ES5时期传统方式是" class="headerlink" title="ES5时期传统方式是"></a>ES5时期传统方式是</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">addUser</span>(<span class="params">type</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (type.toString())&#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'systemAdmin'</span> :</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">          name:<span class="string">'系统管理员'</span>,</span><br><span class="line">          page:[<span class="string">'系统管理'</span>,<span class="string">'用户管理'</span>,<span class="string">'发现页'</span>,<span class="string">'首页'</span>,<span class="string">'我的消息'</span>]</span><br><span class="line">        &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'admin'</span> :</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">          name:<span class="string">'管理员'</span>,</span><br><span class="line">          page:[<span class="string">'用户管理'</span>,<span class="string">'发现页'</span>,<span class="string">'首页'</span>,<span class="string">'我的消息'</span>]</span><br><span class="line">        &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'user'</span> :</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">          name:<span class="string">'用户'</span>,</span><br><span class="line">          page:[<span class="string">'发现页'</span>,<span class="string">'首页'</span>,<span class="string">'我的消息'</span>]</span><br><span class="line">        &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">default</span>:</span><br><span class="line">          <span class="keyword">return</span> &#123;<span class="attr">message</span>:<span class="string">'参数错误'</span>,<span class="attr">code</span>:<span class="string">'401'</span>&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="keyword">var</span> systemAdmin = addUser(<span class="string">'systemAdmin'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这样的话，其实符合功能需求的。但是ES6的看起来更加符合面向对象编程</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AddUser</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>()&#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">  addUser(name)&#123;</span><br><span class="line">     <span class="keyword">switch</span> (name.toString())&#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'systemAdmin'</span> :</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">          name:<span class="string">'系统管理员'</span>,</span><br><span class="line">          page:[<span class="string">'系统管理'</span>,<span class="string">'用户管理'</span>,<span class="string">'发现页'</span>,<span class="string">'首页'</span>,<span class="string">'我的消息'</span>]</span><br><span class="line">        &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'admin'</span> :</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">          name:<span class="string">'管理员'</span>,</span><br><span class="line">          page:[<span class="string">'用户管理'</span>,<span class="string">'发现页'</span>,<span class="string">'首页'</span>,<span class="string">'我的消息'</span>]</span><br><span class="line">        &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'user'</span> :</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">          name:<span class="string">'用户'</span>,</span><br><span class="line">          page:[<span class="string">'发现页'</span>,<span class="string">'首页'</span>,<span class="string">'我的消息'</span>]</span><br><span class="line">        &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">default</span>:</span><br><span class="line">          <span class="keyword">return</span> &#123;<span class="attr">message</span>:<span class="string">'参数错误'</span>,<span class="attr">code</span>:<span class="string">'401'</span>&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> add = <span class="keyword">new</span> AddUser();</span><br><span class="line"><span class="keyword">const</span> user = add.addUser(<span class="string">'systemAdmin'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>结果是相同的，但是更加符合面向对象的规范，即便从传统意义上来说，还是ES5的更容易理解。我们只需要知道能通过<code>add.addUser(name)</code>来生产一个我们需要的对象。不需要去关心它怎么实现。像<code>React.createElement</code>内的<code>VNode(tag,attrs, chilren)</code> 还有Vue的<code>Vue.component()</code>都是工厂模式的实现。<br>工厂模式设计原则</p>
+<blockquote>
+<p>构造函数和创建者分离<br>符合开放封闭原则</p>
+</blockquote>
+<h3 id="2-单例模式"><a href="#2-单例模式" class="headerlink" title="2.单例模式"></a>2.单例模式</h3><p>什么是单例模式</p>
+<blockquote>
+<p>系统中被唯一使用<br>一个类只有一个实例</p>
+</blockquote>
+<p>例如之前使用的JQuery，从外部引入的文件，即使引入多次，最终全局还是只有一个<code>window.$</code>。这就是单例模式。</p>
+<blockquote><p>例如有一个需求是用户点击登录的时候弹出登录框，</p>
+</blockquote>
+<p>那我们可以这么做</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Login</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.state = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">this</span>.instance = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line">Login.prototype.show = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.state)&#123;</span><br><span class="line">      <span class="comment">//如果当前已经显示了</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'已经显示'</span>)</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="comment">//如果当前登录框隐藏</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'登录框成功显示'</span>)</span><br><span class="line">      <span class="keyword">this</span>.state = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">Login.prototype.hide = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(<span class="keyword">this</span>.state)&#123;</span><br><span class="line">      <span class="comment">//如果当前已经显示了</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'登录框成功隐藏'</span>)</span><br><span class="line">      <span class="keyword">this</span>.state = <span class="literal">false</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="comment">//如果当前登录框没有隐藏</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'已经隐藏'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 获取类的实例</span></span><br><span class="line">Login.getInstance = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">this</span>.instance) &#123;</span><br><span class="line">        <span class="keyword">this</span>.instance = <span class="keyword">new</span> Login();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.instance</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = Login.getInstance();</span><br><span class="line"><span class="keyword">var</span> b = Login.getInstance();</span><br><span class="line"><span class="built_in">console</span>.log(a === b); <span class="comment">//true</span></span><br><span class="line">a.show(); <span class="comment">// 登录框成功显示</span></span><br><span class="line">b.show(); <span class="comment">// 已经显示</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line">a.hide(); <span class="comment">// 登录框成功隐藏</span></span><br><span class="line">b.show(); <span class="comment">// 登录框成功显示</span></span><br><span class="line">a.hide(); <span class="comment">// 登录框成功隐藏</span></span><br><span class="line">a.hide(); <span class="comment">// 已经隐藏</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以使用闭包实现</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Login</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>()&#123;</span><br><span class="line">    <span class="keyword">this</span>.state = <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  show()&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.state)&#123;</span><br><span class="line">      <span class="comment">//如果当前已经显示了</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'已经显示'</span>)</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="comment">//如果当前登录框隐藏</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'登录框成功显示'</span>)</span><br><span class="line">      <span class="keyword">this</span>.state = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  hide()&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.state)&#123;</span><br><span class="line">      <span class="comment">//如果当前已经显示了</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'登录框成功隐藏'</span>)</span><br><span class="line">      <span class="keyword">this</span>.state = <span class="literal">false</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="comment">//如果当前登录框没有隐藏</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'已经隐藏'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">Login.getInstance = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">let</span> instance</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(!instance)&#123;</span><br><span class="line">        instance = <span class="keyword">new</span> Login();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> instance</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = Login.getInstance();</span><br><span class="line"><span class="keyword">var</span> b = Login.getInstance();</span><br><span class="line"><span class="built_in">console</span>.log(a === b); <span class="comment">// true</span></span><br><span class="line">a.show(); <span class="comment">// 登录框成功显示</span></span><br><span class="line">b.show(); <span class="comment">// 已经显示</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line">a.hide(); <span class="comment">// 登录框成功隐藏</span></span><br><span class="line">b.show(); <span class="comment">// 登录框成功显示</span></span><br><span class="line">a.hide(); <span class="comment">// 登录框成功隐藏</span></span><br><span class="line">a.hide(); <span class="comment">// 已经隐藏</span></span><br></pre></td></tr></table></figure>
+
+<p>单例模式的实现有很多地方，比如页面登录，商城购物车，VueX和Redux的Store…<br>特征是：全局只会有一个</p>
+<p>单例模式的设计原则验证：</p>
+<blockquote>
+<p>符合单一职责原则，只实例化唯一的对象<br>没法具体开放封闭原则，但是绝对不违反开放封闭原则</p>
+</blockquote>
+<h3 id="3-适配器模式"><a href="#3-适配器模式" class="headerlink" title="3.适配器模式"></a>3.适配器模式</h3><p>适配器，顾名思义，就是不改变原有的，只是提供一个转换的接口。就像港版iPad和国行iPad的官方充电器一样。当初为了图省钱，买了港版的，结果港行的充电器是三头的，国内很少有使用，这个时候就需要转换适配器来达到国行充电的效果。<br><img src="'https://static.yuanziwen.cn/chongdian.jpg'" alt="alt"><br><img src="'https://static.yuanziwen.cn/cd.png'" alt="alt"></p>
+<p>最简单的一个例子</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Adaptee</span> </span>&#123;</span><br><span class="line">  specific()&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'港版'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">National</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>()&#123;</span><br><span class="line">    <span class="keyword">this</span>.adaptee = <span class="keyword">new</span> Adaptee();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">finally</span>()&#123;</span><br><span class="line">    <span class="keyword">let</span> charger = <span class="keyword">this</span>.adaptee.specific();</span><br><span class="line">    <span class="keyword">return</span> charger + <span class="string">'-'</span> + <span class="string">'国行'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> chargerHead = <span class="keyword">new</span> National();</span><br><span class="line"><span class="keyword">var</span> newHead = chargerHead.finally(); <span class="comment">// '港版-国行'</span></span><br></pre></td></tr></table></figure>
+
+<p>这样的设计模式是不是很像Vue的Computed属性？</p>
+<p>设计原则</p>
+<blockquote>
+<p>将旧接口和使用者分离<br>符合开放封闭原则</p>
+</blockquote>
+<h3 id="4-装饰器模式"><a href="#4-装饰器模式" class="headerlink" title="4.装饰器模式"></a>4.装饰器模式</h3><p>装饰器，可以理解成步枪消音器或者是手机壳。<br>假如有个需求，</p>
+<blockquote><p>用户登录后，根据用户的类型，去做出相应的多个接口请求，普通用户只需要请求<code>[&#39;我的消息&#39;]</code>,而系统管理员用户则需要请求<code>[&#39;个人信息&#39;,&#39;我的消息&#39;]</code>；两个接口。</p>
+</blockquote>
+<p>实现思路，由于都要请求<code>我的消息</code>模块，所以将我的消息模块做为一个基本的函数封装</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Message</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(name)&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name||<span class="string">''</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  requestUserMessage()&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'请求用户消息'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserAfterLogin</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(userType)&#123;</span><br><span class="line">    <span class="keyword">this</span>.userType = userType;</span><br><span class="line">  &#125;</span><br><span class="line">  request()&#123;</span><br><span class="line">    <span class="keyword">this</span>.userType.requestUserMessage();</span><br><span class="line">    <span class="keyword">switch</span>(<span class="keyword">this</span>.userType.name)&#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'admin'</span> :</span><br><span class="line">        <span class="keyword">this</span>.userInfo();</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  userInfo()&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'请求个人信息'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> user1 = <span class="keyword">new</span> Message();</span><br><span class="line"><span class="keyword">let</span> admin1 = <span class="keyword">new</span> UserAfterLogin(user1);</span><br><span class="line">admin1.request();</span><br><span class="line"><span class="comment">// 请求用户消息</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> user2 = <span class="keyword">new</span> Message(<span class="string">'admin'</span>);</span><br><span class="line"><span class="keyword">let</span> admin2 = <span class="keyword">new</span> UserAfterLogin(user2);</span><br><span class="line">admin2.request();</span><br><span class="line"><span class="comment">// 请求用户消息</span></span><br><span class="line"><span class="comment">// 请求个人信息</span></span><br></pre></td></tr></table></figure>
+
+<p>有点类似于<code>VueX</code>里的<code>getter</code>，或者是<code>Component</code>的<code>watch/computed</code>，不影响本来值的获取，只会新增操作。<br>也可以用<code>ES7</code>的<code>@</code>操作符</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">@test</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Demo</span></span>&#123;&#125;</span><br><span class="line">等同于</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Demo</span></span>&#123;&#125;</span><br><span class="line">Demo = test(Demo) || Demo;</span><br></pre></td></tr></table></figure>
+
+<p>所以可以这样写</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">target,name,descriptor</span>)</span>&#123;</span><br><span class="line">      <span class="comment">// target 目标, name 名称, descriptor属性描述</span></span><br><span class="line">      target.status = data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@test(<span class="literal">true</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(Demo.status); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以尝试建造属性不可改</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readonly</span>(<span class="params">target, name, descriptor</span>)</span>&#123;</span><br><span class="line">  <span class="comment">// descriptor属性描述对象(Object.defineProperty)</span></span><br><span class="line">  <span class="comment">// &#123;</span></span><br><span class="line">  <span class="comment">//   value: specifiedFunction,</span></span><br><span class="line">  <span class="comment">//   enumerable: false,</span></span><br><span class="line">  <span class="comment">//   configurable: true,</span></span><br><span class="line">  <span class="comment">//   writable: true</span></span><br><span class="line">  <span class="comment">// &#125;</span></span><br><span class="line">  descriptor.writable = <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">return</span> descriptor</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>()&#123;</span><br><span class="line">    <span class="keyword">this</span>.first = <span class="string">'Seven'</span>;</span><br><span class="line">    <span class="keyword">this</span>.last = <span class="string">'Floyd'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  @readonly</span><br><span class="line">  myname()&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;<span class="keyword">this</span>.first&#125;</span> <span class="subst">$&#123;<span class="keyword">this</span>.last&#125;</span>`</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> Person();</span><br><span class="line"><span class="built_in">console</span>.log(p.myname())</span><br><span class="line"><span class="comment">// p.myname = '1';//报错 readonly为只读属性</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以增加日志打印</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">printLog</span>(<span class="params">target, name, descriptor</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">let</span> oldValue = descriptor.value;</span><br><span class="line">  descriptor.value = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">const</span> arg = <span class="built_in">Array</span>.prototype.slice.apply(<span class="built_in">arguments</span>)</span><br><span class="line">    <span class="built_in">console</span>.log( <span class="string">`<span class="subst">$&#123;name&#125;</span> 函数执行，参数<span class="subst">$&#123;arg&#125;</span>`</span>)</span><br><span class="line">    <span class="keyword">return</span> oldValue.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> descriptor</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Log</span> </span>&#123;</span><br><span class="line">  @printLog</span><br><span class="line">  myname(first,last)&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;first&#125;</span> <span class="subst">$&#123;last&#125;</span>`</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> name = <span class="keyword">new</span> Log();</span><br><span class="line"><span class="built_in">console</span>.log(name.myname(<span class="string">'seven'</span>,<span class="string">'floyd'</span>))</span><br><span class="line"><span class="comment">// myname 函数执行，参数seven,floyd</span></span><br><span class="line"><span class="comment">// seven floyd</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以通过<code>core-decorators</code>库引入第三方的装饰器；<br>把原来的登录操作改变一下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">message</span>(<span class="params">...list</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">target</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">Object</span>.assign(target.prototype,...list);<span class="comment">//合并配置</span></span><br><span class="line">    <span class="comment">//每次new都会产生的操作</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'请求用户消息'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> userType = <span class="function"><span class="keyword">function</span>(<span class="params">type</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">let</span> obj = &#123;&#125;;</span><br><span class="line">  <span class="keyword">switch</span>(type.toString())&#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'admin'</span>:</span><br><span class="line">      obj.userInfo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'请求用户信息'</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> obj;<span class="comment">//返回配置</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@message(userType(<span class="string">'admin'</span>))</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserAfterLogin</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> user = <span class="keyword">new</span> UserAfterLogin();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> obj <span class="keyword">in</span> user)&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">typeof</span> user[obj] === <span class="string">'function'</span>)&#123;</span><br><span class="line">    user[obj]();<span class="comment">//循环执行</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 请求用户消息</span></span><br><span class="line"><span class="comment">// 请求个人信息</span></span><br></pre></td></tr></table></figure>
+
+<p>设计原则</p>
+<blockquote>
+<p>将先有对象和装饰器进行分离，两者独立存在<br>符合开放封闭原则</p>
+</blockquote>
+<p>类似于<code>vue</code>的<code>computed</code>和<code>vuex</code>的<code>getter</code>方法实现；</p>
+<h3 id="5-代理模式"><a href="#5-代理模式" class="headerlink" title="5.代理模式"></a>5.代理模式</h3><p>代理模式和适配器模式以及装饰器模式表面看上去很像，但是实际上有不小的差别；<br>类似于翻qiang，国外的网站我们不能直接访问，只有通过某些翻qiang软件才能去访问。</p>
+<blockquote></blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2><p>下面是两道某司面试题。</p>
+<h3 id="1-公司业务有快车和专车，快车每公里1元-专车每公里2元，每辆车有车牌号和车名称，如果实际行驶为5公里，请画出UML类图和代码实现"><a href="#1-公司业务有快车和专车，快车每公里1元-专车每公里2元，每辆车有车牌号和车名称，如果实际行驶为5公里，请画出UML类图和代码实现" class="headerlink" title="1.公司业务有快车和专车，快车每公里1元 专车每公里2元，每辆车有车牌号和车名称，如果实际行驶为5公里，请画出UML类图和代码实现"></a>1.公司业务有快车和专车，快车每公里1元 专车每公里2元，每辆车有车牌号和车名称，如果实际行驶为5公里，请画出UML类图和代码实现</h3><p>费点时间，可以想象出他们彼此之前的相互关系，首先，每个订单也就是行程为一个类，而每个行程有一辆车，可以用车牌号来表示，行程有开始和结束，故得出<code>trip = number | start() | end()</code>,每辆车有车牌号与上面匹配，所以得出<code>car = num | name</code>两个属性。车有两种接单形式，专车和快车，其本身的属性一样，就是每公里数的价格<code>price</code>，得出上面的结论就可以画出如下UML类图。实心箭头为关联，空心为继承。</p>
+<iframe id="embed_dom" name="embed_dom" frameborder="0" style="display:block;width:100%; height:400px;" src="https://www.processon.com/embed/5c19ef03e4b095ccfee67ac8"></iframe>
+
+<p>继而实线代码如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Trip</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(car) &#123;</span><br><span class="line">    <span class="comment">// 行程  车辆信息</span></span><br><span class="line">    <span class="keyword">this</span>.car = car;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">// 行程开始</span></span><br><span class="line">  start() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`行程开始，名称:<span class="subst">$&#123;<span class="keyword">this</span>.car.name&#125;</span> ，车牌号<span class="subst">$&#123;<span class="keyword">this</span>.car.number&#125;</span>`</span>)</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">// 行程结束</span></span><br><span class="line">  end(km) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`行程结束，价格：<span class="subst">$&#123;<span class="keyword">this</span>.car.price * km &#125;</span> 元`</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 车辆信息  所有车辆都有</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Car</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(number, name) &#123;</span><br><span class="line">    <span class="comment">// 车牌号</span></span><br><span class="line">    <span class="keyword">this</span>.number = number;</span><br><span class="line">    <span class="comment">// 车辆名称</span></span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 快车</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Kuai</span> <span class="keyword">extends</span> <span class="title">Car</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(number, name) &#123;</span><br><span class="line">    <span class="keyword">super</span>(number, name)</span><br><span class="line">    <span class="comment">//车辆价格</span></span><br><span class="line">    <span class="keyword">this</span>.price = <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 专车</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Zhuan</span> <span class="keyword">extends</span> <span class="title">Car</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(number, name) &#123;</span><br><span class="line">    <span class="keyword">super</span>(number, name)</span><br><span class="line">    <span class="comment">//车辆价格</span></span><br><span class="line">    <span class="keyword">this</span>.price = <span class="number">2</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化车辆</span></span><br><span class="line"><span class="keyword">let</span> car = <span class="keyword">new</span> Kuai(<span class="string">'浙C:13A23'</span>, <span class="string">'悦动'</span>)</span><br><span class="line"><span class="comment">// 初始化行程</span></span><br><span class="line"><span class="keyword">let</span> trip = <span class="keyword">new</span> Trip(car);</span><br><span class="line">trip.start();</span><br><span class="line"><span class="comment">// 行程</span></span><br><span class="line"><span class="keyword">let</span> i = <span class="number">10</span>;</span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">//结算</span></span><br><span class="line">  trip.end(i)</span><br><span class="line">&#125;, <span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+
+<p>1秒后打印结果</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">行程开始，名称:悦动 ，车牌号浙C:13A23</span><br><span class="line">行程结束，价格：10 元</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-停车场"><a href="#2-停车场" class="headerlink" title="2.停车场"></a>2.停车场</h3><blockquote>
+<p>停车场有3层，每层100个停车位<br>车辆驶入前，显示屏显示每层剩余车位数<br>车辆驶入后，摄像头记录车牌号和驶入时间<br>车辆驶出后，计算停车时间</p>
+</blockquote>
+<p>从题目看起来不是很复杂，但是设计起来要考虑很多。比如每辆车的信息和每个停车位的状态。<br>首先从简单着手，<br>车辆<code>Car = num</code>有车牌号属性。<br>停车位<code>Place = empty | in() | out()</code>是否为空，in为驶入，out为驶出。<br>摄像头<code>Camera = shot()</code> 负责记录每辆车的驶入信息。<br>显示屏<code>Screen = show()</code> 车辆驶出时显示的停车时间。<br>停车层<code>Floor = places | index | emptyPlaceNum()</code>。places该层停车位集合，index层，emptyPlaceNum()返回该层停车位<br>停车场<code>Park</code>，有属性<code>摄像头camera | 屏幕screen | 车位集合floor | 摄像头拍摄的车辆信息 carList</code>。方法有<code>打印每层的停车位emptyNum() | 车辆驶入停车场in() | 车辆驶出停车场out()</code></p>
+<p>列出他们的属性就可以着手话UML类图了。</p>
+<iframe id="embed_dom" name="embed_dom" frameborder="0" style="display:block;width:100%; height:400px;" src="https://www.processon.com/embed/5c19cc87e4b095ccfee626f2"></iframe>
+
+<p>再通过UML实现函数</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//停车场</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Park</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(floor) &#123;</span><br><span class="line">    <span class="keyword">this</span>.floors = floor || [];</span><br><span class="line">    <span class="keyword">this</span>.screen = <span class="keyword">new</span> Screen();</span><br><span class="line">    <span class="keyword">this</span>.camera = <span class="keyword">new</span> Camera();</span><br><span class="line">    <span class="keyword">this</span>.carList = &#123;&#125;; <span class="comment">//储存摄像头拍摄的车辆信息</span></span><br><span class="line">  &#125; </span><br><span class="line">  <span class="keyword">in</span> (car) &#123;</span><br><span class="line">    <span class="comment">//通过摄像头获取信息</span></span><br><span class="line">    <span class="keyword">const</span> info = <span class="keyword">this</span>.camera.shot(car);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//停到到某个停车位</span></span><br><span class="line">    <span class="keyword">const</span> i = <span class="built_in">parseInt</span>(<span class="built_in">Math</span>.random() * <span class="number">100</span> % <span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取随机车位</span></span><br><span class="line">    <span class="keyword">const</span> place = <span class="keyword">this</span>.floors[<span class="number">0</span>].places[i];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//将车停入该车位</span></span><br><span class="line">    place.in();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//停车记录储存该车信息</span></span><br><span class="line">    info.place = place;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//记录信息</span></span><br><span class="line">    <span class="keyword">this</span>.carList[car.num] = info;</span><br><span class="line">  &#125;</span><br><span class="line">  out(car) &#123;</span><br><span class="line">    <span class="comment">// 根据车牌号获取驾出车辆的信息</span></span><br><span class="line">    <span class="keyword">const</span> info = <span class="keyword">this</span>.carList[car.num];</span><br><span class="line">    <span class="comment">// 获取停车位状态 </span></span><br><span class="line">    <span class="keyword">const</span> place = info.place;</span><br><span class="line">    <span class="comment">// 车辆驶出</span></span><br><span class="line">    place.out();</span><br><span class="line">    <span class="comment">//显示时间</span></span><br><span class="line">    <span class="keyword">this</span>.screen.show(car, info.inTime)</span><br><span class="line">    <span class="comment">// 清除属性</span></span><br><span class="line">    <span class="keyword">delete</span> <span class="keyword">this</span>.carList[car.num]</span><br><span class="line">  &#125;</span><br><span class="line">  emptyNum() &#123;</span><br><span class="line">    <span class="comment">// 打印每层空余停车位</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.floors.map(<span class="function"><span class="params">floor</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;floor.index&#125;</span> 层还有 <span class="subst">$&#123;floor.emptyPlaceNum()&#125;</span> 个空余车位`</span></span><br><span class="line">    &#125;).join(<span class="string">'\n'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//显示屏</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Screen</span> </span>&#123;</span><br><span class="line">  show(car, inTime) &#123;</span><br><span class="line">    <span class="comment">// 打印出车牌号和停车时间</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'车牌号'</span>, car.num)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'停车时间'</span>, <span class="built_in">Date</span>.now() - inTime)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//摄像头</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Camera</span> </span>&#123;</span><br><span class="line">  shot(car) &#123;</span><br><span class="line">    <span class="comment">// 返回车辆的车牌号和驶入信息</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      num: car.num,</span><br><span class="line">      inTime: <span class="built_in">Date</span>.now()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//车辆</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Car</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(num) &#123;</span><br><span class="line">    <span class="comment">// 唯一标示 车牌号</span></span><br><span class="line">    <span class="keyword">this</span>.num = num;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//层</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Floor</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(index, places) &#123;</span><br><span class="line">    <span class="comment">// 层级</span></span><br><span class="line">    <span class="keyword">this</span>.index = index;</span><br><span class="line">    <span class="comment">// 总共停车位</span></span><br><span class="line">    <span class="keyword">this</span>.places = places || [];</span><br><span class="line">  &#125;</span><br><span class="line">  emptyPlaceNum() &#123;</span><br><span class="line">    <span class="comment">// 统计空闲停车位总数</span></span><br><span class="line">    <span class="keyword">let</span> num = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">this</span>.places.forEach(<span class="function"><span class="params">p</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (p.empty) &#123;</span><br><span class="line">        num = num + <span class="number">1</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">return</span> num</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//车位</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Place</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="comment">// 每个车位默认true，表示可停</span></span><br><span class="line">    <span class="keyword">this</span>.empty = <span class="literal">true</span>;</span><br><span class="line">  &#125; <span class="keyword">in</span> () &#123;</span><br><span class="line">    <span class="comment">// 驶入改为false</span></span><br><span class="line">    <span class="keyword">this</span>.empty = <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  out() &#123;</span><br><span class="line">    <span class="comment">// 驶出改为true</span></span><br><span class="line">    <span class="keyword">this</span>.empty = <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试</span></span><br><span class="line"><span class="comment">//初始化停车场</span></span><br><span class="line"><span class="keyword">const</span> floors = [];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">  <span class="keyword">const</span> places = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> j = <span class="number">0</span>; j &lt; <span class="number">100</span>; j++) &#123;</span><br><span class="line">    places[j] = <span class="keyword">new</span> Place()</span><br><span class="line">  &#125;</span><br><span class="line">  floors[i] = <span class="keyword">new</span> Floor(i + <span class="number">1</span>, places)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> park = <span class="keyword">new</span> Park(floors)</span><br><span class="line"><span class="comment">//初始化 3辆车</span></span><br><span class="line"><span class="keyword">const</span> car1 = <span class="keyword">new</span> Car(<span class="string">'浙A:12B45'</span>)</span><br><span class="line"><span class="keyword">const</span> car2 = <span class="keyword">new</span> Car(<span class="string">'浙B:33A56'</span>)</span><br><span class="line"><span class="keyword">const</span> car3 = <span class="keyword">new</span> Car(<span class="string">'浙C:9X765'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//车辆进入</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'第一辆车进入'</span>)</span><br><span class="line"><span class="built_in">console</span>.log(park.emptyNum())</span><br><span class="line">park.in(car1)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'第二辆车进入'</span>)</span><br><span class="line"><span class="built_in">console</span>.log(park.emptyNum())</span><br><span class="line">park.in(car2)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'第一辆车离开'</span>)</span><br><span class="line">park.out(car1)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'第二辆车 离开'</span>)</span><br><span class="line">park.out(car2)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'第三辆车进入'</span>)</span><br><span class="line"><span class="built_in">console</span>.log(park.emptyNum())</span><br><span class="line">park.in(car3)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'第三辆车离开'</span>)</span><br><span class="line">park.out(car3)</span><br></pre></td></tr></table></figure>
+
+<p>结果<br><img src="'https://static.yuanziwen.cn/blog/design/park.png'" alt="alt"></p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2018/12/19/设计模式/">blog.yuanziwen.cn/2018/12/19/设计模式/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/javascript/">javascript</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2019/01/17/typescript——基础篇/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">typescript——基础篇</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/08/02/Vue源码剖析——render、patch、updata、vnode/">
+        <span class="next-text nav-default">Vue源码剖析——render、patch、updata、vnode</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1593502174043')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

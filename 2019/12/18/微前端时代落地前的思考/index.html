@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="微前端时代思考与实践"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2019/12/18/微前端时代落地前的思考/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>微前端时代思考与实践 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music(NoAuto)
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music(NoAuto)
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">微前端时代思考与实践
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-12-18
+        </span></div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#微前端"><span class="toc-text">微前端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么出现"><span class="toc-text">为什么出现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决了什么问题"><span class="toc-text">解决了什么问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#适合什么样的场景"><span class="toc-text">适合什么样的场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HOW-DO"><span class="toc-text">HOW DO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构建时集成"><span class="toc-text">构建时集成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行时集成"><span class="toc-text">运行时集成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iframe"><span class="toc-text">iframe</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#优点"><span class="toc-text">优点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#缺点"><span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#web-Component"><span class="toc-text">web Component</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#优点-1"><span class="toc-text">优点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#缺点-1"><span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SystemJs"><span class="toc-text">SystemJs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>技术和架构方案不同，技术可以凭空出现突然爆火没有征兆。但方案或架构一定是为了解决某个问题而出现的，实践之前，请务必先要去搞清楚它是否可以解决当前问题，再者调研是否适合团队，考虑工程价值与产品价值，请不要盲目追求。</p>
+<a id="more"></a>
+
+<p><img src="https://static.yuanziwen.cn/blog/microFront123102034565_01.png" alt="123102034565_01"></p>
+<!-- [原文地址](https://blog.yuanziwen.cn/2019/12/18/%E5%BE%AE%E5%89%8D%E7%AB%AF%E6%97%B6%E4%BB%A3%E8%90%BD%E5%9C%B0%E5%89%8D%E7%9A%84%E6%80%9D%E8%80%83/) -->
+
+<h2 id="微前端"><a href="#微前端" class="headerlink" title="微前端"></a>微前端</h2><p>熟悉它的人更喜欢称它为前端微服务。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><blockquote>
+<p>“微前端是一种架构风格，其中众多独立交付的前端应用组合成一个大型整体。”</p>
+</blockquote>
+<h3 id="为什么出现"><a href="#为什么出现" class="headerlink" title="为什么出现"></a>为什么出现</h3><p>在传统模式开发中，例如阿里云、腾讯云的控制台。维护一个大型的中后台并且快速迭代是一件很困难的事情，因为它们普遍都有下面几个问题。</p>
+<ul>
+<li>技术栈过于陈旧，应用不可维护的问题，想象一下你公司最老的项目突然让你新增feature，用的是jQuery也还好，但用的是Angular1甚至Java Web，透着网线都能感觉到你的痛。</li>
+<li>体积过于庞大，从一个普通应用演变成一个巨石应用( Frontend Monolith )，10W+行代码的祖传项目编译后即使抽离了dll，主包也起码要5M以上，编译慢且开发体验极差。</li>
+<li>技术栈单一，无法满足业务需求。每个框架都有其优点，择其长处利用之岂不美哉？</li>
+<li>重构代价大，无法步进式重构，即每次只重构一个模块，并且不影响现有版本的稳定性。只能一次性发布所有模块，风险大。</li>
+</ul>
+<p>有没有一种方案能够解决这些问题？</p>
+<p>借鉴服务端微服务的设计思想，前端微服务化就出现了。它虽然解决不了全部，但能尽小减轻负担和风险。它的实现更像是将整个项目变成一个“组件”，平台可以自由的组装这些组件。简而言之，单一的单体应用转变为多个小型前端应用聚合为一的应用。</p>
+<p>微服务化之前<br><img src="https://static.yuanziwen.cn/blog/microFront/9.png" alt="alt"><br>微服务化之后<br><img src="https://static.yuanziwen.cn/blog/microFront/10.png" alt="alt"></p>
+<h3 id="解决了什么问题"><a href="#解决了什么问题" class="headerlink" title="解决了什么问题"></a>解决了什么问题</h3><blockquote>
+<p>模块复杂度可控，团队独立自治</p>
+</blockquote>
+<p>每个模块（微服务）由一个开发团队完全掌控，易于管理和维护，快速整合业务。虽然可能会让各个团队的工作愈加分裂，但是只要控制在合理水平上还是利大于弊的。</p>
+<p><img src="https://static.yuanziwen.cn/blog/microFront/6.jpg" alt="alt"></p>
+<blockquote>
+<p>独立开发与部署，子仓库独立</p>
+</blockquote>
+<p>就像微服务一样，每个模块都具备独立运行的能力，这也代表可以独立部署。通过逐渐缩减每次部署的覆盖面降低风险。</p>
+<p><img src="https://static.yuanziwen.cn/blog/microFront/5.jpg" alt="alt"></p>
+<blockquote>
+<p>更具扩展能力，增量升级</p>
+</blockquote>
+<p>年份陈旧的大型前端应用的技术栈掌握的技术人员大多不在岗位上，到了重写整个前端应用的时候一次性重写整个应用风险太大，能够以增量式的风格来重写、升级、迭代，一点点换掉老的应用，同时在不受单体架构拖累的前提下为客户提供新功能。而且理论上来说可以支持大型单页应用无限拓展。虽然不具备SPA应用天然的优势，但是也摆脱了强耦合的应用技术栈。</p>
+<blockquote>
+<p>技术栈无关，创新自主</p>
+</blockquote>
+<p>主框架不限制接入应用的技术栈，如果我们想尝试新的技术或者是基于性能上有更好的实现，完全具备自主权。</p>
+<p>现有的微前端方案有：</p>
+<ul>
+<li><a href="https://single-spa.js.org/" target="_blank" rel="noopener">single-spa</a></li>
+<li><a href="https://github.com/ice-lab/icestark" target="_blank" rel="noopener">icestark</a></li>
+<li><a href="https://github.com/umijs/qiankun" target="_blank" rel="noopener">qiankun</a></li>
+<li><a href="https://github.com/aliyun/alibabacloud-console-widget" target="_blank" rel="noopener">widget</a></li>
+<li><a href="https://thx.github.io/magix/#!" target="_blank" rel="noopener">magix</a></li>
+<li><a href="https://luigi-project.io/" target="_blank" rel="noopener">Luigi</a></li>
+<li><a href="https://ara-framework.github.io/website/" target="_blank" rel="noopener">Ara Framework</a></li>
+<li><a href="https://github.com/iuap-design/ucf-web" target="_blank" rel="noopener">ucf-web</a></li>
+</ul>
+<h3 id="适合什么样的场景"><a href="#适合什么样的场景" class="headerlink" title="适合什么样的场景"></a>适合什么样的场景</h3><p>答案很明显：准备祖传的项目。</p>
+<p>单个团队没有理由采用微前端，还有需要快速开发的应用或者粒度较小的小型应用也不适用。</p>
+<h3 id="HOW-DO"><a href="#HOW-DO" class="headerlink" title="HOW DO"></a>HOW DO</h3><p>但也面临一些问题和挑战。</p>
+<ul>
+<li>如何在一个页面里渲染多种技术栈。</li>
+<li>不同技术栈模块之间如何通信。</li>
+<li>如何结合不同技术栈的路由，使其正确触发;hash与history模式处理;</li>
+<li>应用加载及生命周期管理。</li>
+<li>如何隔离应用，也就是沙盒应用。</li>
+<li>在考虑打包优化情况下每个项目如何打包，合并到一起。</li>
+<li>微服务化后如何进行业务开发。</li>
+<li>多个团队间应该如何协作。</li>
+</ul>
+<blockquote>
+<p>如何在一个页面里渲染多种技术栈。</p>
+</blockquote>
+<h3 id="构建时集成"><a href="#构建时集成" class="headerlink" title="构建时集成"></a>构建时集成</h3><p><a href="https://single-spa.js.org/" target="_blank" rel="noopener">Single-SPA</a> 它可以帮助我们在同一个页面使用多种框架((React、Vue、AngularJS、svelte、Ember等多个框架)。并且每个独立模块的代码可以做到按需加载、独立运行，其工作机制是命中到prefix时激活相应入口应用。</p>
+<p>使用 <code>registerApplication</code> 注册应用，签名</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">appName: string</span><br><span class="line">应用程序名称</span><br><span class="line"></span><br><span class="line">applicationOrLoadingFn: <span class="function"><span class="params">()</span> =&gt;</span> <span class="xml"><span class="tag">&lt;<span class="name">Function</span> | <span class="attr">Promise</span>&gt;</span></span></span><br><span class="line"><span class="xml">必须是一个加载函数，要么返回已加载的应用，要么返回一个Promise。</span></span><br><span class="line"></span><br><span class="line"><span class="xml">activityFn: (location) =&gt; boolean</span></span><br><span class="line"><span class="xml">必须是纯函数。这个函数使用 window.location 作为第一个参数，当应用处于激活状态时返回状态对应的值。</span></span><br><span class="line"></span><br><span class="line"><span class="xml">customProps?: Object = &#123;&#125;</span></span><br><span class="line"><span class="xml">props 将在每个生命周期方法期间传递给应用。</span></span><br></pre></td></tr></table></figure>
+
+<p>最后通过 <code>singleSpa.start()</code> 启动。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> singleSpa <span class="keyword">from</span> <span class="string">'single-spa'</span>;</span><br><span class="line"><span class="keyword">const</span> appName = <span class="string">'reactapp'</span>;</span><br><span class="line"><span class="comment">// 加载 React 应用入口文件</span></span><br><span class="line"><span class="keyword">const</span> loadingFunction = <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">import</span>(<span class="string">'./react/app.js'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 当前路由为/reactapp时为true</span></span><br><span class="line"><span class="keyword">const</span> activityFunction = <span class="function"><span class="params">location</span> =&gt;</span> location.pathname.startsWith(<span class="string">'/reactapp'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册应用</span></span><br><span class="line">singleSpa.registerApplication(appName, loadingFunction, activityFunction ,&#123; <span class="attr">token</span>: <span class="string">'xxx'</span>&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启动single-spa</span></span><br><span class="line">singleSpa.start();</span><br></pre></td></tr></table></figure>
+
+<p>single-spa内置了四个生命周期 Hook，分别是<code>bootstrap</code>, <code>mount</code>, <code>unmount</code>, <code>unload</code>，每个生命周期必须返回 Promise 或者是 asyncFunction.</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// app1.js</span></span><br><span class="line"><span class="keyword">let</span> domEl;</span><br><span class="line"><span class="keyword">const</span> gen = <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">Promise</span>.resolve();</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">bootstrap</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> gen().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="comment">// 首次安装时会被调用一次，也就是路由命中的时候</span></span><br><span class="line">            domEl = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">            domEl.id = <span class="string">'app1'</span>;</span><br><span class="line">            <span class="built_in">document</span>.body.appendChild(domEl);</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'app1 is bootstrapped!'</span>)</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">unload</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> gen().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 卸载注册应用，可以理解为删除，只有主动调用 unloadApplication 才会触发，相对应的是bootstrap</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'app1 is unloaded!'</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">mount</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> gen().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="comment">// mounted Component</span></span><br><span class="line">            domEl.textContent = <span class="string">'App1.js mounted'</span></span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'app1 is mounted!'</span>)</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">unmount</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> gen().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="comment">// unmounted Component</span></span><br><span class="line">            domEl.textContent = <span class="string">''</span>;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'app1 is unmounted!'</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样一个简单的应用就完成了。光说不练假把式，从无到有写一个支持<code>react</code>, <code>angular</code>, <code>vue</code>, <code>svelte</code> 的demo。</p>
+<p>先定义HTML结构</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"micro-container"</span>&gt;</span><br><span class="line">  &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"navbar"</span>&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">      &lt;a onclick=<span class="string">"singleSpaNavigate('/react')"</span>&gt;</span><br><span class="line">        &lt;li&gt;React App&lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>a&gt;</span><br><span class="line">      &lt;a onclick=<span class="string">"singleSpaNavigate('/vue')"</span>&gt;</span><br><span class="line">        &lt;li&gt;Vue App&lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>a&gt;</span><br><span class="line">      &lt;a onclick=<span class="string">"singleSpaNavigate('/svelte')"</span>&gt;</span><br><span class="line">        &lt;li&gt;Svelte App&lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>a&gt;</span><br><span class="line">      &lt;a onclick=<span class="string">"singleSpaNavigate('/angular')"</span>&gt;</span><br><span class="line">        &lt;li&gt;Angular App&lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>a&gt;</span><br><span class="line">    &lt;<span class="regexp">/ul&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>div&gt;</span><br><span class="line">  &lt;div id=<span class="string">"container"</span>&gt;</span><br><span class="line">    &lt;div id=<span class="string">"react-app"</span>&gt;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    &lt;div id="vue-app"&gt;&lt;/</span>div&gt;</span><br><span class="line">    &lt;div id=<span class="string">"angular-app"</span>&gt;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    &lt;div id="svelte-app"&gt;&lt;/</span>div&gt;</span><br><span class="line">  &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>上面的<code>div.micro-container</code>称为容器应用。每个页面除了包含一个容器应用外，还有可能包含多个<code>micro-frontend</code>。<code>singleSpaNavigate</code> 方法是<code>single-spa</code>内置的导航Api，可以在已注册的application之间执行 url Navigation ，而且无需处理 <code>event.preventDefault</code> <code>pushState</code>方法等。然后再定义 entry，以下是伪结构。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">├─.babelrc</span><br><span class="line">├─assets</span><br><span class="line">│ └─styles</span><br><span class="line">├─index.html</span><br><span class="line">├─package.json</span><br><span class="line">├─src</span><br><span class="line">│ ├─angular</span><br><span class="line">│ │ ├─app.js</span><br><span class="line">│ │ ├─root.component.ts</span><br><span class="line">│ │ ├─components</span><br><span class="line">│ │ └─routes</span><br><span class="line">│ ├─baseApplication</span><br><span class="line">│ │ └─index.js <span class="comment">// register Application</span></span><br><span class="line">│ ├─react</span><br><span class="line">│ │ ├─app.js</span><br><span class="line">│ │ ├─components</span><br><span class="line">│ │ ├─root.component.js</span><br><span class="line">│ │ └─routes</span><br><span class="line">│ ├─svelte</span><br><span class="line">│ │ ├─app.js</span><br><span class="line">│ │ ├─components</span><br><span class="line">│ │ ├─root.component.svelte</span><br><span class="line">│ │ └─routes</span><br><span class="line">│ └─vue</span><br><span class="line">│   ├─app.js</span><br><span class="line">│   ├─components</span><br><span class="line">│   ├─root.component.vue</span><br><span class="line">│   └─routes</span><br><span class="line">├─tsconfig.json</span><br><span class="line">└─webpack.config.js</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/baseApplication/index.js</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> singleSpa <span class="keyword">from</span> <span class="string">'single-spa'</span>;</span><br><span class="line"></span><br><span class="line">singleSpa.registerApplication(<span class="string">'react'</span>, () =&gt; <span class="keyword">import</span> (<span class="string">'../react/app.js'</span>), pathPrefix(<span class="string">'/react'</span>));</span><br><span class="line">singleSpa.registerApplication(<span class="string">'vue'</span>, () =&gt; <span class="keyword">import</span> (<span class="string">'../vue/app.js'</span>), pathPrefix(<span class="string">'/vue'</span>));</span><br><span class="line">singleSpa.registerApplication(<span class="string">'angular'</span>, () =&gt; <span class="keyword">import</span> (<span class="string">'../angular/app.js'</span>), pathPrefix(<span class="string">'/angular'</span>));</span><br><span class="line">singleSpa.registerApplication(<span class="string">'svelte'</span>, () =&gt; <span class="keyword">import</span> (<span class="string">'../svelte/app.js'</span>), pathPrefix(<span class="string">'/svelte'</span>));</span><br><span class="line"></span><br><span class="line">singleSpa.start();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pathPrefix</span>(<span class="params">prefix</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">location</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> location.pathname.startsWith(<span class="string">`<span class="subst">$&#123;prefix&#125;</span>`</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以React 和 Vue 为例，当应用被import后，抛出的 <code>boostrap</code> 和 <code>mount</code> 及 <code>unmount</code> 会被执行，</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/vue/app.js</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue/dist/vue.min.js'</span>;</span><br><span class="line"><span class="keyword">import</span> singleSpaVue <span class="keyword">from</span> <span class="string">'single-spa-vue'</span>;</span><br><span class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">'./router'</span>;</span><br><span class="line"><span class="keyword">import</span> Loading <span class="keyword">from</span> <span class="string">'./Loading'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> vueLifecycles = singleSpaVue(&#123;</span><br><span class="line">  Vue,</span><br><span class="line">  appOptions: &#123;</span><br><span class="line">    router,</span><br><span class="line">    el:<span class="string">'#vue-app'</span>,</span><br><span class="line">    template: <span class="string">`</span></span><br><span class="line"><span class="string">      &lt;div id="vue-app"&gt;</span></span><br><span class="line"><span class="string">        &lt;router-view&gt;&lt;/router-view&gt;</span></span><br><span class="line"><span class="string">      &lt;/div&gt;</span></span><br><span class="line"><span class="string">    `</span>,</span><br><span class="line">    loadRootComponent: Loading</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> bootstrap = <span class="function">(<span class="params">props</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'vue-app is bootstrap'</span>)</span><br><span class="line">  <span class="keyword">return</span> vueLifecycles.bootstrap(props);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> mount = <span class="function">(<span class="params">props</span>) =&gt;</span>  &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'vue-app is Mounted'</span>)</span><br><span class="line">  <span class="keyword">return</span> vueLifecycles.mount(props);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> unmount = <span class="function">(<span class="params">props</span>) =&gt;</span>  &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'vue-app is unMounted'</span>)</span><br><span class="line">  <span class="keyword">return</span> vueLifecycles.unmount(props);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>bootstrap</code> 和 <code>mount</code> 这些钩子就不凑字数了，自行补上…</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/react/app.js</span></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span>;</span><br><span class="line"><span class="keyword">import</span> singleSpaReact <span class="keyword">from</span> <span class="string">'single-spa-react'</span>;</span><br><span class="line"><span class="keyword">import</span> Root <span class="keyword">from</span> <span class="string">'@React/root.component.js'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> reactLifecycles = singleSpaReact(&#123;</span><br><span class="line">  React,</span><br><span class="line">  ReactDOM,</span><br><span class="line">  rootComponent: Root,</span><br><span class="line">  domElementGetter: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">document</span>.getElementById(<span class="string">'react-app'</span>) <span class="comment">// 节点getter</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// ...other</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/svelte/app.js</span></span><br><span class="line"><span class="keyword">import</span> singleSpaSvelte <span class="keyword">from</span> <span class="string">'single-spa-svelte'</span>;</span><br><span class="line"><span class="keyword">import</span> AppComponent <span class="keyword">from</span> <span class="string">'./root.component.svelte'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> svelteLifecycles = singleSpaSvelte(&#123;</span><br><span class="line">  component: AppComponent,</span><br><span class="line">  domElementGetter: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">document</span>.getElementById(<span class="string">'svelte-app'</span>),</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// ...other</span></span><br></pre></td></tr></table></figure>
+
+<p>single-spa已经提供了大部分主流框架的对接工具库，内部对其做了适应工作，将 entry <code>baseApplication</code> 和 <code>common-dependencies</code> 注入到 html，如果只需要单一版本的话则把它放在公共依赖。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line">entry: &#123;</span><br><span class="line">    <span class="string">'baseApplication'</span>: <span class="string">'src/baseApplication/index.js'</span>,</span><br><span class="line">    <span class="string">'common-dependencies'</span>: [</span><br><span class="line">      <span class="string">'core-js/client/shim.min.js'</span>,</span><br><span class="line">      <span class="string">'@angular/common'</span>,</span><br><span class="line">      <span class="string">'@angular/compiler'</span>,</span><br><span class="line">      <span class="string">'@angular/core'</span>,</span><br><span class="line">      <span class="string">'@angular/platform-browser-dynamic'</span>,</span><br><span class="line">      <span class="string">'@angular/router'</span>,</span><br><span class="line">      <span class="string">'reflect-metadata'</span>,</span><br><span class="line">      <span class="string">'react'</span>,</span><br><span class="line">      <span class="string">'react-dom'</span>,</span><br><span class="line">      <span class="string">'react-router'</span>,</span><br><span class="line">      <span class="string">'react-router-dom'</span>,</span><br><span class="line">      <span class="string">"vue"</span>,</span><br><span class="line">      <span class="string">"vue-router"</span>,</span><br><span class="line">      <span class="string">"svelte"</span>,</span><br><span class="line">      <span class="string">"svelte-routing"</span></span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins:[</span><br><span class="line">     <span class="keyword">new</span> HTMLWebpackPlugin(&#123;</span><br><span class="line">      template: path.resolve(<span class="string">'index.html'</span>),</span><br><span class="line">      inject: <span class="literal">true</span>,</span><br><span class="line">      chunksSortMode: <span class="string">'none'</span></span><br><span class="line">    &#125;),</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
+
+<p>源码已经上传到<a href="https://github.com/yzw7489757/single-spa-demo/tree/simple" target="_blank" rel="noopener">github</a></p>
+<p>借助 <code>single-spa</code> 提供的 Events 钩子，可以实现子应用的 LiftCycle Hooks。从而在子应用 boostrap与 unmount 进行全局变量冻结之类的事情避免变量污染。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'single-spa:before-routing-event'</span>,evt =&gt; &#123;</span><br><span class="line">    <span class="string">'route Event事件发生之前(hashchange,popstate或triggerAppChange之后都会触发)'</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="string">'single-spa:routing-event'</span>       =&gt; <span class="string">'route Event事件后触发'</span></span><br><span class="line"></span><br><span class="line"><span class="string">'single-spa:app-change'</span>          =&gt; <span class="string">'app change'</span></span><br><span class="line"></span><br><span class="line"><span class="string">'single-spa:no-app-change'</span>       =&gt; <span class="string">'与app-change相反，app nochange 时触发'</span></span><br><span class="line"></span><br><span class="line"><span class="string">'single-spa:before-first-mount'</span>  =&gt; <span class="string">'挂载第一个应用前'</span></span><br><span class="line"></span><br><span class="line"><span class="string">'single-spa:first-mount'</span>         =&gt; <span class="string">'挂载第一个应用后'</span></span><br></pre></td></tr></table></figure>
+
+<p>创建一个 <code>setDefaultMountedApp</code> 方法，其功能为指定默认挂载的 App。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">setDefaultMountedApp</span>(<span class="params">path</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">window</span>.addEventListener(<span class="string">`single-spa:no-app-change`</span>, () =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> activedApps = getMountedApps()</span><br><span class="line">    <span class="keyword">if</span> (activedApps.length === <span class="number">0</span>) &#123;</span><br><span class="line">      navigateToUrl(path)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    once: <span class="literal">true</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://static.yuanziwen.cn/blog/microFront/13.gif" alt="alt"></p>
+<p>这里由于使用了single-spa从而避免了刷新页面造成的子应用404问题。我们成功从应用分发路由到路由分发应用，似乎是达到想要的效果，之前的问题真的解决了吗？</p>
+<p><img src="https://static.yuanziwen.cn/blog/microFront/14.png" alt="alt"></p>
+<p>打包结果</p>
+<p><img src="https://static.yuanziwen.cn/blog/microFront/12.png" alt="alt"></p>
+<p>目前加载的是 <code>/react</code>，却依赖了整个公共依赖包，随着业务复杂，项目中组件库与其他库迅速发生“滚雪球效应”，依赖包体积的增大代表 FCP(First Contentful Paint) 也随之变长，即便在一个页面内实现渲染了多种技术栈，其根本意义还是属于大型整体应用、解耦性差、不能独立部署，未对各应用进行隔离，一旦某个应用崩溃仍然会引发整体应用崩溃。所以问题还是存在着，只是以另一种形式体现，</p>
+<p>这种方式被称为构建时集成，它通常会生成一个可部署的 Javascript 包，虽然我们可以从各种应用中删除重复依赖。但这意味着我们修改 app 的任何功能时都必须重新编译和发布所有微前端。这种齐步走的发布流程在微服务里已经够让我们好受了，所以强烈建议不要用它来实现微前端架构。好不容易实现了解耦和独立，别在发布阶段又绕回去。</p>
+<p>问题回到本质上，我们的目的就将应用分离解耦，集成部署的同时也支持独立运行、独立部署，我们得在运行时中也集成微前端。</p>
+<h3 id="运行时集成"><a href="#运行时集成" class="headerlink" title="运行时集成"></a>运行时集成</h3><p>除了使用原生JavaScript，运行时集成通常三种方式实现：</p>
+<ul>
+<li>iframe</li>
+<li>web Component</li>
+<li>SystemJs</li>
+</ul>
+<h3 id="iframe"><a href="#iframe" class="headerlink" title="iframe"></a>iframe</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">id</span>=<span class="string">"micro-frontend-container"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> microFrontendsByRoute = &#123;</span></span><br><span class="line"><span class="javascript">    <span class="string">'/'</span>: <span class="string">'https://browse.example.com/index.html'</span>,</span></span><br><span class="line"><span class="javascript">    <span class="string">'/order-food'</span>: <span class="string">'https://order.example.com/index.html'</span>,</span></span><br><span class="line"><span class="javascript">    <span class="string">'/user-profile'</span>: <span class="string">'https://profile.example.com/index.html'</span>,</span></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> iframe = <span class="built_in">document</span>.getElementById(<span class="string">'micro-frontend-container'</span>);</span></span><br><span class="line"><span class="javascript">  iframe.src = microFrontendsByRoute[<span class="built_in">window</span>.location.pathname];</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><p>简单、粗暴，天生自带沙盒，适用于三方业务引入。</p>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>SEO差;页面响应速度慢;灵活性差;路由深层连接复杂;使用<code>postMessage</code>进行消息通信侵入性太强;双滚动条;iframe内部的DOM获取页面高度;遮罩无法覆盖外部;刷新回到iframe首页等问题。这种先甜后苦后人背锅的事情我们可做不来，强烈不推荐。</p>
+<h3 id="web-Component"><a href="#web-Component" class="headerlink" title="web Component"></a>web Component</h3><p>web Component 由四个部分组成，</p>
+<ul>
+<li>Custom elements 自定义元素</li>
+<li>Shadow DOM 隔离样式</li>
+<li>HTML templates  模板</li>
+<li>HTML Imports 导入</li>
+</ul>
+<p>这里有个简单的<a href="https://codepen.io/Floyd_seven/pen/VwYWYNN" target="_blank" rel="noopener">Demo</a></p>
+<p>目前React、Preact、Vue、Angular 对 Web component 都有支持，例如</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SearchBar</span> <span class="keyword">extends</span> <span class="title">HTMLElement</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">super</span>();</span><br><span class="line">    <span class="keyword">this</span>.mountPoint = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">    <span class="keyword">this</span>.attachShadow(&#123; <span class="attr">mode</span>: <span class="string">'open'</span> &#125;).appendChild(<span class="keyword">this</span>.mountPoint); <span class="comment">// 指定 open 模式</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  connectedCallback() &#123;</span><br><span class="line">    <span class="keyword">const</span> initialValue = <span class="keyword">this</span>.getAttribute(<span class="string">'initialValue'</span>) || <span class="string">''</span>;</span><br><span class="line">    ReactDOM.render(<span class="xml"><span class="tag">&lt;<span class="name">input</span> <span class="attr">value</span>=<span class="string">&#123;initialValue&#125;</span> <span class="attr">placeholder</span>=<span class="string">"Search..."</span> /&gt;</span></span>, <span class="keyword">this</span>.mountPoint);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  disconnectedCallback() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;<span class="keyword">this</span>.nodeName&#125;</span> is Remove`</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">customElements.define(<span class="string">'search-bar'</span>, SearchBar);</span><br><span class="line"></span><br><span class="line"><span class="comment">// index.html</span></span><br><span class="line">&lt;search-bar defaultValue=<span class="string">"field"</span> /&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>connectedCallback</code> 在被插入到DOM时执行，其时机相当于 React.componentDidMount。与之对应的是<code>disconnectedCallback</code>——React.componentWillUnMount.</p>
+<p>这样我们就可以通过创建 app 自定义应用组件，根据路由动态插入。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://base.xxx.com/bundle.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://order.xxx.com/bundle.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://profile.xxx.com/bundle.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"root-contariner"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> webComponentsByRoute = &#123;</span></span><br><span class="line"><span class="javascript">    <span class="string">'/'</span>: <span class="string">'base-dashboard'</span>,</span></span><br><span class="line"><span class="javascript">    <span class="string">'/order-food'</span>: <span class="string">'order-food'</span>,</span></span><br><span class="line"><span class="javascript">    <span class="string">'/user-profile'</span>: <span class="string">'user-profile'</span>,</span></span><br><span class="line">  &#125;;</span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> webComponentType = webComponentsByRoute[<span class="built_in">window</span>.location.pathname];</span></span><br><span class="line"></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> root = <span class="built_in">document</span>.getElementById(<span class="string">'root-contariner'</span>);</span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> webComponent = <span class="built_in">document</span>.createElement(webComponentType);</span></span><br><span class="line">  root.appendChild(webComponent);</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h4><p>满足所有需求</p>
+<h4 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h4><ol>
+<li>侵入性大，相当于重写现有的所有前端应用，不适用于过渡。</li>
+<li>生态尚未建立完善，手动造轮子耗时。</li>
+<li>组件间通信问题随着业务复杂随之也变得难以管理。</li>
+<li>仍然是兼容性问题，我们不需要“弃车保帅”。</li>
+</ol>
+<h3 id="SystemJs"><a href="#SystemJs" class="headerlink" title="SystemJs"></a>SystemJs</h3><p>SystemJs 是一个模块加载器，支持AMD、CommonJS、ES6等各种格式的JS模块动态加载。搭配 single-spa 再好不过。</p>
+<p>首先将各个子应用抽离出来，概览结构如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">├─cra-ts-app</span><br><span class="line">│ ├─config</span><br><span class="line">│ ├─images.d.ts</span><br><span class="line">│ ├─package.json</span><br><span class="line">│ ├─public</span><br><span class="line">│ ├─scripts</span><br><span class="line">│ ├─src</span><br><span class="line">│ │ ├─index.css</span><br><span class="line">│ │ ├─index.tsx</span><br><span class="line">│ │ └─registerServiceWorker.ts</span><br><span class="line">│ ├─tsconfig.json</span><br><span class="line">│ ├─tsconfig.prod.json</span><br><span class="line">│ ├─tsconfig.test.json</span><br><span class="line">│ ├─tslint.json</span><br><span class="line">├─nav <span class="comment">// 导航栏</span></span><br><span class="line">│ ├─package.json</span><br><span class="line">│ ├─src</span><br><span class="line">│ │ ├─app.js</span><br><span class="line">│ │ └─root.component.js</span><br><span class="line">│ └─webpack.config.js</span><br><span class="line">├─package.json</span><br><span class="line">├─portal <span class="comment">// 入口</span></span><br><span class="line">│ ├─index.html</span><br><span class="line">│ ├─index.js</span><br><span class="line">│ ├─package.json</span><br><span class="line">│ └─webpack.config.js</span><br><span class="line">├─react</span><br><span class="line">│ ├─package.json</span><br><span class="line">│ ├─src</span><br><span class="line">│ │ ├─app.js</span><br><span class="line">│ │ ├─main.js</span><br><span class="line">│ │ ├─root.component.js</span><br><span class="line">│ │ ├─routes</span><br><span class="line">│ └─webpack.config.js</span><br><span class="line">├─rts</span><br><span class="line">│ ├─build</span><br><span class="line">│ ├─package.json</span><br><span class="line">│ ├─postcss.config.js</span><br><span class="line">│ ├─public</span><br><span class="line">│ ├─src</span><br><span class="line">│ │ ├─app.tsx</span><br><span class="line">│ │ ├─index.tsx</span><br><span class="line">│ │ └─views</span><br><span class="line">│ ├─tsconfig.json</span><br><span class="line">│ └─types</span><br><span class="line">├─svelte</span><br><span class="line">│ ├─package.json</span><br><span class="line">│ ├─src</span><br><span class="line">│ │ ├─app.js</span><br><span class="line">│ │ ├─root.component.svelte</span><br><span class="line">│ │ └─routes</span><br><span class="line">│ └─webpack.config.js</span><br><span class="line">├─vts</span><br><span class="line">│ ├─babel.config.js</span><br><span class="line">│ ├─package.json</span><br><span class="line">│ ├─public</span><br><span class="line">│ ├─src</span><br><span class="line">│ │ ├─App.vue</span><br><span class="line">│ │ ├─assets</span><br><span class="line">│ │ ├─components</span><br><span class="line">│ │ ├─main.ts</span><br><span class="line">│ │ ├─registerServiceWorker.ts</span><br><span class="line">│ │ ├─router</span><br><span class="line">│ │ ├─shims-tsx.d.ts</span><br><span class="line">│ │ ├─shims-vue.d.ts</span><br><span class="line">│ │ ├─store</span><br><span class="line">│ │ └─views</span><br><span class="line">│ ├─tsconfig.json</span><br><span class="line">└─vue</span><br><span class="line">  ├─package.json</span><br><span class="line">  ├─src</span><br><span class="line">  │ ├─app.js</span><br><span class="line">  │ ├─app.vue</span><br><span class="line">  │ ├─components</span><br><span class="line">  │ ├─main.js</span><br><span class="line">  │ ├─root.component.vue</span><br><span class="line">  │ ├─router.js</span><br><span class="line">  │ ├─routes</span><br><span class="line">  └─webpack.config.js</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://static.yuanziwen.cn/blog/microFront/16.png" alt="alt"></p>
+<p>最终八个技术栈或版本各不相同的子应用，每个子应用可以单独作为一个仓库存在并管理，<code>portal</code> 作为一个入口项目，用于整合和注册各应用，<code>Portal</code> 也是一个主项目，给它的定位是资源加载框架, <code>Nav</code> 作为导航路由，其他的应用作为子应用。</p>
+<p>框架应用的本质是一个中心化部件，越简单也就越稳定，所以不要在<code>Portal</code>中做任何UI及业务逻辑。可以在 <code>Portal</code> 来做一些系统级公共支持，e.g. 登录验证、权限管理、鉴权、性能监控、错误调用栈上报等。</p>
+<p><img src="https://static.yuanziwen.cn/blog/microFront/17.png" alt="alt"></p>
+<p>portal 主应用代码如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; getMountedApps, registerApplication, start, navigateToUrl, getAppNames &#125; <span class="keyword">from</span> <span class="string">'single-spa'</span>;</span><br><span class="line"><span class="keyword">import</span> SystemJS <span class="keyword">from</span> <span class="string">'systemjs/dist/system'</span> <span class="comment">// 0.20.24 DEV!!!</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> apps = [</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'nav'</span>, <span class="attr">url</span>: <span class="literal">true</span>, <span class="attr">entry</span>: <span class="string">'//localhost:5005/app.js'</span>, <span class="attr">customProps</span>: &#123;&#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'react'</span>, <span class="attr">url</span>: <span class="string">'/react'</span>, <span class="attr">entry</span>: <span class="string">'//localhost:5001/app.js'</span>, <span class="attr">customProps</span>: &#123;&#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'vue'</span>, <span class="attr">url</span>: <span class="string">'/vue'</span>, <span class="attr">entry</span>: <span class="string">'//localhost:5002/app.js'</span>, <span class="attr">customProps</span>: &#123;&#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'svelte'</span>, <span class="attr">url</span>: <span class="string">'/svelte'</span>, <span class="attr">entry</span>: <span class="string">'//localhost:5003/app.js'</span>, <span class="attr">customProps</span>: &#123;&#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'react-ts'</span>, <span class="attr">url</span>: <span class="string">'/rts'</span>, <span class="attr">entry</span>: <span class="string">'//localhost:5006/app.js'</span>, <span class="attr">customProps</span>: &#123;&#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'cra-ts'</span>, <span class="attr">url</span>: <span class="string">'/crats'</span>, <span class="attr">entry</span>: <span class="string">'//localhost:5007/app.js'</span>, <span class="attr">customProps</span>: &#123;&#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'vts'</span>, <span class="attr">url</span>: <span class="string">'/vts'</span>, <span class="attr">entry</span>: <span class="string">'//localhost:5008/vts/index.js'</span>, <span class="attr">customProps</span>: &#123;&#125; &#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * RegisterApp</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">registerAllApps</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">await</span> <span class="built_in">Promise</span>.all(apps.map(registerApp))</span><br><span class="line">  <span class="keyword">await</span> setDefaultMountedApp(<span class="string">'/react'</span>);</span><br><span class="line">  start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">registerAllApps();</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * set default App</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;*&#125;</span> </span>path default app path</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">setDefaultMountedApp</span>(<span class="params">path</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">window</span>.addEventListener(<span class="string">`single-spa:no-app-change`</span>, (evt) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> activedApps = getMountedApps()</span><br><span class="line">    <span class="keyword">if</span> (activedApps.length === <span class="number">0</span> &amp;&amp; evt.target.location.pathname === <span class="string">'/'</span>) &#123;</span><br><span class="line">      navigateToUrl(path)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    once: <span class="literal">true</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * register App</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;*&#125;</span> </span>name App Name</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;*&#125;</span> </span>url visit Url</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;*&#125;</span> </span>entry entry file</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;*&#125;</span> </span>customProps custom Props</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">registerApp</span>(<span class="params">&#123; name, url, entry, customProps = &#123;&#125; &#125;</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 可以通过customProps来传递store与用户权限之类</span></span><br><span class="line">  <span class="keyword">return</span> registerApplication(name, () =&gt; SystemJS.import(entry), pathPrefix(url), customProps);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://static.yuanziwen.cn/blog/microFront/18.gif" alt></p>
+<p>改动不大，上文说到过独立运行、独立部署，这套方案目前还是不完全的，想搭建一个符合要求的微前端架构，通过动态获取各子应用的入口写入 <code>Portal</code> 主应用中，以及路由、打包后的公共依赖抽离等等。</p>
+<p>美团使用的方案就是类似 <a href="https://tech.meituan.com/2018/09/06/fe-tiny-spa.html" target="_blank" rel="noopener">用微前端的方式搭建类单页应用</a></p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018b/d25a43b1.png" alt></p>
+<ul>
+<li>发布最新的静态资源文件</li>
+<li>重新生成entry-xx.js和index.html（更新入口引用）</li>
+<li>重启前端服务</li>
+</ul>
+<p>我理想中微前端的单个子应用应该还具备单独作为一个项目产品上线，所以需要将入口文件分离，<code>single-spa</code> 子应用入口 与 普通应用分离，方式有很多，比如双入口文件处理，或者双打包配置，但是这种不仅麻烦容易出错而且比我想象中的还要复杂，不仅仅是方案上的问题，试想一下，某个子应用拿出来单步部署，而登录及鉴权系统在 <code>Portal</code> 其某个子应用中，难道又要将两个项目合并成一个新的微前端？想想也就觉得自己搞笑。</p>
+<p>除此之外，这套方案存在一些问题，e.g.</p>
+<ul>
+<li>使用 <code>@vue/cli</code> 路由动态import Component，返回的其实是一个html。</li>
+<li>旧项目可能涉及到多entry。</li>
+<li>子应用卸载后样式未清理。</li>
+<li>公共依赖仍未抽离。</li>
+<li>入口只能是单个 JavaScript 包，打包出来的 JS Entry 包太大，不能利用 code Splitting 分包利用并行资源加载。</li>
+</ul>
+<p>后来借鉴了 qiankun 针对这几个问题则使用 HTML Entry 的方式。即以 <code>{entry:&#39;//localhost:5001/index.html&#39;}</code>的形式引入;它可以很轻松的解决上述大部分问题。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">render</span>(<span class="params">&#123; appContent, loading &#125;</span>) </span>&#123;</span><br><span class="line">  ReactDOM.render(<span class="xml"><span class="tag">&lt;<span class="name">Framework</span> <span class="attr">loading</span>=<span class="string">&#123;loading&#125;</span> <span class="attr">content</span>=<span class="string">&#123;appContent&#125;</span> /&gt;</span></span>, <span class="built_in">document</span>.getElementById(<span class="string">'container'</span>));</span><br><span class="line">&#125;</span><br><span class="line">render(&#123; <span class="attr">loading</span>: <span class="literal">true</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">genActiveRule</span>(<span class="params">routerPrefix</span>) =&gt; <span class="title">location</span> =&gt; <span class="title">location</span>.<span class="title">pathname</span>.<span class="title">startsWith</span>(<span class="params">routerPrefix</span>);</span></span><br><span class="line"><span class="function"></span></span><br><span class="line">const appGroup = [</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'react app'</span>, <span class="attr">entry</span>: <span class="string">'//localhost:7100'</span>, render, <span class="attr">activeRule</span>: genActiveRule(<span class="string">'/react'</span>) &#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'react15 app'</span>, <span class="attr">entry</span>: <span class="string">'//localhost:7101'</span>, render, <span class="attr">activeRule</span>: genActiveRule(<span class="string">'/react15'</span>) &#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'vue app'</span>, <span class="attr">entry</span>: <span class="string">'//localhost:7102'</span>, render, <span class="attr">activeRule</span>: genActiveRule(<span class="string">'/vue'</span>) &#125;,</span><br><span class="line">]</span><br><span class="line"><span class="comment">// 注册应用集</span></span><br><span class="line">registerMicroApps(appGroup);</span><br></pre></td></tr></table></figure>
+
+<p>registerMicroApps 大概实现如下</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> microApps: RegistrableApp[] = [];</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">registerMicroApps</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">object</span> = </span>&#123;&#125;&gt;(</span><br><span class="line">  apps: <span class="built_in">Array</span>&lt;RegistrableApp&lt;T&gt;&gt;,</span><br><span class="line">  lifeCycles: LifeCycles&lt;T&gt; = &#123;&#125;,</span><br><span class="line">  opts: RegisterMicroAppsOpts = &#123;&#125;,</span><br><span class="line">) &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; beforeUnmount = [], afterUnmount = [], afterMount = [], beforeMount = [], beforeLoad = [] &#125; = lifeCycles;</span><br><span class="line">  <span class="keyword">const</span> &#123; fetch &#125; = opts;</span><br><span class="line">  microApps = [...microApps, ...apps];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> prevAppUnmountedDeferred: Deferred&lt;<span class="built_in">void</span>&gt;;</span><br><span class="line"></span><br><span class="line">  apps.forEach(<span class="function"><span class="params">app</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; name, entry, render, activeRule, props = &#123;&#125; &#125; = app;</span><br><span class="line"></span><br><span class="line">    registerApplication(</span><br><span class="line">      name,</span><br><span class="line"></span><br><span class="line">      <span class="keyword">async</span> (&#123; name: appName &#125;) =&gt; &#123;</span><br><span class="line">        <span class="keyword">await</span> frameworkStartedDefer.promise;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取入口 html 模板及脚本加载器 及 资源Domain</span></span><br><span class="line">        <span class="keyword">const</span> &#123; template: appContent, execScripts, assetPublicPath &#125; = <span class="keyword">await</span> importEntry(entry, &#123; fetch &#125;);</span><br><span class="line">        <span class="comment">// 卸载完后再加载</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">await</span> validateSingularMode(singularMode, app)) &#123;</span><br><span class="line">          <span class="keyword">await</span> (prevAppUnmountedDeferred &amp;&amp; prevAppUnmountedDeferred.promise);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 第一次加载设置应用可见区域 dom 结构</span></span><br><span class="line">        <span class="comment">// 确保每次应用加载前容器 dom 结构已经设置完毕</span></span><br><span class="line">        render(&#123; appContent, loading: <span class="literal">true</span> &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> jsSandbox: Window = <span class="built_in">window</span>;</span><br><span class="line">        <span class="keyword">let</span> mountSandbox = <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">Promise</span>.resolve();</span><br><span class="line">        <span class="keyword">let</span> unmountSandbox = <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">Promise</span>.resolve();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (useJsSandbox) &#123;</span><br><span class="line">          <span class="keyword">const</span> sandbox = genSandbox(appName, assetPublicPath);</span><br><span class="line">          jsSandbox = sandbox.sandbox;</span><br><span class="line">          mountSandbox = sandbox.mount;</span><br><span class="line">          unmountSandbox = sandbox.unmount;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">await</span> execHooksChain(toArray(beforeLoad), app);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// eval</span></span><br><span class="line">        <span class="keyword">let</span> &#123; bootstrap: bootstrapApp, mount, unmount &#125; = <span class="keyword">await</span> execScripts(jsSandbox);</span><br><span class="line">        <span class="comment">// ...other</span></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">          bootstrap: [bootstrapApp],</span><br><span class="line">          mount: [</span><br><span class="line">            <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">              <span class="keyword">if</span> ((<span class="keyword">await</span> validateSingularMode(singularMode, app)) &amp;&amp; prevAppUnmountedDeferred) &#123;</span><br><span class="line">                <span class="keyword">return</span> prevAppUnmountedDeferred.promise;</span><br><span class="line">              &#125;</span><br><span class="line">              <span class="keyword">return</span> <span class="literal">undefined</span>;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="keyword">async</span> () =&gt; execHooksChain(toArray(beforeMount), app),</span><br><span class="line">            <span class="keyword">async</span> () =&gt; render(&#123; appContent, loading: <span class="literal">true</span> &#125;),</span><br><span class="line">            mountSandbox,</span><br><span class="line">            mount,</span><br><span class="line">            <span class="keyword">async</span> () =&gt; render(&#123; appContent, loading: <span class="literal">false</span> &#125;),</span><br><span class="line">            <span class="keyword">async</span> () =&gt; execHooksChain(toArray(afterMount), app),</span><br><span class="line">            <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">              <span class="keyword">if</span> (<span class="keyword">await</span> validateSingularMode(singularMode, app)) &#123;</span><br><span class="line">                prevAppUnmountedDeferred = <span class="keyword">new</span> Deferred&lt;<span class="built_in">void</span>&gt;();</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">          ],</span><br><span class="line">          unmount: [</span><br><span class="line">            <span class="keyword">async</span> () =&gt; execHooksChain(toArray(beforeUnmount), app),</span><br><span class="line">            unmount,</span><br><span class="line">            unmountSandbox,</span><br><span class="line">            <span class="keyword">async</span> () =&gt; execHooksChain(toArray(afterUnmount), app),</span><br><span class="line">            <span class="keyword">async</span> () =&gt; render(&#123; appContent: <span class="string">''</span>, loading: <span class="literal">false</span> &#125;),</span><br><span class="line">            <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">              <span class="keyword">if</span> ((<span class="keyword">await</span> validateSingularMode(singularMode, app)) &amp;&amp; prevAppUnmountedDeferred) &#123;</span><br><span class="line">                prevAppUnmountedDeferred.resolve();</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">          ],</span><br><span class="line">        &#125;;</span><br><span class="line">      &#125;,</span><br><span class="line"></span><br><span class="line">      activeRule,</span><br><span class="line">      props,</span><br><span class="line">    );</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从HTML模板中提取出所有脚本样式等资源，样式直接写入html template，在沙盒部分的处理上，qiankun 利用 Proxy 劫持了对 <code>window</code> 的操作，使其作用到一个空字典上，在 bootstrap 及 mount 生命周期之前分别get全局状态打下快照，并使用 <code>Map</code> 记录下来，避免污染了全局对象，这样在沙盒 <code>unmount</code> 的时候也不需要手动去销毁，至于怎样将脚本默认 window 指向这个空字典也很简单，通过<code>eval</code>将 window 指向 window.proxy 也就是空字典。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">geval(<span class="string">`;(function(window)&#123;;<span class="subst">$&#123;inlineScript&#125;</span>\n&#125;).bind(window.proxy)(window.proxy);`</span>);</span><br></pre></td></tr></table></figure>
+
+<p>关于css隔离，由于重写了html Entry，之前的内嵌样式也自然不复存在了。其实还有一种隔离 css 的方式，与 BEM 相同，通过 postcss 去设置子应用内 class 前缀，同时支持第三方库，至于css-module就不说了，兼容性问题，比如我司还有jquery项目，这你让谁给我转去？/手动滑稽</p>
+<p>然后剩下的就是 Lifecycle 内部的处理了。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">execHooksChain</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">object</span>&gt;(<span class="params">hooks: Array&lt;Lifecycle&lt;T&gt;&gt;, app: RegistrableApp&lt;T&gt;</span>): <span class="title">Promise</span>&lt;<span class="title">any</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (hooks.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> hooks.reduce(<span class="function">(<span class="params">chain, hook</span>) =&gt;</span> chain.then(<span class="function"><span class="params">()</span> =&gt;</span> hook(app)), <span class="built_in">Promise</span>.resolve());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果采用JS Entry的方式会浪费更多时间与精力去优化。最终采用了HTML Entry的方式，简直像极了HTMLless。</p>
+<p>这种完全将项目独立出去的方案虽然能避免很多问题，但是也存在一个性能优化上的问题——公共依赖，如果十个子应用都是用同一技术栈，那么在打包时即使依赖抽离子应用之间也毫无关系，这其实并没有一个好的解决方案，像React、React-DOM、Svelte、Vue之类占据大部分体积的包应该建立一个公共依赖池，把他们挂载在同一CDN下外链加载并通过extenals引入。</p>
+<p>e.g.</p>
+<blockquote>
+<p>A子应用<code>React@16.10.1</code> + B子应用 <code>React@16.10.2</code> =&gt; A+B<code>React@16.10.1</code>;</p>
+</blockquote>
+<p>由于修订号保持向下兼容,修复问题但不影响特性，只要次版本号相同，修订号保持向上兼容则功能相同，利用CDN缓存尽最大程度的避免重复依赖的资源加载。</p>
+<p>最后就是跨应用通信了，大部分人习惯Redux之类全局状态管理库的存在，但是为了降低耦合度，我们应该避免去应用间通信，如果必要的话，Custom Events 可以做到，但一定要把握好这个度。另一种方式就是以<code>Portal</code>主应用 bridge 向下传递数据和回调。</p>
+<p>可能有人觉得我前面扯了一大堆到头来全部推翻感情浪费时间，“知其然而不知其所以然”，总不能知道什么是好的就直接拿来用都不知道好在哪吧？</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://tech.antfin.com/community/articles/536" target="_blank" rel="noopener">可能是你见过最完善的微前端解决方案</a></li>
+<li><a href="https://martinfowler.com/articles/micro-frontends.html" target="_blank" rel="noopener">Micro Frontends</a></li>
+<li><a href="https://alili.tech/archive/ea599f7c/" target="_blank" rel="noopener">前端微服务化解决方案</a></li>
+<li><a href="https://www.infoq.cn/article/03*BeU3zQegIbIytRsX9" target="_blank" rel="noopener">大前端时代下的微前端架构：实现增量升级、代码解耦、独立部署</a></li>
+</ul>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2019/12/18/微前端时代落地前的思考/">blog.yuanziwen.cn/2019/12/18/微前端时代落地前的思考/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/工程化/">工程化</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2020/06/30/实现简版eval/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">实现简版eval</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2019/12/16/为什么ServerLess/">
+        <span class="next-text nav-default">为什么ServerLess</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1593502174043')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

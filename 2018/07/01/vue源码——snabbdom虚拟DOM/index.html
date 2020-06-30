@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="vue源码——snabbdom虚拟DOM（转载）"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2018/07/01/vue源码——snabbdom虚拟DOM/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>vue源码——snabbdom虚拟DOM（转载） - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music(NoAuto)
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music(NoAuto)
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">vue源码——snabbdom虚拟DOM（转载）
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-07-01
+        </span></div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟DOM"><span class="toc-text">虚拟DOM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是虚拟dom"><span class="toc-text">什么是虚拟dom</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么需要虚拟dom"><span class="toc-text">为什么需要虚拟dom</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#虚拟dom的diff"><span class="toc-text">虚拟dom的diff</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><p><a href="https://github.com/zyl1314/blog/issues/11" target="_blank" rel="noopener">原文</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><a href="https://github.com/snabbdom/snabbdom" target="_blank" rel="noopener">snabbdom</a>是一个虚拟dom算法库，它的特点是效率高、可扩展，许多开源项目采用了这种算法，例如vue。本文试图还原虚拟dom的diff原理（仅限于snabbdom算法）。</p>
+<a id="more"></a>
+<h2 id="虚拟DOM"><a href="#虚拟DOM" class="headerlink" title="虚拟DOM"></a>虚拟DOM</h2><h3 id="什么是虚拟dom"><a href="#什么是虚拟dom" class="headerlink" title="什么是虚拟dom"></a>什么是虚拟dom</h3><p>首先需要了解什么是虚拟dom，虚拟dom是真实dom的简单映射。我们知道一个真实dom的属性是十分繁多的，但是表示一个真实dom仅仅需要一部分属性就够了。对于一个真实dom，只要我们清楚它的选择器、它的子节点以及它的“数据”（属性、样式、类、事件等），我们就可以利用一个对象（即虚拟dom）来描述这个真实的dom节点，如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vnode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(&#123;sel, data, children, text, key&#125;) &#123;</span><br><span class="line">        <span class="comment">//  选择器</span></span><br><span class="line">        <span class="keyword">this</span>.sel = sel;</span><br><span class="line">        <span class="comment">//  key</span></span><br><span class="line">        <span class="keyword">this</span>.key = key;</span><br><span class="line">        <span class="comment">//  保存属性、样式等</span></span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">        <span class="comment">//  子节点</span></span><br><span class="line">        <span class="keyword">this</span>.children = children;</span><br><span class="line">        <span class="comment">//  对应的真实dom节点</span></span><br><span class="line">        <span class="keyword">this</span>.elm = <span class="literal">null</span>;</span><br><span class="line">        <span class="comment">//  文本节点</span></span><br><span class="line">        <span class="keyword">this</span>.text = text;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>举个例子</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>a<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>b<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以被表示为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> Vnode(&#123;</span><br><span class="line">    sel: <span class="string">'ul'</span>,</span><br><span class="line">    children: [</span><br><span class="line">        <span class="keyword">new</span> Vnode(&#123;</span><br><span class="line">            sel: <span class="string">'li'</span>,</span><br><span class="line">            children: [<span class="keyword">new</span> Vnode(&#123;<span class="attr">text</span>: a&#125;)]</span><br><span class="line">        &#125;),</span><br><span class="line">        <span class="keyword">new</span> Vnode(&#123;</span><br><span class="line">            sel: <span class="string">'li'</span>,</span><br><span class="line">            children: [<span class="keyword">new</span> Vnode(&#123;<span class="attr">text</span>: b&#125;)]</span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="为什么需要虚拟dom"><a href="#为什么需要虚拟dom" class="headerlink" title="为什么需要虚拟dom"></a>为什么需要虚拟dom</h3><p>对于前端mvc模型，当model改变时相应的view需要更新，一种最简单的方法是只要model发生了改变就利用模板引擎更新整个view，这在页面简单时是极好的，但是当面对复杂应用时代价过大，其需要重新渲染dom树，这可是很耗时的。合理的操作是哪里改变了重新渲染哪里，通过比较新旧虚拟dom树可以找出相同和不同，相同的地方就复用真实dom节点，不同的地方就对真实dom节点进行增加、删除、移动等操作，这样一来就大大提高了效率。<br><img src alt></p>
+<h3 id="虚拟dom的diff"><a href="#虚拟dom的diff" class="headerlink" title="虚拟dom的diff"></a>虚拟dom的diff</h3><p>在谈到虚拟dom的diff时有个前提：diff只发生在相同的层级。这是因为跨越层级的dom增添、删除、移动并不常见，一般都是兄弟节点之间的位置发生变化。</p>
+<p><img src="https://static.yuanziwen.cn/blog/snabbdom/2.png_plain" alt></p>
+<p>首先需要判断两个虚拟节点是否为samaVnode，假如是sameVnode则保留旧的真实dom并对新旧虚拟节点的children进行diff，否则删除掉旧虚拟节点对应的真实dom并替换为新虚拟节点对应的真实dom。如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (sameVnode(oldVnode, vnode)) &#123;</span><br><span class="line">  patchVnode(oldVnode, vnode, insertedVnodeQueue);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  elm = oldVnode.elm <span class="keyword">as</span> Node;</span><br><span class="line">  parent = api.parentNode(elm);</span><br><span class="line"></span><br><span class="line">  createElm(vnode, insertedVnodeQueue);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (parent !== <span class="literal">null</span>) &#123;</span><br><span class="line">    api.insertBefore(parent, vnode.elm <span class="keyword">as</span> Node, api.nextSibling(elm));</span><br><span class="line">    removeVnodes(parent, [oldVnode], <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>sameVnode如下定义：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sameVnode</span>(<span class="params">vnode1: VNode, vnode2: VNode</span>): <span class="title">boolean</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> vnode1.key === vnode2.key &amp;&amp; vnode1.sel === vnode2.sel;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>sameVnode</code>需要满足两个条件：</p>
+<ul>
+<li>选择器相同</li>
+<li>key相同<blockquote>
+<p>key的作用可以参考这里：<a href="https://cn.vuejs.org/v2/api/#key" target="_blank" rel="noopener">https://cn.vuejs.org/v2/api/#key</a></p>
+</blockquote>
+</li>
+</ul>
+<p>新旧虚拟节点children的diff是整个虚拟dom算法的核心，首先解决以下几个特殊情况：</p>
+<ul>
+<li><p>新虚拟dom有children，旧虚拟dom没有children<br>处理方法：假如旧虚拟dom的text属性有定义，说明旧真实dom节点有且仅有文本子节点，需要先清除文本节点，然后将新虚拟节点children对应的真实节点添加到父节点</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// oldVnode  旧虚拟节点</span></span><br><span class="line"><span class="comment">// vnode 新虚拟节点</span></span><br><span class="line"><span class="comment">// oldCh 旧虚拟节点的子虚拟节点</span></span><br><span class="line"><span class="comment">// ch 新虚拟节点的子虚拟节点</span></span><br><span class="line"><span class="comment">// elm 新旧虚拟节点对应的真实节点</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (isDef(ch)) &#123;</span><br><span class="line">  <span class="keyword">if</span> (isDef(oldVnode.text)) api.setTextContent(elm, <span class="string">''</span>);</span><br><span class="line">  addVnodes(elm, <span class="literal">null</span>, ch <span class="keyword">as</span> <span class="built_in">Array</span>&lt;VNode&gt;, <span class="number">0</span>, (ch <span class="keyword">as</span> <span class="built_in">Array</span>&lt;VNode&gt;).length - <span class="number">1</span>, insertedVnodeQueue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>旧虚拟dom有children，新虚拟dom没有children</p>
+</li>
+</ul>
+<p>解决方法：删除掉旧虚拟节点children对应的真实节点即可</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (isDef(oldCh)) &#123;</span><br><span class="line">  removeVnodes(elm, oldCh <span class="keyword">as</span> <span class="built_in">Array</span>&lt;VNode&gt;, <span class="number">0</span>, (oldCh <span class="keyword">as</span> <span class="built_in">Array</span>&lt;VNode&gt;).length - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>旧虚拟节点text属性有定义，新虚拟节点text属性没定义且没有children<br>解决方法：说明旧节点有且仅有文本子节点，新节点为空节点，删除旧节点文本内容即可</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">api.setTextContent(elm, <span class="string">''</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>就虚拟节点的text属性有定义，新虚拟节点的text属性有定义<br>解决方法：说明新旧节点都有且仅有文本子节点，直接比较文本内容，不相同替换即可</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (oldVnode.text !== vnode.text) &#123;</span><br><span class="line">  api.setTextContent(elm, vnode.text <span class="keyword">as</span> string);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>以上是新旧虚拟dom子节点的四种特殊情况，还剩下一种普遍情况即：新旧虚拟dom均有children：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (isDef(oldCh) &amp;&amp; isDef(ch)) &#123;</span><br><span class="line">  <span class="keyword">if</span> (oldCh !== ch) updateChildren(elm, oldCh <span class="keyword">as</span> <span class="built_in">Array</span>&lt;VNode&gt;, ch <span class="keyword">as</span> <span class="built_in">Array</span>&lt;VNode&gt;, insertedVnodeQueue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>各种虚拟dom算法的差别在于updateChildren方法实现的不同，snabbdom算法的特点是给新旧children分别提供了头尾两个指针，diff过程中头尾指针均向中间靠拢，当任一children的头指针超过尾指针则diff过程结束。以下图这个例子做参照，相同字母代表两个虚拟dom是sameVnode：<br><img src="https://static.yuanziwen.cn/blog/snabbdom/3.png_plain" alt><br>具体的指针移动方式又可以分为以下6种情况：</p>
+<ul>
+<li>新children（下文记为ch）的头与旧children（下文记为oldCh）的头是sameVnode<br>解决方法：这种情况说明oldch头指针指向的虚拟dom的真实节点可原地复用，只需将oldch和ch的头指针分别向后移动一位即可，移动后如下：</li>
+</ul>
+<p><img src="https://static.yuanziwen.cn/blog/snabbdom/4.png_plain" alt></p>
+<ul>
+<li><p>ch的尾与oldCh的尾是sameVnode<br>解决方法：这种情况说明oldch尾指针指向的虚拟dom的真实节点可原地复用，只需将oldch和ch的尾指针分别向前移动一位即可，移动后如下：<br><img src="https://static.yuanziwen.cn/blog/snabbdom/5.png_plain" alt></p>
+</li>
+<li><p>ch的尾与oldCh的尾是sameVnode<br>解决方法：这种情况说明oldch尾指针指向的虚拟dom的真实节点可原地复用，只需将oldch和ch的尾指针分别向前移动一位即可，移动后如下：</p>
+</li>
+</ul>
+<p><img src="https://static.yuanziwen.cn/blog/snabbdom/6.png_plain" alt></p>
+<ul>
+<li><p>oldCh的尾与ch的头是sameVnode<br>解决方法：与上面相似，oldCh尾指针指向的虚拟dom的真实节点可以复用，但是其被移动到了oldCh头指针指向虚拟dom的真实节点的前面，这时需要将oldCh的尾指针向前移动一位，ch的头指针向后移动一位，移动后如下：<br><img src="https://static.yuanziwen.cn/blog/snabbdom/7.png_plain" alt></p>
+</li>
+<li><p>在oldCh中可以找到与ch的头是sameVnode的虚拟节点（此节点记为moveVnode）<br>解决方法：这种情况意味着moveVnode对应的真实节点可以被复用，且移动到了oldCh头指针指向虚拟dom的真实节点的前面，此时需要将ch的头指针向后移动一位，同时将moveVnode设置为null，因为其已经被复用了，当头指针或者尾指针再指向它时需要跳过。移动后如下：<br><img src="https://static.yuanziwen.cn/blog/snabbdom/8.png_plain" alt></p>
+</li>
+<li><p>不符合以上五种情况<br>解决方法：当以上五种情况均不符合时，说明ch头指针指向的虚拟dom是一个全新的节点，也即在oldCh中不能找到可复用的节点，此时应当根据ch头指针指向的虚拟dom创建真实dom，并插入到oldCh头指针指向真实节点的前面。移动后如下：</p>
+</li>
+</ul>
+<p><img src="https://static.yuanziwen.cn/blog/snabbdom/9.png_plain" alt></p>
+<p>以上分别对应了6种指针移动的方式，同时可以发现此时ch的头指针已经超越了尾指针，说明diff已经结束，但是此时oldCh的头指针依然小于尾指针，这说明在oldCh头指针和尾指针之间的虚拟dom对应的真实dom不能够被复用，需要删除掉。想象一下，假如oldCh的头指针超越了尾指针，而ch的头指针仍然小于尾指针，这说明了原有的dom节点全部可以复用，且ch的头指针和尾指针之间的虚拟dom代表了新的节点，需要被创建并插入到原有dom中。</p>
+<p>下面是snabbdom中updateChildren的代码，添加了部分注释：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">updateChildren</span>(<span class="params">parentElm: Node,</span></span></span><br><span class="line"><span class="function"><span class="params">                        oldCh: Array&lt;VNode&gt;,</span></span></span><br><span class="line"><span class="function"><span class="params">                        newCh: Array&lt;VNode&gt;,</span></span></span><br><span class="line"><span class="function"><span class="params">                        insertedVnodeQueue: VNodeQueue</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> oldStartIdx = <span class="number">0</span>, newStartIdx = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">let</span> oldEndIdx = oldCh.length - <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">let</span> oldStartVnode = oldCh[<span class="number">0</span>];</span><br><span class="line">  <span class="keyword">let</span> oldEndVnode = oldCh[oldEndIdx];</span><br><span class="line">  <span class="keyword">let</span> newEndIdx = newCh.length - <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">let</span> newStartVnode = newCh[<span class="number">0</span>];</span><br><span class="line">  <span class="keyword">let</span> newEndVnode = newCh[newEndIdx];</span><br><span class="line">  <span class="keyword">let</span> oldKeyToIdx: any;</span><br><span class="line">  <span class="keyword">let</span> idxInOld: number;</span><br><span class="line">  <span class="keyword">let</span> elmToMove: VNode;</span><br><span class="line">  <span class="keyword">let</span> before: any;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (oldStartIdx &lt;= oldEndIdx &amp;&amp; newStartIdx &lt;= newEndIdx) &#123;</span><br><span class="line">    <span class="comment">// 下面4行代码我认为没有意义   不可能出现oldStartVnode或者oldEndVnode为null的情况</span></span><br><span class="line">    <span class="keyword">if</span> (oldStartVnode == <span class="literal">null</span>) &#123;</span><br><span class="line">      oldStartVnode = oldCh[++oldStartIdx]; <span class="comment">// Vnode might have been moved left</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (oldEndVnode == <span class="literal">null</span>) &#123;</span><br><span class="line">      oldEndVnode = oldCh[--oldEndIdx];</span><br><span class="line">    <span class="comment">// 已经被复用了   跳过</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (newStartVnode == <span class="literal">null</span>) &#123;</span><br><span class="line">      newStartVnode = newCh[++newStartIdx];</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (newEndVnode == <span class="literal">null</span>) &#123;</span><br><span class="line">      newEndVnode = newCh[--newEndIdx];</span><br><span class="line">    <span class="comment">//  对应上文第一种情况</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sameVnode(oldStartVnode, newStartVnode)) &#123;</span><br><span class="line">      patchVnode(oldStartVnode, newStartVnode, insertedVnodeQueue);</span><br><span class="line">      oldStartVnode = oldCh[++oldStartIdx];</span><br><span class="line">      newStartVnode = newCh[++newStartIdx];</span><br><span class="line">    <span class="comment">//  对应上文第二种情况</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sameVnode(oldEndVnode, newEndVnode)) &#123;</span><br><span class="line">      patchVnode(oldEndVnode, newEndVnode, insertedVnodeQueue);</span><br><span class="line">      oldEndVnode = oldCh[--oldEndIdx];</span><br><span class="line">      newEndVnode = newCh[--newEndIdx];</span><br><span class="line">    <span class="comment">// 对应上文第三种情况</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sameVnode(oldStartVnode, newEndVnode)) &#123; <span class="comment">// Vnode moved right</span></span><br><span class="line">      patchVnode(oldStartVnode, newEndVnode, insertedVnodeQueue);</span><br><span class="line">      api.insertBefore(parentElm, oldStartVnode.elm <span class="keyword">as</span> Node, api.nextSibling(oldEndVnode.elm <span class="keyword">as</span> Node));</span><br><span class="line">      oldStartVnode = oldCh[++oldStartIdx];</span><br><span class="line">      newEndVnode = newCh[--newEndIdx];</span><br><span class="line">    <span class="comment">// 对应上文第四种情况</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sameVnode(oldEndVnode, newStartVnode)) &#123; <span class="comment">// Vnode moved left</span></span><br><span class="line">      patchVnode(oldEndVnode, newStartVnode, insertedVnodeQueue);</span><br><span class="line">      api.insertBefore(parentElm, oldEndVnode.elm <span class="keyword">as</span> Node, oldStartVnode.elm <span class="keyword">as</span> Node);</span><br><span class="line">      oldEndVnode = oldCh[--oldEndIdx];</span><br><span class="line">      newStartVnode = newCh[++newStartIdx];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (oldKeyToIdx === <span class="literal">undefined</span>) &#123;</span><br><span class="line">        oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx);</span><br><span class="line">      &#125;</span><br><span class="line">      idxInOld = oldKeyToIdx[newStartVnode.key <span class="keyword">as</span> string];</span><br><span class="line">      <span class="comment">// 新的虚拟节点</span></span><br><span class="line">      <span class="keyword">if</span> (isUndef(idxInOld)) &#123; <span class="comment">// New element</span></span><br><span class="line">        api.insertBefore(parentElm, createElm(newStartVnode, insertedVnodeQueue), oldStartVnode.elm <span class="keyword">as</span> Node);</span><br><span class="line">        newStartVnode = newCh[++newStartIdx];</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        elmToMove = oldCh[idxInOld];</span><br><span class="line">        <span class="comment">// key和sel均相同时才是sameVnode</span></span><br><span class="line">        <span class="comment">// 对应上文第五种情况</span></span><br><span class="line">        <span class="keyword">if</span> (elmToMove.sel !== newStartVnode.sel) &#123;</span><br><span class="line">          api.insertBefore(parentElm, createElm(newStartVnode, insertedVnodeQueue), oldStartVnode.elm <span class="keyword">as</span> Node);</span><br><span class="line">        <span class="comment">// 新的虚拟节点</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          patchVnode(elmToMove, newStartVnode, insertedVnodeQueue);</span><br><span class="line">          oldCh[idxInOld] = <span class="literal">undefined</span> <span class="keyword">as</span> any;</span><br><span class="line">          api.insertBefore(parentElm, (elmToMove.elm <span class="keyword">as</span> Node), oldStartVnode.elm <span class="keyword">as</span> Node);</span><br><span class="line">        &#125;</span><br><span class="line">        newStartVnode = newCh[++newStartIdx];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (oldStartIdx &lt;= oldEndIdx || newStartIdx &lt;= newEndIdx) &#123;</span><br><span class="line">    <span class="comment">// 原节点全部被复用</span></span><br><span class="line">    <span class="keyword">if</span> (oldStartIdx &gt; oldEndIdx) &#123;</span><br><span class="line">      before = newCh[newEndIdx+<span class="number">1</span>] == <span class="literal">null</span> ? <span class="literal">null</span> : newCh[newEndIdx+<span class="number">1</span>].elm;</span><br><span class="line">      addVnodes(parentElm, before, newCh, newStartIdx, newEndIdx, insertedVnodeQueue);</span><br><span class="line">    <span class="comment">// 原节点被部分复用</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2018/07/01/vue源码——snabbdom虚拟DOM/">blog.yuanziwen.cn/2018/07/01/vue源码——snabbdom虚拟DOM/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/虚拟dom算法/">虚拟dom算法</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/07/24/一次性搞懂JvaScript执行机制/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">一次性搞懂JvaScript执行机制</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/06/17/一次性让你动async-await，解决回调地狱/">
+        <span class="next-text nav-default">一次性让你懂async/await，解决回调地狱</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1593502174043')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

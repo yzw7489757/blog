@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="前端性能优化笔记(2)"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2018/04/24/前端性能优化笔记-2/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>前端性能优化笔记(2) - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music(NoAuto)
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music(NoAuto)
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">前端性能优化笔记(2)
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-04-24
+        </span></div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML-页面加载渲染过程"><span class="toc-text">HTML 页面加载渲染过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTML渲染的一些特点"><span class="toc-text">HTML渲染的一些特点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#顺序执行，并发加载"><span class="toc-text">顺序执行，并发加载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#是否阻塞以及依赖关系"><span class="toc-text">是否阻塞以及依赖关系</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#css加载是否会阻塞js？"><span class="toc-text">css加载是否会阻塞js？</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#css加载是否会阻塞页面的渲染？"><span class="toc-text">css加载是否会阻塞页面的渲染？</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#js执行是否存在依赖关系？"><span class="toc-text">js执行是否存在依赖关系？</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#js阻塞"><span class="toc-text">js阻塞</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优化关键渲染"><span class="toc-text">优化关键渲染</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#懒加载与预加载"><span class="toc-text">懒加载与预加载</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#懒加载"><span class="toc-text">懒加载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#预加载"><span class="toc-text">预加载</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#图层渲染（回流与重绘）"><span class="toc-text">图层渲染（回流与重绘）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回流的触发机制"><span class="toc-text">回流的触发机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重绘的触发机制"><span class="toc-text">重绘的触发机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建图层"><span class="toc-text">创建图层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结优化点"><span class="toc-text">总结优化点</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><h2 id="HTML-页面加载渲染过程"><a href="#HTML-页面加载渲染过程" class="headerlink" title="HTML 页面加载渲染过程"></a>HTML 页面加载渲染过程</h2><p><img src="https://static.yuanziwen.cn/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AC%94%E8%AE%B02.1.png_plain" alt="alt"></p>
+<p>浏览器从请求到生成页面发生了以上的过程。首先，我们在地址栏里输入<code class="codes"><a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a></code> ,会向百度服务器解析的<code class="codes">ip</code>地址发送请求，接到我们的请求后，会向我们返回一段<code class="codes">HTML</code>的文档。浏览器接收到启用<code class="codes">HTML</code> <code class="codes">Parse</code>解析器进行解析，通过词法分析的过程，将内容分析成不同的<code class="codes">token</code>，然后根据<code class="codes">HTML</code>的文档，从上到下依次<code class="codes">nextToken</code>进行解析<code class="codes">token</code>，并获取下一个<code class="codes">token</code>的位置，所以我们的<code class="codes">DOM</code> <code class="codes">tree</code>是通过词法分析<code class="codes">token</code>一步一步添加的。而类似于<code class="codes">link</code>，<code class="codes">script</code> <code class="codes">src</code>引用<code class="codes">web</code>资源的地址会进一步的由浏览器发送请求<code class="codes">css</code>和<code class="codes">js</code>相关资源，将请求回来的<code class="codes">js</code>资源利用<code class="codes">V8</code>内核引擎执行<code class="codes">js</code>代码。请求回来的<code class="codes">CSS</code>资源则会生成相应的<code class="codes">CSSOM</code>，前面的<code class="codes">DOM</code> <code class="codes">tree</code>生成完毕后浏览器并不会直接渲染出来，而是会等待<code class="codes">CSSOM</code>（<code class="codes">css</code> <code class="codes">tree</code>）生成后进行合并，再渲染出来。</p>
+<a id="more"></a>
+<h3 id="HTML渲染的一些特点"><a href="#HTML渲染的一些特点" class="headerlink" title="HTML渲染的一些特点"></a>HTML渲染的一些特点</h3><h4 id="顺序执行，并发加载"><a href="#顺序执行，并发加载" class="headerlink" title="顺序执行，并发加载"></a>顺序执行，并发加载</h4><p>前面讲到浏览器会将<code class="codes">HTML</code>文档进行<code class="codes">nextToken</code>一步一步解析每个标签的<code class="codes">token</code>，所以是顺序执行。并发加载指的是同时加载多个资源，这里要注意的是，我们平时将<code class="codes">web</code>资源托管在<code class="codes">CDN</code>上，由于受到浏览器的域名影响，每个域名都有并发请求的数量上限。导致很多资源没有做到同时的并发请求，所以一般会设置<code class="codes">3</code>~<code class="codes">4</code>个<code class="codes">CDN</code>域名。</p>
+<h4 id="是否阻塞以及依赖关系"><a href="#是否阻塞以及依赖关系" class="headerlink" title="是否阻塞以及依赖关系"></a>是否阻塞以及依赖关系</h4><p>我们要考虑几个问题：</p>
+<h5 id="css加载是否会阻塞js？"><a href="#css加载是否会阻塞js？" class="headerlink" title="css加载是否会阻塞js？"></a>css加载是否会阻塞js？</h5><p>答案是会的。它不会阻塞<code class="codes">js</code>的加载，<code class="codes">chrome</code>浏览器中有个<code class="codes">webkit</code> <code class="codes">upload</code> <code class="codes">preScaning</code>(预先扫描器）,它能够在解析当前文件或者文档的时候，预先扫描下一部分的代码，如果存在外部资源，会并发进行加载，但是会阻塞<code class="codes">js</code>的执行！打个比方，如果<code class="codes">js</code>文件内有修改<code class="codes">dom</code>样式的代码，会依赖于之前已绘制的<code class="codes">DOM</code>样式的基础上去修改的。<code class="codes">js</code>本身是无法判断<code class="codes">DOM</code> <code class="codes">tree</code>样式是否存在及修改</p>
+<h5 id="css加载是否会阻塞页面的渲染？"><a href="#css加载是否会阻塞页面的渲染？" class="headerlink" title="css加载是否会阻塞页面的渲染？"></a>css加载是否会阻塞页面的渲染？</h5><p>默认情况下，CSS 被视为阻塞渲染的资源。</p>
+<p>可以通过媒体类型和媒体查询将一些 CSS 资源标记为不阻塞渲染。</p>
+<p>浏览器会下载所有 CSS 资源，无论阻塞还是不阻塞。</p>
+<blockquote>
+<p>CSS 是阻塞渲染的资源。需要将它尽早、尽快地下载，以便缩短首次渲染的时间。</p>
+</blockquote>
+<p><code class="codes">css</code>放在<code class="codes">head</code>中阻塞页面的渲染，它会等待<code class="codes">CSS</code>样式表加载完成形成<code class="codes">CSSOM</code>（<code class="codes">css</code> <code class="codes">tree</code>）树再去加载<code class="codes">DOM</code>，但是这种方式也是推荐的，会让当前加载的<code class="codes">HTML</code>页面<code class="codes">DOM</code>带样式的进行加载。<br>在一些情况下，我们的页面已经加载完成了，但是样式没有完整，突然闪的一下，页面重新渲染。这种情况的原因可能是网速较慢<code class="codes">css</code>资源没有下载下来，导致<code class="codes">CSSOM</code>（<code class="codes">css</code> <code class="codes">tree</code>）没有生成，最后解析完毕合并<code class="codes">DOM</code> <code class="codes">tree</code>和<code class="codes">CSSOM</code>造成页面闪动的现象。根本原因是没有遵循好依赖关系，如果我们把<code class="codes">css</code>代码放在<code class="codes">&lt;head&gt;</code>中去引入的话，浏览器是会优先解析<code class="codes">css</code>样式表生成<code class="codes">CSSOM</code>（<code class="codes">css</code> <code class="codes">tree</code>），再解析<code class="codes">DOM</code> <code class="codes">tree</code>最后合并成<code class="codes">render</code> <code class="codes">tree</code>渲染页面。</p>
+<h5 id="js执行是否存在依赖关系？"><a href="#js执行是否存在依赖关系？" class="headerlink" title="js执行是否存在依赖关系？"></a>js执行是否存在依赖关系？</h5><p>由于<code class="codes">js</code>会阻塞后续代码的执行，故<code class="codes">script</code>标签属性有一个<code class="codes">async</code>异步加载属性，使用此属性的<code class="codes">web</code>资源会放弃依赖关系，保持着’哪个资源先加载完就执行哪个’的思想。所以在使用该属性的时候，我们要梳理好各个<code class="codes">js</code>文件的依赖关系。<br>开发<code class="codes">SPA</code>单页应用的时候，首屏是不会加载全部外部资源，在<code class="codes">A</code>页面的时候，只异步加载<code class="codes">A</code>页面所需的资源，在<code class="codes">B</code>页面的时候，只异步加载<code class="codes">B</code>页面的资源，这也是性能优化极为重要的一点。</p>
+<h5 id="js阻塞"><a href="#js阻塞" class="headerlink" title="js阻塞"></a>js阻塞</h5><p>直接引入的<code class="codes">script src</code>会阻塞页面的渲染。实际上我们的js代码很可能去调用<code class="codes">document.ready</code>去修改DOM样式的，依赖于当前页面<code class="codes">DOM tree</code>。可能插入节点或者是操作节点，影响后续DOM样式排版，所以按常理而言，这样阻塞是合理的。浏览器会等待<code class="codes">js</code>操作DOM节点完毕再去进一步的渲染HTML节点。和CSS阻塞JS执行的原因大致上是一样的。根本原因是浏览器<code class="codes">HTML parse</code>认为js文件会去操作<code class="codes">HTML DOM</code>结构，故先执行js代码导致阻塞HTML渲染。<br>异步加载可以避免这种情况：<a href="https://segmentfault.com/a/1190000007216755" target="_blank" rel="noopener">Deferred</a>、<a href="http://www.css88.com/archives/7731" target="_blank" rel="noopener">async</a>,这两天阮大的blog被Ddos攻击了，只好给这两个链接，可以去看看。</p>
+<h3 id="优化关键渲染"><a href="#优化关键渲染" class="headerlink" title="优化关键渲染"></a>优化关键渲染</h3><p>google官方已经给出了在资源方面的优化<a href="https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path?hl=zh-cn" target="_blank" rel="noopener">传送门</a></p>
+<p>首次渲染需要最大限度减小以下三种可变因素：</p>
+<ul>
+<li>关键资源的数量。</li>
+<li>关键路径长度。</li>
+<li>关键字节的数量。</li>
+</ul>
+<p>关键资源是可能阻止网页首次渲染的资源。这些资源越少，浏览器的工作量就越小，对 CPU 以及其他资源的占用也就越少。</p>
+<p>同样，关键路径长度受所有关键资源与其字节大小之间依赖关系图的影响：某些资源只能在上一资源处理完毕之后才能开始下载，并且资源越大，下载所需的往返次数就越多。</p>
+<p>最后，浏览器需要下载的关键字节越少，处理内容并让其出现在屏幕上的速度就越快。要减少字节数，我们可以减少资源数（将它们删除或设为非关键资源），此外还要压缩和优化各项资源，确保最大限度减小传送大小。</p>
+<p>优化关键渲染路径的常规步骤如下：</p>
+<ul>
+<li>对关键路径进行分析和特性描述：资源数、字节数、长度。</li>
+<li>最大限度减少关键资源的数量：删除它们，延迟它们的下载，将它们标记为异步等。</li>
+<li>优化关键字节数以缩短下载时间（往返次数）。</li>
+<li>优化其余关键资源的加载顺序：您需要尽早下载所有关键资产，以缩短关键路径长度</li>
+</ul>
+<h3 id="懒加载与预加载"><a href="#懒加载与预加载" class="headerlink" title="懒加载与预加载"></a>懒加载与预加载</h3><h4 id="懒加载"><a href="#懒加载" class="headerlink" title="懒加载"></a>懒加载</h4><p>在日常工作中，懒加载和预加载相信很多人用过了，其目的都是为了避免加载非必要资源，节省页面性能。 而且页面加载并发是有上线数的，如果被<code class="codes">img</code>占用了<code class="codes">js</code>、<code class="codes">css</code>相关资源，从而导致<code class="codes">js</code>、<code class="codes">css</code>无法及时加载、所以，懒加载就被开发出来了。实现方法普通是根据当前可视窗口的位置，依需替换<code class="codes">img</code>的<code class="codes">src</code>占位符。将<code class="codes">data-img</code>自定义属性替换到<code class="codes">src</code>上。再动态的进行请求。在购物类网站、尤其图片社交类网站的较多。<br>可以参考以下原生方法，但是要考虑图片占位的因素。否则会引起抖动和不好的用户体验。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">""</span> <span class="attr">class</span>=<span class="string">"lazyload-item"</span> <span class="attr">lazyload</span>=<span class="string">"true"</span> <span class="attr">data-original</span>=<span class="string">"xxx.png"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> viewHeight = <span class="built_in">document</span>.documentElement.clientHeight;<span class="comment">//获取当前窗口的屏幕高度</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">lazyload</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> eles = <span class="built_in">document</span>.querySelectorAll(<span class="string">'img[data-original][lazyload]'</span>);</span><br><span class="line">  <span class="built_in">Array</span>.prototype.forEach.call(eles, <span class="function"><span class="keyword">function</span> (<span class="params">item, index</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> rect</span><br><span class="line">    <span class="keyword">if</span> (item.dataset.original === <span class="string">''</span>)</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    rect = item.getBoundingClientRect();</span><br><span class="line">    <span class="keyword">if</span> (rect.bottom &gt;= <span class="number">0</span> &amp;&amp; rect.top &lt; viewHeight) &#123;</span><br><span class="line">      !<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> img = <span class="keyword">new</span> Image();</span><br><span class="line">        img.src = item.dataset.original;</span><br><span class="line">        img.onload = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">          item.src = img.src;</span><br><span class="line">        &#125;</span><br><span class="line">        item.removeAttribute(<span class="string">'data-original'</span>);</span><br><span class="line">        item.removeAttribute(<span class="string">'lazyload'</span>);</span><br><span class="line">      &#125;()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">lazyload();</span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">'scroll'</span>, lazyload);</span><br></pre></td></tr></table></figure>
+
+<h4 id="预加载"><a href="#预加载" class="headerlink" title="预加载"></a>预加载</h4><p>与懒加载相反，预加载是提前进行加载，提升用户体验。在大型展示类页面，音频、视频、游戏、<code class="codes">webGL</code>模型等场景，优先预加载可以提升非常不错的体验度，这也是预加载适合的场景。图片预加载的方式其实很简单，新建一个<code class="codes">img</code>标签，填上<code class="codes">src</code>，<code class="codes">display</code>:<code class="codes">none</code>，第二次使用的时候，浏览器就会优先使用该缓存，这种方式的弊端是不能控制其周期。第二种方式是新建浏览器请求，原理是新建一个<code class="codes">xmlHttpRequest</code>()请求。保存其请求状态信息，进行相应回调。弊端是存在跨域问题，<a href="http://www.createjs.cc/preloadjs/docs/modules/PreloadJS.html" target="_blank" rel="noopener">preload.js</a>解决了该问题，只要在方法队列里加一个<code class="codes">false</code>参数即可不走<code class="codes">xmlHttpRequest</code>路线。还可以设置延迟预加载，避免在页面第一次加载的时候网速占用大影响其他资源的加载速度，具体方法可自行官网学习。</p>
+<h3 id="图层渲染（回流与重绘）"><a href="#图层渲染（回流与重绘）" class="headerlink" title="图层渲染（回流与重绘）"></a>图层渲染（回流与重绘）</h3><p>浏览器解析<code class="codes">DOM</code> <code class="codes">tree</code>完毕之后对<code class="codes">DOM</code>进行分割处理为多个图层，然后对每个图层的样式进行计算，拿到节点计算样式结果后为每个节点生成图形和位置，（<code class="codes">Layout</code>–布局和回流），再将每个节点绘制填充到图层位图中（<code class="codes">Paint</code> <code class="codes">Setup</code>和<code class="codes">Paint</code>–重绘），接下来图层纹理上传至<code class="codes">GPU</code>，符合多个图层到页面上生成最终屏幕图像（<code class="codes">Composite</code> <code class="codes">Layers</code>–图层重组），整个就是浏览器渲染的过程。站在性能优化的点上看，一个页面的如果有多次重绘与回流是非常消耗性能的，但是重绘的代价比回流低得多，所以要尽量去创建图层避免多次回流，减少回流的次数。</p>
+<h3 id="回流的触发机制"><a href="#回流的触发机制" class="headerlink" title="回流的触发机制"></a>回流的触发机制</h3><p>回流是怎么触发的呢？<span class="codes"> 当render tree的部分或者全部，因为元素的规模尺寸，布局，隐藏等属性改变需要重新构建，这就被称为回流（reflow）,还有当页面布局和几何属性改变时就需要回流。<br>一句话概括就是：当页面布局变化的时候，必定会触发回流！</span><br>哪些CSS属性会触发重布局？<br>概括下：<br>1.盒子模型相关属性会触发重布局.<br>CSS属性：<code class="codes">width</code>,<code class="codes">height</code>,<code class="codes">padding</code>,<code class="codes">margin</code>,<code class="codes">display</code>,<code class="codes">border-width</code>,<code class="codes">border</code>,<code class="codes">min-height</code>;<br>2.定位属性及浮动也会触发重布局.<br>CSS属性：<code class="codes">top</code>,<code class="codes">bottom</code>,<code class="codes">left</code>,<code class="codes">right</code>,<code class="codes">position</code>,<code class="codes">float</code>,<code class="codes">clear</code>,<br>3.改变节点内部文字结构也会触发重布局.<br>CSS属性：<code class="codes">text-align</code>,<code class="codes">overflow-y</code>,<code class="codes">font-weight</code>,<code class="codes">overflow</code>,<code class="codes">font-family</code>,<code class="codes">line-height</code>,<code class="codes">vertival-align</code>,<code class="codes">white-space</code>,<code class="codes">font-size</code>;<br>总结出一个规律了吗？只要是会’动’的CSS属性，都会触发回流！</p>
+<h3 id="重绘的触发机制"><a href="#重绘的触发机制" class="headerlink" title="重绘的触发机制"></a>重绘的触发机制</h3><p>回流是’动’，那重绘就是外观了，当<code class="codes">render tree</code>中的一些元素需要更新属性，而这些属性只是影响元素的外观，风格，而不会影响布局的，比如<code class="codes">background-color</code>。则就叫称为重绘.<br><code class="codes">color</code>,<code class="codes">border-style</code>,<code class="codes">border-radius</code>,<code class="codes">visibility</code>,<code class="codes">text-decoration</code>,<code class="codes">background</code>,<code class="codes">background-image</code>,<code class="codes">background-position</code>,<code class="codes">background-repeat</code>,<code class="codes">background-size</code>,<code class="codes">outline-color</code>,<code class="codes">outline</code>,<code class="codes">outline-style</code>,<code class="codes">outline-width</code>,<code class="codes">box-shadow</code>…这些属性都可以触发重绘。</p>
+<h3 id="创建图层"><a href="#创建图层" class="headerlink" title="创建图层"></a>创建图层</h3><p>那怎么去创建图层呢？以标准化的浏览器–&gt;<code class="codes">Chrome</code>为例，含有以下条件（不限于）<br>1.混合插件（如<code class="codes">Flash</code>）<br>2.3D或透视变换（<code class="codes">perspective</code> transform）<code class="codes">CSS</code>属性<br>3.使用加速视频解码的<code class="codes">&lt;video&gt;</code>节点<br>4.拥有<code class="codes">3D（WebGL）</code>上下文或加速的2D上下文的<code class="codes">&lt;canvas&gt;</code>节点<br>5.拥有加速<code class="codes">CSS过滤器</code>的元素(<code class="codes">filter: grayscale(100%) opacity(50%)</code>…)<br>6.对自己的<code class="codes">opacity</code>做CSS动画或使用一个动画<code class="codes">webkit</code>变换的元素.<br>7.元素有一个<code class="codes">z-index</code>较低且包含一个复合层的兄弟元素（换句话说就是该元素在复合层上面渲染）<br>8.元素有一个包含复合层的后代节点（一个元素拥有一个子元素，该子元素在自己的层里）<br><code class="codes">Chrome</code>开发者工具里有一个<code class="codes">Performance</code>工具，用于监测图层的创建和渲染的整个过程，有兴趣的朋友可以去玩玩。</p>
+<h3 id="总结优化点"><a href="#总结优化点" class="headerlink" title="总结优化点"></a>总结优化点</h3><ol>
+<li>用<code class="codes">translate</code>替代<code class="codes">top</code>改变</li>
+<li>用<code class="codes">opacity</code>替代<code class="codes">visibility</code></li>
+<li>不要一条一条地修改 <code class="codes">DOM</code> 的样式，预先定义好 <code class="codes">class</code>，然后修改 <code class="codes">DOM</code> 的 <code class="codes">className</code></li>
+<li>把 <code class="codes">DOM</code> 离线后修改，比如：先把 <code class="codes">DOM</code> 给 <code class="codes">display</code>:<code class="codes">none</code> (有一次 <code class="codes">Reflow</code>)，然后你修改100次，然后再把它显示出来</li>
+<li>不要把 <code class="codes">DOM</code> 结点的属性值放在一个循环里当成循环里的变量</li>
+<li>不要使用 <code class="codes">table</code> 布局，可能很小的一个小改动会造成整个 <code class="codes">table</code> 的重新布局</li>
+<li>动画实现的速度的选择</li>
+<li>对于动画新建图层</li>
+<li>启用 <code class="codes">GPU</code> 硬件加速</li>
+</ol>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2018/04/24/前端性能优化笔记-2/">blog.yuanziwen.cn/2018/04/24/前端性能优化笔记-2/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/优化笔记/">优化笔记</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/05/05/Vue-js运行机制/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Vue.js运行机制</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/04/21/前端性能优化笔记-1/">
+        <span class="next-text nav-default">前端性能优化笔记（1）代码资源篇</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1593502174043')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

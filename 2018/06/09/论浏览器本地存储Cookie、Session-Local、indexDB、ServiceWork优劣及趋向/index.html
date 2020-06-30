@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="本地存储Cookie、Session/Local、indexDB、ServiceWork"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2018/06/09/论浏览器本地存储Cookie、Session-Local、indexDB、ServiceWork优劣及趋向/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>本地存储Cookie、Session/Local、indexDB、ServiceWork - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music(NoAuto)
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music(NoAuto)
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">本地存储Cookie、Session/Local、indexDB、ServiceWork
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-06-09
+        </span></div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#cookie"><span class="toc-text">cookie</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cookie的优点"><span class="toc-text">Cookie的优点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Session-Local"><span class="toc-text">Session/Local</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Session-Local优点"><span class="toc-text">Session/Local优点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IndexedDB"><span class="toc-text">IndexedDB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#indexedDB优点"><span class="toc-text">indexedDB优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#indexedDB缺点"><span class="toc-text">indexedDB缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ServiceWork"><span class="toc-text">ServiceWork</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ServiceWork产生的意义"><span class="toc-text">ServiceWork产生的意义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ServiceWork的功能"><span class="toc-text">ServiceWork的功能</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><p><img src="https://static.yuanziwen.cn/title.png_plain" alt="alt"><br>在日常开发中，开发者用得最多的大概是前三种吧，cookie、Session/Local，对后两种运用的较少，话不多少，直接正文：</p>
+<a id="more"></a>
+<h2 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h2><p>cookie是客户端的解决方案，最早是网景公司的前雇员Lou Montulli在1993年3月发明的。众所周知，HTTP是一个无状态的协议，客户端发起一次请求，服务器处理来自客户端的请求，然后给客户端回送一条响应。在客户端与服务器数据交换完毕后，服务器端和客户端的连接就会被关闭，Web服务器几乎没有什么信息可以判断是哪个用户发送的请求，也无法记录来访用户的请求序列，每次交换数据都需要建立新的连接，后来有了用户，网站想要去了解用户的需求，但是根据当时场景显然无法满足业务需求，cookie便孕育而出，它可以弥补HTTP协议无状态的部分不足。<br><img src="https://static.yuanziwen.cn/cookie_cb.png_plain" alt="alt"></p>
+<p>我们先来看一下在日常操作中是怎么接收到这个cookie的。</p>
+<p><img src="https://static.yuanziwen.cn/cookie%E6%B8%85%E9%99%A4.png_plain" alt="alt"></p>
+<p>开始之前，将本地cookie的值全部清除。</p>
+<img src="https://static.yuanziwen.cn/cookie_enter.gif_plain">
+
+<p>输入’掘金’，百度监听了focus和input事件，所以第一次触发了2次请求，奇怪的是第一次没有Set-cookie返回:<br><img src="https://static.yuanziwen.cn/second.png_plain" alt="alt"><br>第一次触发的是focus()，这时候Request Header请求头是没有任何Cookie，查询字段wd没有参数，历史记录Hisdata读取的是LocalStorage里客户端的历史查询与时间戳。看第二次请求<br><img src="https://static.yuanziwen.cn/three.png_plain" alt="alt"></p>
+<p>服务器传回了7条Set-Cooie，客户端拿到数据后，进行储存<br><img src="https://static.yuanziwen.cn/cookie_c.png_plain" alt="alt"></p>
+<p>这时候可以看到Cookie中有服务器返回的所有cookie以及相对应的值和其他配置；</p>
+<p>每次客户端第一次请求，服务器接收到请求后为该客户端设置cookie，服务器端向客户端发送Cookie是通过HTTP响应报文实现的，在Set-Cookie中设置需要向客户端发送的cookie，浏览器接收到响应缓存cookie到内存或者硬盘（视浏览器机制），之后每次发送请求都会携带上cookie：<br><img src="https://static.yuanziwen.cn/cookieing.png_plain" alt="alt"></p>
+<p>cookie格式如下：  </p>
+<p>接收到的cookie格式</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Set</span>-cookie: name=value [; expires=date] [; path=path] [; domain=domain] [;secure=secure]</span><br></pre></td></tr></table></figure>
+
+<p>发送的cookie格式</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Cookie: name1=value1 [; name2=value2]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>name:一个唯一确定的cookie名称。通常来讲cookie的名称是不区分大小写的。</li> 
+<li>value:存储在cookie中的字符串值。最好为cookie的name和value进行url编码 </li>
+<li>domain:cookie对于哪个域名下是有效的。所有向该域发送的请求中都会包含这个cookie信息。这个值可以包含子域(如：m.baidu.com)，也可以不包含它(如：.baidu.com，则对于baidu.com的所有子域都有效). </li>
+<li>path: 表示这个cookie影响到的路径，浏览器跟会根据这项配置，向指定域中匹配的路径发送cookie。</li>
+<li>expires:过期时间，表示cookie自删除的时间戳。如果不设置这个时间戳，cookie就会变成会话Session类型的cookie，浏览器会在页面关闭时即将删除所有cookie,这个值是GMT时间格式，如果客户端和服务器端时间不一致，使用expires就会存在偏差。 </li>
+<li>max-age: 与expires作用相同，用来告诉浏览器此cookie多久过期（单位是秒），而不是一个固定的时间点。正常情况下，max-age的优先级高于expires。 </li>
+<li>HttpOnly: 告知浏览器不允许通过脚本document.cookie去更改这个值，同样这个值在document.cookie中也不可见。但在http请求仍然会携带这个cookie。注意这个值虽然在脚本中不可获取，但仍然在浏览器安装目录中以文件形式存在。这项设置通常在服务器端设置。 </li>
+<li>secure: 安全标志，指定后只有在使用SSL(https)链接时候才会发送到服务器，如果是http链接则不会传递该值。但是也有其他方法能在本地查看到cookie</li>
+</ul>
+我们可以手动设置一下cookie的返回，
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"></span><br><span class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">request, responed</span>) </span>&#123;</span><br><span class="line">    responed.setHeader(<span class="string">'status'</span>, <span class="string">'200 OK'</span>);</span><br><span class="line">    responed.setHeader(<span class="string">'Set-Cookie'</span>, <span class="string">'userStatus=true;domain=.juejin.com;path=/;max-age=1000'</span>);</span><br><span class="line">    responed.write(<span class="string">'掘金'</span>);</span><br><span class="line">    responed.end();</span><br><span class="line">&#125;).listen(<span class="number">8888</span>);</span><br></pre></td></tr></table></figure>
+
+<p>然后启动服务器，访问的时候就能看到服务器返回</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Set</span>-Cookie:userStatus=<span class="literal">true</span>;domain=.juejin.com;path=<span class="regexp">/;max-age=1000</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Cookie的优点"><a href="#Cookie的优点" class="headerlink" title="Cookie的优点"></a>Cookie的优点</h3><ul>
+<li>cookie键值对形式，结构简单</li>
+<li>可以配置过期时间，不需要任何服务器资源存在于客户端上</li>
+<li>可以弥补HTTP协议无状态的部分不足</li>
+<li>无兼容性问题。</li></ul>
+### Cookie的缺点
+<ul>
+<li>大小数量受到限制，每个domain最多只能有20条cookie，每个cookie长度不能超过4096 字节，否则会被截掉。尽管在当今新的浏览器和客户端设备开始支持8192字节。</li>
+<li>用户配置可能为禁用 有些用户禁用了浏览器或客户端设备接收 Cookie 的能力，因此限制了这一功能。</li>
+<li>增加流量消耗，每次请求都需要带上cookie信息。</li>
+<li>安全风险，黑客可以进行Cookie拦截、XSS跨站脚本攻击和Cookie欺骗，历史上因为Cookie被攻击的网站用户不在少数，虽然可以对Cookie进行加密解密，但会影响到性能。</li>
+</ul>
+### Cookie总结
+在业务开发场景中，Cookie更多的是作为一种标识，用来记录用户的行为，而并非用户的身份信息，根据用户登录后生成特定Cookie，再次发起其他请求的时候，服务器能够识别用户是否能够继续此次操作，不能则相应操作。如果将用户的身份信息及其他重要信息放在cookie中是十分危险的，而且对于大型流量网站来说，每一个字节的消耗一年下来都是按几十TB算的,
+
+<p>以谷歌为例：<br>google的流量，占到整个互联网的40%，2016年全球网路流量达到1.3ZB（1ZB = 10^9TB），那么google在2016年的流量就是1.3ZB*40%,如果google每1MB请求减少一个字节，每年可以节省近500TB。</p>
+<h2 id="Session-Local"><a href="#Session-Local" class="headerlink" title="Session/Local"></a>Session/Local</h2><p>SessionStorage简称会话存储，和LocalStorage本地储存是前端现在最为广泛也是操作最简单的本地存储，都遵循同源策略(域名、协议、端口），存放空间很大，一般是5M，极大的解决了之前只能用Cookie来存储数据的容量小、存取不便、容易被清除的问题。这个功能为客户端提供了极大的灵活性。</p>
+<p>并非是只支持IE8以上，可以通过MDN官方的方法，变相的存储在Cookie内，不过这样的话有失Storage对象存在的意义了。</p>
+<p>Session只作用于当前窗口，不能跨窗口读取其他窗口的SessionStorage数据库信息，浏览器每次新建、关闭都是直接导致当前窗口的数据库新建和销毁。兼容性如下：</p>
+<img src="https://static.yuanziwen.cn/mdnsession.png">
+<p>Local作用于当前浏览器，即使你开2个Chrome浏览器(不是2个窗口)也还是共用一个路径地址。永远不会自动删除，所以如果我们要用LocalStorage保存敏感重要信息的时候也要注意不要放在Local里，而是放在Session里，关闭后进行清除，否则攻击者可以通过XSS攻击进行信息窃取。兼容性如下：</p>
+<img src="https://static.yuanziwen.cn/mdnlocal.png">
+<p>两者在PC端仅仅Chrome和Firefox有些许兼容偏差，移动端兼容性相同。</p>
+<img src="https://static.yuanziwen.cn/desket.png">
+
+<blockquote><p>PS：当浏览器进入隐私浏览模式，会创建一个新的、临时的数据库来存储local storage的数据；当关闭隐私浏览模式时，该数据库将被清空并丢弃。</p>
+</blockquote>
+<p>只是API名字不同。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">localStorage.setItem(<span class="string">'key'</span>, <span class="string">'value'</span>);  <span class="comment">// 设置</span></span><br><span class="line">localStorage.getItem(<span class="string">'key'</span>);  <span class="comment">// 获取</span></span><br><span class="line">localStorage.removeItem(<span class="string">'key'</span>); <span class="comment">// 删除</span></span><br><span class="line">localStorage.clear(); <span class="comment">//清除所有</span></span><br></pre></td></tr></table></figure>
+
+<p>不过在储存和读取数据的时候,需要将数据进行JSON.stringify和JSON.parse，否则会强制改变数据类型</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    name:<span class="string">'掘金'</span>,</span><br><span class="line">    url:<span class="string">'juejin.com'</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">//错误方法</span></span><br><span class="line">localStorage.setItem(<span class="string">'object'</span>,obj);  <span class="comment">//object:"[object Object]" 无法读取</span></span><br><span class="line">localStorage.setItem(<span class="string">'array'</span>,arr);  <span class="comment">//array:"1,2,3" 变成string格式</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//正确方法:Object</span></span><br><span class="line">localStorage.setItem(<span class="string">'object'</span>,<span class="built_in">JSON</span>.stringify(obj));<span class="comment">//存储 object:"&#123;"name":"掘金","url":"juejin.com"&#125;"</span></span><br><span class="line"><span class="built_in">JSON</span>.parse(localStorage.getItem(<span class="string">'object'</span>));<span class="comment">//读取 &#123;name: "掘金", url: "juejin.com"&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//正确方法:Array</span></span><br><span class="line">localStorage.setItem(<span class="string">'array'</span>,<span class="built_in">JSON</span>.stringify(arr));  <span class="comment">//存储 array:"[1,2,3]"</span></span><br><span class="line"><span class="built_in">JSON</span>.parse(localStorage.getItem(<span class="string">'array'</span>));<span class="comment">//读取  [1,2,3]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Session-Local优点"><a href="#Session-Local优点" class="headerlink" title="Session/Local优点"></a>Session/Local优点</h3><ul>
+<li>存储数据量大，5MB。</li>
+<li>不会随http请求一起发送，有效的减少了请求大小</li>
+<li>local跨窗口处理数据，能够减少相当一部分本地处理与维护状态。</li>
+</ul>
+### Session/Local缺点
+<ul>
+<li>本质是在读写文件，写入数据量大的话会影响性能（firefox是将localstorage写入内存中的）</li>
+<li>XSS攻击窃取信息（为了安全性还是放session吧）</li>
+<li>兼容性，虽然说IE6已经死了，但是我就看过好多掘金段友还在写兼容IE6的文章....真是sun了dog，如果你们项目还在写IE6兼容，我敬你是条汉子！</li>
+<li>不能被爬虫读取</li>
+</ul>
+### Session与Local总结
+本来是用来做cookie的解决方案，适合于做小规模的简单结构数据储存与状态维护，不适宜储存敏感信息。可以运用在所有业务场景下。
+
+
+
+<h2 id="IndexedDB"><a href="#IndexedDB" class="headerlink" title="IndexedDB"></a>IndexedDB</h2><p>IndexedDB是HTML5规范里新出现的浏览器里内置的数据库。跟NoSQL很像,提供了类似数据库风格的数据存储和使用方式。但IndexedDB里的数据是永久保存，适合于储存大量结构化数据，有些数据本应该存在服务器，但是通过indexedDB，可以减轻服务器的大量负担，实现本地读取修改使用，以对象的形式存储，每个对象都有一个key值索引。</p>
+<p>IndexedDB里的操作都是事务性的。一种对象存储在一个object store里，object store就相当于关系数据库里的表。IndexedDB可以有很多object store，object store里可以有很多对象。</p>
+<p>首先来看兼容性<br><img src="https://static.yuanziwen.cn/indexdb.png_plain" alt="alt"></p>
+<p>Window自带浏览器也只是部分支持，window8.1及以上才支持IE11。</p>
+<p>首先，我们创建一个数据库</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//首先定义一个自己的版本</span></span><br><span class="line"><span class="keyword">var</span> my = &#123;</span><br><span class="line">    name:<span class="string">'juejin'</span>,</span><br><span class="line">    version:<span class="string">'1'</span>,</span><br><span class="line">    db:<span class="literal">null</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//打开仓库，没有则创建</span></span><br><span class="line"><span class="keyword">var</span> request = <span class="built_in">window</span>.indexedDB.open(my.name);</span><br><span class="line"><span class="comment">//window.indexedDB.open()的第二个参数即为版本号。在不指定的情况下，默认版本号为1.</span></span><br><span class="line"><span class="comment">//版本号不能是一个小数,否则会被转化成最近的整数。同时可能导致不会触发onupgradeneeded版本更新回调</span></span><br><span class="line"><span class="built_in">console</span>.log(request);</span><br></pre></td></tr></table></figure>
+
+<p>返回的是一个名字为IDBOpenDBRequest的对象。<br><img src="https://static.yuanziwen.cn/indexdbconsole.png_plain" alt="alt"></p>
+<p>里面有各个状态的回调参数，初始化的时候都是null，需要手动去挂载自定义的回调参数，从而实现window.indexedDB.open函数的状态回调控制，再去控制台Appliation的indexedDB查看<br><img src="https://static.yuanziwen.cn/indexdbbase.png_plain" alt="alt"></p>
+<p>我们已经成功添加该名称为juejin的db对象了，security origin表示安全起源(我是在个人博客控制台进行创建的)</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">request.onerror = <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123; <span class="comment">//打开失败回调</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;my.name&#125;</span> open indexedDB is Fail`</span>);</span><br><span class="line">&#125;</span><br><span class="line">request.onsuccess = <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123; <span class="comment">//打开成功回调</span></span><br><span class="line">    <span class="built_in">console</span>.warn(<span class="string">`<span class="subst">$&#123;my.name&#125;</span> open indexedDB is success`</span>);</span><br><span class="line">    <span class="comment">//将返回的值赋给自己控制的db版本对象,下面两种方法都能接收到。</span></span><br><span class="line">    my.db = event.target.result|| request.result;</span><br><span class="line">&#125;</span><br><span class="line">request.onupgradeneeded = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;<span class="comment">//版本变化回调参数,第一次设置版本号也会触发</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'indexDB version change'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(my.db);</span><br></pre></td></tr></table></figure>
+
+<p>返回的是一个db对象，里面包含后续对该db对象状态控制的回调方法。这些方法仍然需要自己定义。<br><img src="https://static.yuanziwen.cn/ver.png_plain" alt="alt"></p>
+<p>怎么关闭db对象和删除db对象呢？关闭和删除是两个概念。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//关闭db对象，之后无法对其进行插入、删除操作。</span></span><br><span class="line">my.db.close()；</span><br><span class="line"></span><br><span class="line"><span class="comment">//而删除方法则挂载在window.indexedDB下，删除该db仓库</span></span><br><span class="line"><span class="built_in">window</span>.indexedDB.deleteDatabase(my.db);</span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意的一点是此onclose()方法非上面代码调用的close()方法，my.db.close()调用的是<strong>proto</strong>原型内的方法。</p>
+<p>知道如何建立和操作indexedDB之后，我们对object store进行添加表的操作。上文我们说到，indexedDB中没有表的概念，而是object store，一个数据库中可以包含多个object store，object store是一个灵活的数据结构，可以存放多种类型数据。也就是说一个object store相当于一张表，里面存储的每条数据和一个键相关联。</p>
+<p>我们可以使用每条记录中的某个指定字段作为键值（keyPath），也可以使用自动生成的递增数字作为键值（keyGenerator），也可以不指定。选择键的类型不同，objectStore可以存储的数据结构也有差异。</p>
+<p>创建object store对象只能从onupgradeneeded版本变化回调中进行。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//创建object store对象</span></span><br><span class="line">request.onupgradeneeded = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;    </span><br><span class="line">    <span class="keyword">var</span> db = request.result;    </span><br><span class="line">    <span class="keyword">var</span> objectStore = db.createObjectStore(<span class="string">"LOL"</span>, &#123;<span class="attr">keyPath</span>: <span class="string">"isbn"</span>&#125;);    </span><br><span class="line">    <span class="keyword">var</span> titleIndex = objectStore.createIndex(<span class="string">"by_hero"</span>, <span class="string">"hero"</span>, &#123;<span class="attr">unique</span>: <span class="literal">true</span>&#125;);    </span><br><span class="line">    <span class="keyword">var</span> authorIndex = objectStore.createIndex(<span class="string">"by_author"</span>, <span class="string">"author"</span>);</span><br><span class="line">    objectStore.put(&#123;<span class="attr">title</span>: <span class="string">"亚索"</span>, <span class="attr">author</span>: <span class="string">"Roit"</span>, <span class="attr">isbn</span>: <span class="number">123456</span>&#125;);    </span><br><span class="line">    objectStore.put(&#123;<span class="attr">title</span>: <span class="string">"提莫"</span>, <span class="attr">author</span>: <span class="string">"Roit"</span>, <span class="attr">isbn</span>: <span class="number">234567</span>&#125;);    </span><br><span class="line">    objectStore.put(&#123;<span class="attr">title</span>: <span class="string">"诺手"</span>, <span class="attr">author</span>: <span class="string">"Hang"</span>, <span class="attr">isbn</span>: <span class="number">345678</span>&#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>createObjectStore方法有2个参数，第一个表示该object store表的名称，第二个是对象，keyPath为存储对象的某个属性（作为key值），options还有个参数:autoIncrement代表是否自增。接下来建立索引</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> titleIndex = objectStore.createIndex(<span class="string">"by_title"</span>, <span class="string">"title"</span>, &#123;<span class="attr">unique</span>: <span class="literal">true</span>&#125;);    </span><br><span class="line"><span class="keyword">var</span> authorIndex = objectStore.createIndex(<span class="string">"by_author"</span>, <span class="string">"author"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>第一个参数是索引的名称，第二个参数指定了根据存储数据的哪一个属性来构建索引，第三个options对象，其中属性unique的值为true表示不允许索引值相等。第二个索引没有options对象，接下来我们可以通过put方法添加数据了。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">objectStore.put(&#123;<span class="attr">hero</span>: <span class="string">"亚索"</span>, <span class="attr">author</span>: <span class="string">"Roit"</span>, <span class="attr">isbn</span>: <span class="number">123456</span>&#125;);    </span><br><span class="line">objectStore.put(&#123;<span class="attr">hero</span>: <span class="string">"提莫"</span>, <span class="attr">author</span>: <span class="string">"Roit"</span>, <span class="attr">isbn</span>: <span class="number">234567</span>&#125;);    </span><br><span class="line">objectStore.put(&#123;<span class="attr">hero</span>: <span class="string">"诺手"</span>, <span class="attr">author</span>: <span class="string">"Hang"</span>, <span class="attr">isbn</span>: <span class="number">345678</span>&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>整体代码写上</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> my = &#123;<span class="comment">//定义控制版本       </span></span><br><span class="line">    name:<span class="string">'juejin'</span>,       </span><br><span class="line">    version:<span class="string">'1'</span>,       </span><br><span class="line">    db:<span class="literal">null</span>     </span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> request = <span class="built_in">window</span>.indexedDB.open(my.name);  <span class="comment">//创建打开仓库     </span></span><br><span class="line">request.onupgradeneeded = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;<span class="comment">//更新版本回调    </span></span><br><span class="line">    <span class="keyword">var</span> db = request.result;    </span><br><span class="line">    <span class="keyword">var</span> objectStore = db.createObjectStore(<span class="string">"LOL"</span>, &#123;<span class="attr">keyPath</span>: <span class="string">"isbn"</span>&#125;);    </span><br><span class="line">    <span class="keyword">var</span> heroIndex = objectStore.createIndex(<span class="string">"by_hero"</span>, <span class="string">"hero"</span>, &#123;<span class="attr">unique</span>: <span class="literal">true</span>&#125;);    </span><br><span class="line">    <span class="keyword">var</span> authorIndex = objectStore.createIndex(<span class="string">"by_author"</span>, <span class="string">"author"</span>);</span><br><span class="line">    objectStore.put(&#123;<span class="attr">hero</span>: <span class="string">"亚索"</span>, <span class="attr">author</span>: <span class="string">"Roit"</span>, <span class="attr">isbn</span>: <span class="number">123456</span>&#125;);        </span><br><span class="line">    objectStore.put(&#123;<span class="attr">hero</span>: <span class="string">"提莫"</span>, <span class="attr">author</span>: <span class="string">"Roit"</span>, <span class="attr">isbn</span>: <span class="number">234567</span>&#125;);        </span><br><span class="line">    objectStore.put(&#123;<span class="attr">hero</span>: <span class="string">"诺手"</span>, <span class="attr">author</span>: <span class="string">"Hang"</span>, <span class="attr">isbn</span>: <span class="number">345678</span>&#125;);</span><br><span class="line">&#125;;</span><br><span class="line">request.onsuccess = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;<span class="comment">//成功回调    </span></span><br><span class="line">    my.db = event.target.result|| request.result;    </span><br><span class="line">    <span class="built_in">console</span>.warn(<span class="string">`<span class="subst">$&#123;my.name&#125;</span> indexedDB is success open Version <span class="subst">$&#123;my.version&#125;</span>`</span>);</span><br><span class="line">&#125;;</span><br><span class="line">request.onerror = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;<span class="comment">//失败回调    </span></span><br><span class="line">    <span class="built_in">console</span>.warn(<span class="string">`<span class="subst">$&#123;my.name&#125;</span> indexedDB is fail open  Version <span class="subst">$&#123;my.version&#125;</span>`</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>注意只有在运行环境下才会进行一个存储，本地打开静态文件是不会储存indexedDB的，虽然能弹出juejin indexedDB is success open。这样我们就成功创建了一个object store，我们到控制台去看下</p>
+<p><img src="https://static.yuanziwen.cn/hero.png_plain" alt="alt"><br>by_hero表示在创建索引的时候，通过createObjectStore(‘by_hero’,’hero’,{unique:true})的时候，通过key值为hero的对象，进行索引筛选的数据。再去by_author看下，</p>
+<p><img src="https://static.yuanziwen.cn/author.png_plain" alt="alt"></p>
+<p>同理，通过key值为author的，进行索引的数据。这样就能够储存大量结构化数据。并且拥有索引能力，这一点比Storage强。当然，api也麻烦。接来下进行事务操作。</p>
+<p>在IndexedDB中，使用事务来进行数据库的操作。事务有三个模式，默认只读</p>
+<p>readOnly只读。<br>readwrite读写。<br>versionchange数据库版本变化</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//首先要创建一个事务,</span></span><br><span class="line"><span class="keyword">var</span> transaction = my.db.transaction(<span class="string">'LOL'</span>, <span class="string">'readwrite'</span>);</span><br><span class="line"><span class="comment">//获取objectStore数据</span></span><br><span class="line"><span class="keyword">var</span> targetObjectStore = transaction.objectStore(<span class="string">'LOL'</span>);</span><br><span class="line"><span class="comment">//对预先设置的keyPath:isbn进行获取</span></span><br><span class="line"><span class="keyword">var</span> obj = targetObjectStore.get(<span class="number">345678</span>);</span><br><span class="line"><span class="comment">//如果获取成功，执行回调</span></span><br><span class="line">obj.onsuccess = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'数据成功获取'</span>+e.target.result)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//获取失败obj.onerror = function(e)&#123;    </span></span><br><span class="line">    <span class="built_in">console</span>.error(<span class="string">'获取失败:'</span>+e.target.result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://static.yuanziwen.cn/22.png_plain" alt="alt"><br>获取成功，拿到isbn为345678的数据。</p>
+<p>第一个参数为需要关联的object store名称，第二个参数为事务模式，选择可读可写，与indexedDB一样，调用成功后也会触发onsuccess、onerror回调方法。可以读取了我们尝试去添加</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">targetObjectStore.add(&#123;<span class="attr">hero</span>: <span class="string">"盖伦"</span>, <span class="attr">author</span>: <span class="string">"Yuan"</span>, <span class="attr">isbn</span>: <span class="number">163632</span>&#125;);        </span><br><span class="line">targetObjectStore.add(&#123;<span class="attr">hero</span>: <span class="string">"德邦"</span>, <span class="attr">author</span>: <span class="string">"Dema"</span>, <span class="attr">isbn</span>: <span class="number">131245</span>&#125;);        </span><br><span class="line">targetObjectStore.add(&#123;<span class="attr">hero</span>: <span class="string">"皇子"</span>, <span class="attr">author</span>: <span class="string">"King"</span>, <span class="attr">isbn</span>: <span class="number">435112</span>&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>有一点要注意，添加重复数据会更新。添加完毕后，去控制台看下<br><img src="https://static.yuanziwen.cn/add.png_plain" alt="alt"><br>不对啊，肯定有的，刷新无数遍后，终于找到了解决办法。这可能是Chrome的一个BUG吧。</p>
+<img src="https://static.yuanziwen.cn/indexdb.gif_plain">
+
+<p>删除数据</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//获取数据是get，删除数据是delete</span></span><br><span class="line">targetObjectStore.delete(<span class="number">345678</span>);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://static.yuanziwen.cn/delete.png_plain" alt="alt"></p>
+<p>同样 ，需要输入筛选数据才会触发刷新，不过在日常中已经足够我们使用。</p>
+<p>更新数据</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = targetObjectStore.get(<span class="number">123456</span>);</span><br><span class="line"><span class="comment">//如果获取成功，执行回调</span></span><br><span class="line">obj.onsuccess = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'数据成功获取'</span>+e.target.result);</span><br><span class="line">    <span class="keyword">var</span> data = e.target.result;</span><br><span class="line">    data.hero = <span class="string">'亚索踩蘑菇挂了'</span>;</span><br><span class="line">    <span class="comment">//再put回去</span></span><br><span class="line">    <span class="keyword">var</span> updata = targetObjectStore.put(data);</span><br><span class="line">    updata.onsuccess = <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'更新数据成功'</span>+event.target.result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://static.yuanziwen.cn/updata.gif_plain">
+<p>又要筛选一遍.</p>
+<p>当你需要便利整个存储空间中的数据时，你就需要使用到游标。游标使用方法如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> request = <span class="built_in">window</span>.indexedDB.open(<span class="string">'juejin'</span>);</span><br><span class="line"></span><br><span class="line">request.onsuccess = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> db = event.target.result;</span><br><span class="line">    <span class="keyword">var</span> transaction = db.transaction(<span class="string">'LOL'</span>, <span class="string">'readwrite'</span>);</span><br><span class="line">    <span class="comment">//获取object store数据</span></span><br><span class="line">    <span class="keyword">var</span> objectStore = transaction.objectStore(<span class="string">'LOL'</span>);</span><br><span class="line">    <span class="comment">//获取该数据的浮标</span></span><br><span class="line">    <span class="keyword">var</span> eachData = objectStore.openCursor();</span><br><span class="line">        <span class="comment">//openCursor有2个参数（遍历范围，遍历顺序）</span></span><br><span class="line">    eachData.onsuccess = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> cursor = event.target.result;</span><br><span class="line">        <span class="keyword">if</span> (cursor)&#123;    </span><br><span class="line">            <span class="built_in">console</span>.log(cursor);</span><br><span class="line">            cursor.continue();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    eachData.onerror = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">        consoe.error(<span class="string">'each all data fail reason:'</span>+event.target.result);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样通过openCursor得到的数据就类似于forEach输出，当表中无数据，仍会书法一次onsuccess回调</p>
+<p><img src="https://static.yuanziwen.cn/each.png_plain" alt="alt"></p>
+<p>上面提到openCursor的两个参数，第一个是遍历范围，由indexedDB的 ：IDBKeyRange的API进行实现，主要有以下几个值;</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//区间向上匹配,第一个参数指定边界值，第二个参数是否包含边界值，默认false包含。</span></span><br><span class="line">lowerBound(<span class="string">'边界值'</span>,<span class="built_in">Boolean</span>);</span><br><span class="line"><span class="keyword">var</span> index = IDBKeyRange.lowerBound(<span class="number">1</span>);<span class="comment">//匹配key&gt;=1</span></span><br><span class="line"><span class="keyword">var</span> index = IDBKeyRange.lowerBound(<span class="number">1</span>,<span class="literal">true</span>);<span class="comment">//匹配key&gt;1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//单一匹配,指定参数值</span></span><br><span class="line">only(<span class="string">'值'</span>);</span><br><span class="line"><span class="keyword">var</span> index = IDBKeyRange.only(<span class="number">1</span>);<span class="comment">//匹配key===1;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//区间向下搜索,第一个参数指定边界值，第二个参数是否包含边界值，默认false包含。</span></span><br><span class="line">upperBound(<span class="string">'边界值'</span>,<span class="built_in">Boolean</span>);</span><br><span class="line"><span class="keyword">var</span> index = IDBKeyRange.upperBound(<span class="number">2</span>);<span class="comment">//匹配key&lt;=2</span></span><br><span class="line"><span class="keyword">var</span> index = IDBKeyRange.upperBound(<span class="number">2</span>,<span class="literal">true</span>);<span class="comment">//匹配key&lt;2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//区间搜索,第一个参数指定开始边界值，第二个参数结束边界值，</span></span><br><span class="line"><span class="comment">//        第三个指定开始边界值是否包含边界值，默认false包含。第四个指定结束边界值是否包含边界值，默认false</span></span><br><span class="line">bound(<span class="string">'边界值'</span>,<span class="built_in">Boolean</span>);</span><br><span class="line"><span class="keyword">var</span> index = IDBKeyRange.bound(<span class="number">1</span>,<span class="number">10</span>,<span class="literal">true</span>,<span class="literal">false</span>);<span class="comment">//匹配key&gt;1&amp;&amp;key&lt;=10;</span></span><br></pre></td></tr></table></figure>
+
+<p>openCursor第二个参数，遍历顺序，指定游标遍历时的顺序和处理相同id（keyPath属性指定字段）重复时的处理方法。改范围通过特定的字符串来获取。其中：</p>
+<ul>
+  <li>IDBCursor.next，从前往后获取所有数据（包括重复数据）</li>
+  <li>IDBCursor.prev，从后往前获取所有数据（包括重复数据）</li>
+  <li>IDBCursor.nextunique，从前往后获取数据（重复数据只取第一条）</li>
+  <li>IDBCursor.prevunique，从后往前获取数据（重复数据只取第一条）</li>
+</ul>
+我们来试一下
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> request = <span class="built_in">window</span>.indexedDB.open(<span class="string">'juejin'</span>);</span><br><span class="line">request.onsuccess = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> db = event.target.result;</span><br><span class="line">    <span class="keyword">var</span> transaction = db.transaction(<span class="string">'LOL'</span>, <span class="string">'readwrite'</span>);</span><br><span class="line">    <span class="comment">//获取object store数据</span></span><br><span class="line">    <span class="keyword">var</span> objectStore = transaction.objectStore(<span class="string">'LOL'</span>);</span><br><span class="line">    <span class="comment">//bound('边界值',Boolean);匹配key&gt;22000&amp;&amp;key&lt;=400000;</span></span><br><span class="line">    <span class="keyword">var</span> index = IDBKeyRange.bound(<span class="number">220000</span>,<span class="number">400000</span>,<span class="literal">true</span>,<span class="literal">false</span>);</span><br><span class="line">    <span class="comment">//获取该数据的浮标，从前往后顺序索引，包括重复数据</span></span><br><span class="line">    <span class="keyword">var</span> eachData = objectStore.openCursor(index,IDBCursor.NEXT);</span><br><span class="line">    eachData.onsuccess = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> cursor = event.target.result;</span><br><span class="line">        <span class="built_in">console</span>.log(cursor);</span><br><span class="line">        <span class="keyword">if</span> (cursor) cursor.continue();</span><br><span class="line">    &#125;;</span><br><span class="line">    eachData.onerror = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">        consoe.error(<span class="string">'each all data fail reason:'</span>+event.target.result);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>搜索key值为220000到40000万之间的数据，搜索出一条。</p>
+<p><img src="https://static.yuanziwen.cn/search.png_plain" alt="alt"></p>
+<p>好了，indexedDB基本和事务操作讲的差不多了，现在说说它另一方面：</p>
+<p>目前为止，所知道在IndexedDB中，键值对中的key值可以接受以下几种类型的值：</p>
+<ul>
+<li>Number</li>
+<li>String</li>
+<li>Array</li>
+<li>Object</li>
+<li>Binary二进制</li>
+</ul>
+但是储存数据千万要注意的一点是，如果储存了isbn相同的数据，是无效操作，甚至可能引起报错。
+
+<p>keyPath能够接受的数据格式，示例中createObjectStore时设置的{KeyPath:’isbn’}，为主键</p>
+<ul>
+<li>Blob</li>
+<li>File</li>
+<li>Array</li>
+<li>String</li>
+<li>至于value几乎能接受所有数据格式。</li>
+</ul>
+参考文献：[indexedDB出坑指南](https://segmentfault.com/a/1190000006924681)
+
+<h3 id="indexedDB优点"><a href="#indexedDB优点" class="headerlink" title="indexedDB优点"></a>indexedDB优点</h3><p>替代web SQL，与service work搭配简直无敌，实现离线访问不在话下，<br>数据储存量无限大（只要你硬盘够），Chrome规定了最多只占硬盘可用空间的1/3，可以储存结构化数据带来的好处是可以节省服务器的开支。</p>
+<h3 id="indexedDB缺点"><a href="#indexedDB缺点" class="headerlink" title="indexedDB缺点"></a>indexedDB缺点</h3><p>兼容性问题，只有ie11以上，根据业务场景慎重考虑需求。<br>同源策略，部分浏览器如Safari手机版隐私模式在访问IndexedDB时，可能会出现由于没有权限而导致的异常（LocalStorage也会），需要进行异常处理。<br>API类似SQL比较复杂，操作大量数据的时候，可能存在性能上的消耗。<br>用户在清除浏览器缓存时，可能会清除IndexedDB中相关的数据。</p>
+<h2 id="ServiceWork"><a href="#ServiceWork" class="headerlink" title="ServiceWork"></a>ServiceWork</h2><p>什么是ServiceWork？serviceWork是W3C 2014年提出的草案，是一种独立于当前页面在后台运行的脚本。这里的后台指的是浏览器后台，能够让web app拥有和native app一样的离线程序访问能力，让用户能够进行离线体验，消息推送体验。service worker是一段脚本，与web worker一样，也是在后台运行。作为一个独立的线程，运行环境与普通脚本不同，所以不能直接参与web交互行为。native app可以做到离线使用、消息推送、后台自动更新，service worker的出现是正是为了使得web app也可以具有类似的能力。</p>
+<h3 id="ServiceWork产生的意义"><a href="#ServiceWork产生的意义" class="headerlink" title="ServiceWork产生的意义"></a>ServiceWork产生的意义</h3><p>打开了现在浏览器单线程的革面，随着前端性能越来越强，要求越来越高，我们都知道在浏览器中，JavaScript是单线程执行的，如果涉及到大量运算的话，很有可能阻碍css tree的渲染，从而阻塞后续代码的执行运算速度，ServiceWork的出现正好解决了这个问题，将一些需要大规模数据运算和获取  资源文件在后台进行处理，然后将结果返回到主线程，由主线程来执行渲染，这样可以避免主线程被巨量的逻辑和运算所阻塞。这样的大大的提升了JavaScript线程在处理大规模运算时候的一个能力， 这也是ServiceWork本身的巨大优势，比如我们要进行WebGBL场景下3D模型和数据的运算，一个普通的数据可能高达几MB，如果放在主线程进行运算的话，会严重阻碍页面的渲染，这个时候就非常适合ServiceWork进行后台计算，再将结果返回到主线程进行渲染。</p>
+<h3 id="ServiceWork的功能"><a href="#ServiceWork的功能" class="headerlink" title="ServiceWork的功能"></a>ServiceWork的功能</h3><p>service worker可以：</p>
+<ul>
+<li>消息推送、传递</li>
+<li>在不影响页面通信以及阻塞线程的情况下，后台同步运算。</li>
+<li>网络拦截、代理，转发请求，伪造响应</li>
+<li>离线缓存</li>
+<li>地理围栏定位</li>
+</ul>
+说了这么多，到底跟我们实际工作中有什么用处呢，这里就要介绍google 的PWD（Progressive Web Apps)，它是一种Web App新模型，渐进式的web App，它依赖于Service Work，是现在没有网络的环境中也能够提供基本的页面访问，不会出现‘未连接到互联网’，可以优化网页渲染及网络数据访问，并且可以添加到手机桌面，和普通应用一样有全屏状态和消息推送的功能。
+![alt](https://static.yuanziwen.cn/sw-lifecycle.png_plain)
+
+<p>这是Service Work的生命周期，首先没有Service Work的情况下会进行一个安装中的状态，返回一个promise实例，reject的会走到Error这一步，resolve安装成功，当安装完成后，进入Activated激活状态，在这一阶段，你还可以升级一个service worker的版本，具体内容我们会在后面讲到。在激活之后，service worker将接管所有在自己管辖域范围内的页面，但是如果一个页面是刚刚注册了service worker，那么它这一次不会被接管，到下一次加载页面的时候，service worker才会生效。当service worker接管了页面之后，它可能有两种状态：要么被终止以节省内存，要么会处理fetch(拦截和发出网络请求)和message(信息传递)事件，这两个事件分别是页面初始化的时候产生了一个网络请求出现或者页面上发送了一个消息。</p>
+<p>目前有哪些页面支持service Work呢？</p>
+<p>在Chrome浏览器地址栏输入chrome://inspect/#service-workers，可以看到目前为止你访问过所有支持service work的网站<br><img src="https://static.yuanziwen.cn/serviceWork.png_plain" alt="alt"><br>你也可以打开控制台，到Application，点击serviceWork这一栏。</p>
+<p><img src="https://static.yuanziwen.cn/serviceWork2.png_plain" alt="alt"><br>那怎么才能体验到service Work呢，我们以Vue官网为例，首先打开<a href="https://cn.vuejs.org/，等待加载完成，现在关掉你的WiFi和所有能连上互联网的工具。再刷新地址栏页面" target="_blank" rel="noopener">https://cn.vuejs.org/，等待加载完成，现在关掉你的WiFi和所有能连上互联网的工具。再刷新地址栏页面</a></p>
+<img src="https://static.yuanziwen.cn/servicework.gif_plain">
+
+<p>是不是感觉很新奇，怎么做到呢，继续往下看。需要运行本地环境，各种方法自行百度，我使用的是自己购买的腾讯云服务器，nginx多开几个端口，SFTP自动上传。也可以搭建本地localhost，切记不可以用IP地址，ServiceWork不支持域名为IP的网站，做好这些我们开始。</p>
+<p>首先创建一个文件夹，再创建index.html，index.css，app.js，servicework.js这些文件我们后续都要用到。</p>
+<p>index.html</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>ServiceWork<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>ServiceWork<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./app.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"./index.css"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>引入了一个main.css文件和一个app.js</p>
+<p>main.css</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">h1</span>&#123;  </span><br><span class="line">    <span class="attribute">color</span>:red;</span><br><span class="line">    <span class="attribute">text-align</span>:center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>app.js</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">alert(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>测试成功弹出alert(1)后，我们开始写代码。</p>
+<p>首先要确定是否支持ServiceWork。</p>
+<p>app.js</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (navigator.serviceWorker) &#123; </span><br><span class="line">  <span class="comment">//先注入注册文件，第二个参数为作用域，为当前目录  </span></span><br><span class="line">  navigator.serviceWorker.register(<span class="string">'./servicework.js'</span>, &#123;    </span><br><span class="line">    scope: <span class="string">'./'</span>  </span><br><span class="line">  &#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">reg</span>) </span>&#123;    </span><br><span class="line">    <span class="built_in">console</span>.warn(<span class="string">'install ServiceWork success'</span>,reg)  </span><br><span class="line">  &#125;).catch(<span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;    </span><br><span class="line">    <span class="built_in">console</span>.error(err)  </span><br><span class="line">  &#125;</span><br><span class="line">)&#125; <span class="keyword">else</span> &#123;  </span><br><span class="line">  <span class="comment">//不支持serviceWork操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>导入注册配置文件，返回一个promise，触发相应回调,然后再去修改servicework.js文件，</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//self是serviceWorker的实例。</span></span><br><span class="line"><span class="built_in">console</span>.log(self)</span><br><span class="line"><span class="comment">//给实例监听安装事件，成功触发回调</span></span><br><span class="line">self.addEventListener(<span class="string">'install'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;  </span><br><span class="line">  <span class="comment">//ExtendableEvent.waitUntil()扩展事件的生命周期。  </span></span><br><span class="line">  e.waitUntil(    </span><br><span class="line">    <span class="comment">//我们通过打开名称为'app-v1'的缓存，将读取到的文件储存到cache里    </span></span><br><span class="line">    caches.open(<span class="string">'app-v1'</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params">cache</span>) </span>&#123;     </span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'caches staticFile success'</span>);     </span><br><span class="line">      <span class="comment">//添加cache     </span></span><br><span class="line">      <span class="keyword">return</span> cache.addAll([       </span><br><span class="line">        <span class="string">'./app.js'</span>,       </span><br><span class="line">        <span class="string">'./servicework.html'</span>,       </span><br><span class="line">        <span class="string">'./servicework.js'</span>,       </span><br><span class="line">        <span class="string">'./index.css'</span>    </span><br><span class="line">       ]);   </span><br><span class="line">      &#125;)</span><br><span class="line">    ); </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>ExtendableEvent.waitUntil()接受一个promise对象，它可以扩展时间的生命周期，延长事件的寿命从而阻止浏览器在事件中的异步操作完成之前终止服务工作线程。它可以扩展时间的生命周期，延长事件的寿命从而阻止浏览器在事件中的异步操作完成之前终止服务工作线程。<br><img src="https://static.yuanziwen.cn/installserviceWork.png_plain" alt="alt"><br>install的时候，它会延迟将安装的works视为installing，直到传递的Promise被成功地resolve。确保服务工作线程在所有依赖的核心cache被缓存之前都不会被安装。</p>
+<p>一旦 Service Worker 成功安装，它将转换到Activation阶段。如果以前的 Service Worker 还在服务着任何打开的页面，则新的 Service Worker 进入 waiting 状态。新的 Service Worker 仅在旧的 Service Worker 没有任何页面被加载时激活。这确保了在任何时间内只有一个版本的 Service Worker 正在运行。当进行</p>
+<p>activited<br>的时候，它延迟将active work视为已激活的，直到传递的Promise被成功地resolve。确保功能时间不会被分派到ServiceWorkerGlobalScope 对象。</p>
+<p>更详细的可以到MDN查看该API更多说明。<br>成功丢到缓存里后，就可以使用fetch进行网络拦截了。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//同样的方法，监听fetch事件， </span></span><br><span class="line">self.addEventListener(<span class="string">'fetch'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;  </span><br><span class="line">  <span class="comment">//respondWith方法产生一个request，response。 </span></span><br><span class="line">  event.respondWith(     </span><br><span class="line">    <span class="comment">//利用match方法对event.request所请求的文件进行查询   </span></span><br><span class="line">    caches.match( event.request).then(      </span><br><span class="line">      <span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;     </span><br><span class="line">        <span class="built_in">console</span>.log(res,event.request);     </span><br><span class="line">        <span class="comment">//如果cache中有该文件就返回。        </span></span><br><span class="line">        <span class="keyword">if</span>(res) &#123;          </span><br><span class="line">          <span class="keyword">return</span> res</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;          </span><br><span class="line">          <span class="comment">//没有找到缓存的文件,再去通过fetch()请求资源          </span></span><br><span class="line">          fetch(res.url).then(<span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</span><br><span class="line">                        </span><br><span class="line">            <span class="keyword">if</span>(res)&#123;              </span><br><span class="line">              <span class="keyword">if</span>(!res || res.status !== <span class="number">200</span> || res.type !== <span class="string">'basic'</span>) &#123;                </span><br><span class="line">                <span class="keyword">return</span> res;              </span><br><span class="line">              &#125;              </span><br><span class="line">              <span class="comment">//再将请求到的数据丢到cache缓存中..               </span></span><br><span class="line">              <span class="keyword">var</span> fetchRequest = event.request.clone();               </span><br><span class="line">              <span class="keyword">var</span> fileClone = res.clone();               </span><br><span class="line">              caches.open(<span class="string">'app-v1'</span>)                </span><br><span class="line">              .then(<span class="function"><span class="keyword">function</span>(<span class="params">cache</span>) </span>&#123;                  </span><br><span class="line">                cache.put(event.request, fileClone);                </span><br><span class="line">              &#125;);            </span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;              </span><br><span class="line">              <span class="comment">//没有请求到该文件，报错处理            </span></span><br><span class="line">              <span class="built_in">console</span>.error(<span class="string">'file not found:'</span>+ event.reuqest+<span class="string">'==&gt;'</span>+res.url )            </span><br><span class="line">            &#125;          </span><br><span class="line">          &#125;)        </span><br><span class="line">        &#125;      </span><br><span class="line">      &#125;    </span><br><span class="line">    )  </span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>对于前端大家肯定很熟悉request，response代表着什么，event.respondWith()会根据当前控制的页面产生一个request，request再去生成自定义的response，network error 或者 Fetch的方式resolve。<br><img src="https://static.yuanziwen.cn/promiseSW.png_plain" alt="alt"><br>fetch()对网络进行拦截，代理请求，先读取本地文件，没有资源再去请求，很大程度的节约了网络请求消耗。<br><img src="https://static.yuanziwen.cn/eventResponse.png_plain" alt="alt"><br>现在我们去试试有没有成功！</p>
+<img src="https://static.yuanziwen.cn/serviceSuccess.gif_plain">
+
+<p>啊哈，漂亮！这样就实现了离线访问，但是在实际项目中，尽量不要缓存servicework.js文件，可能无法及时生效，进行后续修改。我们去控制台看下<br><img src="https://static.yuanziwen.cn/installsuccess.png_plain" alt="alt"><br>已经安装好了，并且在运行中。<br>整体大概的流程如下<br><img src="https://static.yuanziwen.cn/cm-on-activate.png_plain" alt="alt"></p>
+<p>service work.js 的更新<br>Service Work.js 的更新不仅仅只是简单的更新，为了用户可靠性体验，里面还是有很多门道的。</p>
+<p>首先更新ServiceWork.js 文件，这是最主要的。只有更新 ServiceWork.js 文件之后，之后的流程才能触发。ServiceWork.js 的更新也很简单，直接改动 ServiceWork.js 文件即可。浏览器会自动检查差异性（就算只有 1B 的差异也行），然后进行获取。<br>新的 ServiceWork.js 文件开始下载，并且 install 事件被触发<br>此时，旧的 ServiceWork 还在工作，新的 ServiceWork 进入 waiting 状态。注意，此时并不存在替换<br>现在，两个 ServiceWork 同时存在，不过还是以前的 ServiceWork 在掌管当前网页。只有当 old service work 不工作，即，被 terminated 后，新的 ServiceWork 才会发生作用。具体行为就是，该网页被关闭一段时间，或者手动的清除 service worker。然后，新的 Service Work 就度过可 waiting 的状态。<br>一旦新的 Service Work 接管，则会触发 activate 事件。<br>整个流程图为：<br><img src="https://static.yuanziwen.cn/sw%E6%9B%B4%E6%96%B0.png_plain" alt="alt"><br>一个版本的缓存创建好之后，我们也可以设置多个缓存，那怎去删除不在白名单中的缓存呢</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">self.addEventListener(<span class="string">'activate'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//上个版本，我们使用的是'app-v1'的缓存，所以就需要进行清除，进行'app-v2'版本的缓存储存</span></span><br><span class="line">  <span class="keyword">var</span> cacheWhitelist = [<span class="string">'app-v1'</span>];</span><br><span class="line"></span><br><span class="line">  event.waitUntil(</span><br><span class="line">    caches.keys().then(<span class="function"><span class="keyword">function</span>(<span class="params">cacheNames</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Promise</span>.all(</span><br><span class="line">        cacheNames.map(<span class="function"><span class="keyword">function</span>(<span class="params">cacheName</span>) </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (cacheWhitelist.indexOf(cacheName) === <span class="number">-1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> caches.delete(cacheName);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">      );</span><br><span class="line">    &#125;)</span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>如果 new service work要立即生效呢，那就要用到skipWaiting，在 install 阶段使用 self.skipWaiting(); ,因为上面说到 new Service Work 加载后会触发 install 然后进入 waiting 状态。那么，我们可以直接在 install 阶段跳过等待，直接让 new Service Work 进行接管。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">self.addEventListener(<span class="string">'install'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  self.skipWaiting();</span><br><span class="line"></span><br><span class="line">  event.waitUntil(</span><br><span class="line">    <span class="comment">// caching etc</span></span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>上面的 service work 更新都是在一开始加载的时候进行的，那么，如果用户需要长时间停留在你的网页上，有没有什么手段，在间隔时间检查更新呢？<br>有的，可以使用 registration.update() 来完成。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">navigator.serviceWorker.register(<span class="string">'./ServiceWork.js'</span>).then(<span class="function"><span class="keyword">function</span>(<span class="params">reg</span>)</span>&#123;</span><br><span class="line">  <span class="comment">// sometime later…</span></span><br><span class="line">  reg.update();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>另外，如果你一旦用到了 ServiceWork.js 并且确定路由之后，请千万不要在更改路径了，因为，浏览器判断 ServiceWork.js 是否更新，是根据 ServiceWork.js 的路径来的。如果你修改的 ServiceWork.js 路径，而以前的 ServiceWork.js 还在作用，那么你新的 ServiceWork 永远无法工作。除非你手动启用 update 进行更新。</p>
+<p>你想要一个文件更新，只需要在 ServiceWork 的 fetch阶段使用 caches 进行缓存即可。一开始我们的 install 阶段的代码为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">self.addEventListener(<span class="string">'install'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  event.waitUntil(</span><br><span class="line">    caches.open(<span class="string">'app-v1'</span>).then(<span class="function"><span class="keyword">function</span>(<span class="params">cache</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> cache.addAll([</span><br><span class="line">        <span class="string">'./app.js'</span>,        </span><br><span class="line">        <span class="string">'./servicework.html'</span>,        </span><br><span class="line">        <span class="string">'./index.css'</span>      </span><br><span class="line">        ]);</span><br><span class="line">    &#125;)</span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">self.addEventListener(<span class="string">'install'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> now = <span class="built_in">Date</span>.now();</span><br><span class="line">  <span class="comment">// 事先设置好需要进行更新的文件路径  </span></span><br><span class="line">  <span class="keyword">var</span> urlsToPrefetch = [</span><br><span class="line">    <span class="string">'./index.css'</span>,</span><br><span class="line">    <span class="string">'./servicework.html'</span></span><br><span class="line">  ];</span><br><span class="line">  event.waitUntil(</span><br><span class="line">    caches.open(CURRENT_CACHES.prefetch).then(<span class="function"><span class="keyword">function</span> (<span class="params">cache</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> cachePromises = urlsToPrefetch.map(<span class="function"><span class="keyword">function</span> (<span class="params">urlToPrefetch</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 使用 url 对象进行路由拼接        </span></span><br><span class="line">        <span class="keyword">var</span> url = <span class="keyword">new</span> URL(urlToPrefetch, location.href);</span><br><span class="line">        url.search += (url.search ? <span class="string">'&amp;'</span> : <span class="string">'?'</span>) + <span class="string">'cache-bust='</span> + now;</span><br><span class="line">        <span class="comment">// 创建 request 对象进行流量的获取        </span></span><br><span class="line">        <span class="keyword">var</span> request = <span class="keyword">new</span> Request(url, &#123;</span><br><span class="line">          mode: <span class="string">'no-cors'</span></span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// 手动发送请求，用来进行文件的更新        </span></span><br><span class="line">        <span class="keyword">return</span> fetch(request).then(<span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (response.status &gt;= <span class="number">400</span>) &#123;</span><br><span class="line">            <span class="comment">// 解决请求失败时的情况            </span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'request for '</span> + urlToPrefetch +</span><br><span class="line">              <span class="string">' failed with status '</span> + response.statusText);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="comment">// 将成功后的 response 流，存放在 caches 套件中，完成指定文件的更新。          </span></span><br><span class="line">          <span class="keyword">return</span> cache.put(urlToPrefetch, response);</span><br><span class="line">        &#125;).catch(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">          <span class="built_in">console</span>.error(<span class="string">'Not caching '</span> + urlToPrefetch + <span class="string">' due to '</span> + error);</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Promise</span>.all(cachePromises).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'Pre-fetching complete.'</span>);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;).catch(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.error(<span class="string">'Pre-fetching failed:'</span>, error);</span><br><span class="line">    &#125;));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>当成功获取到缓存之后， ServiceWork 并不会直接进行替换，他会等到用户下一次刷新页面过后，使用新的缓存文件。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">self.addEventListener(<span class="string">'fetch'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  event.respondWith(</span><br><span class="line">    caches.open(<span class="string">'app-v1'</span>).then(<span class="function"><span class="keyword">function</span>(<span class="params">cache</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> cache.match(event.request).then(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> fetchPromise = fetch(event.request).then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</span><br><span class="line">          cache.put(event.request, res.clone());</span><br><span class="line">          <span class="keyword">return</span> res;</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">return</span> response || fetchPromise;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://static.yuanziwen.cn/fileUpdata.png_plain" alt="alt"><br>更详细的其他方法运用可以参考<a href="https://blog.csdn.net/i10630226/article/details/78885664" target="_blank" rel="noopener">这篇文章</a>.<br>更具体规范的代码内容可以到这<a href="https://github.com/yzw7489757/service-Work-demo/blob/master/www/static/js-unmin/sw/index.js" target="_blank" rel="noopener">查看</a>。</p>
+<p>service work（PWA）缺点：<br>  <ul><br>    <li>缓存的问题，要定期清理。超出的时候会出现 Uncaught (in promise) DOMException: Quota exceeded. 异常。清理后必须要重启浏览器才生效。</li><br>    <li>浏览器兼容，头疼的问题。IE和safari不兼容</li><br>  </ul><br><img src="https://static.yuanziwen.cn/jianrong.png_plain" alt="alt"><br>优点：<br>  <ul><br>   <li> 如上文所述，有着消息推送、网络拦截代理、后台运算、离线缓存、地理围栏等很实用的一些技术。</li><br>  </ul><br><img src="https://static.yuanziwen.cn/jianrong.png_plain" alt="alt"><br>本文参考了很多大神的代码，不喜勿喷，诚心学习请指教。</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2018/06/09/论浏览器本地存储Cookie、Session-Local、indexDB、ServiceWork优劣及趋向/">blog.yuanziwen.cn/2018/06/09/论浏览器本地存储Cookie、Session-Local、indexDB、ServiceWork优劣及趋向/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/Storage/">Storage</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/06/17/一次性让你动async-await，解决回调地狱/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">一次性让你懂async/await，解决回调地狱</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/05/17/网页高效重构思想-模块化/">
+        <span class="next-text nav-default">网页高效重构思想-模块化</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1593502174043')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="React传-2"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2019/10/30/React传-2/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>React传-2 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music(NoAuto)
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music(NoAuto)
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">React传-2
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-10-30
+        </span></div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Suspense-与-lazy"><span class="toc-text">Suspense 与 lazy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#createContext"><span class="toc-text">createContext</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#forwardRef"><span class="toc-text">forwardRef</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#memo"><span class="toc-text">memo</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><p><img src="https://static.yuanziwen.cn/blog/react-source-code/5.png_plain" alt="alt=poster"></p>
+<h2 id="Suspense-与-lazy"><a href="#Suspense-与-lazy" class="headerlink" title="Suspense 与 lazy"></a>Suspense 与 lazy</h2><p>在<code>src/React.js</code>里，有几个组件长得比较奇怪。</p>
+<a id="more"></a>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Fragment: REACT_FRAGMENT_TYPE,</span><br><span class="line">Profiler: REACT_PROFILER_TYPE,</span><br><span class="line">StrictMode: REACT_STRICT_MODE_TYPE,</span><br><span class="line">Suspense: REACT_SUSPENSE_TYPE,</span><br><span class="line">unstable_SuspenseList: REACT_SUSPENSE_LIST_TYPE,</span><br></pre></td></tr></table></figure>
+
+<!-- more -->
+
+<p>它们都是一个symbol常量，作为一种标识，现在暂时占个位，之后看到再回来补。</p>
+<p>直接看lazy代码</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">lazy</span>&lt;<span class="title">T</span>, <span class="title">R</span>&gt;(<span class="params">ctor: (</span>) =&gt; <span class="title">Thenable</span>&lt;<span class="title">T</span>, <span class="title">R</span>&gt;): <span class="title">LazyComponent</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="comment">// lazy的用法</span></span><br><span class="line">  <span class="comment">// lazy(()=&gt;import('./xxx.js')) 这里的ctor指的就是懒加载函数</span></span><br><span class="line">  <span class="keyword">let</span> lazyType = &#123;</span><br><span class="line">    $$<span class="keyword">typeof</span>: REACT_LAZY_TYPE, <span class="comment">// 这里的$$typeof 并不是指createElement的$$type，整个对象是createElement返回对象的type字段</span></span><br><span class="line">    _ctor: ctor,</span><br><span class="line">    <span class="comment">// React uses these fields to store the result.</span></span><br><span class="line">    _status: <span class="number">-1</span>, <span class="comment">// 状态码</span></span><br><span class="line">    _result: <span class="literal">null</span>, <span class="comment">// 结果</span></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (__DEV__) &#123;</span><br><span class="line">    <span class="comment">// 开发环境下如果设置了defaultProps和propTypes会进行警告，</span></span><br><span class="line">    <span class="comment">// 可能是因为懒加载组件并不能在开发环境中merge原有的defaultProps</span></span><br><span class="line">    <span class="keyword">let</span> defaultProps;</span><br><span class="line">    <span class="keyword">let</span> propTypes;</span><br><span class="line">    <span class="built_in">Object</span>.defineProperties(lazyType, &#123;</span><br><span class="line">      defaultProps: &#123;</span><br><span class="line">        configurable: <span class="literal">true</span>,</span><br><span class="line">        <span class="keyword">get</span>() &#123;</span><br><span class="line">          <span class="keyword">return</span> defaultProps;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="keyword">set</span>(newDefaultProps) &#123;</span><br><span class="line">          warning(</span><br><span class="line">            <span class="literal">false</span>,</span><br><span class="line">            <span class="string">'React.lazy(...): It is not supported to assign `defaultProps` to a lazy component import. Either specify them where the component  is defined, or create a wrapping component around it.'</span>,</span><br><span class="line">          );</span><br><span class="line">          defaultProps = newDefaultProps;</span><br><span class="line">          <span class="comment">// Match production behavior more closely:</span></span><br><span class="line">          <span class="built_in">Object</span>.defineProperty(lazyType, <span class="string">'defaultProps'</span>, &#123;</span><br><span class="line">            enumerable: <span class="literal">true</span>,</span><br><span class="line">          &#125;);</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      propTypes: &#123;</span><br><span class="line">        configurable: <span class="literal">true</span>,</span><br><span class="line">        <span class="keyword">get</span>() &#123;</span><br><span class="line">          <span class="keyword">return</span> propTypes;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="keyword">set</span>(newPropTypes) &#123;</span><br><span class="line">          warning(</span><br><span class="line">            <span class="literal">false</span>,</span><br><span class="line">            <span class="string">'React.lazy(...): It is not supported to assign `propTypes` to '</span> +</span><br><span class="line">              <span class="string">'a lazy component import. Either specify them where the component '</span> +</span><br><span class="line">              <span class="string">'is defined, or create a wrapping component around it.'</span>,</span><br><span class="line">          );</span><br><span class="line">          propTypes = newPropTypes;</span><br><span class="line">          <span class="comment">// Match production behavior more closely:</span></span><br><span class="line">          <span class="built_in">Object</span>.defineProperty(lazyType, <span class="string">'propTypes'</span>, &#123;</span><br><span class="line">            enumerable: <span class="literal">true</span>,</span><br><span class="line">          &#125;);</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> lazyType;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>传入一个Thenable函数，Thenable代表promise，最终返回一个LazyComponent类型的组件。</p>
+<h2 id="createContext"><a href="#createContext" class="headerlink" title="createContext"></a>createContext</h2><p>context 提供了一种在 组件之间共享此类值 的方式，使得我们无需每层显式添加 props 或传递组件 ，就能够实现在 组件树中传递数据 。</p>
+<p>使用方式</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; Provider,Consumer &#125; = React.createContext(<span class="string">'default'</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;Provider value=<span class="string">'Foo'</span>&gt;</span><br><span class="line">        &lt;Content /&gt;</span><br><span class="line">      &lt;<span class="regexp">/Provider&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">function Child()&#123;</span></span><br><span class="line"><span class="regexp">  return (</span></span><br><span class="line"><span class="regexp">    &lt;Consumer&gt;</span></span><br><span class="line"><span class="regexp">      &#123;</span></span><br><span class="line"><span class="regexp">        value =&gt; &lt;p&gt;&#123;value&#125;&lt;/</span>p&gt;</span><br><span class="line">      &#125;</span><br><span class="line">    &lt;<span class="regexp">/Consumer&gt;</span></span><br><span class="line"><span class="regexp">  )</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>React.createContext 的第一个参数是 defaultValue，代表默认值，除了可以设置默认值外，它还可以让开发者手动控制更新粒度的方式，第二个参数calculateChangedBits，接受 newValue 与 oldValue 的函数，返回值作为 changedBits，在 Provider 中，当 changedBits = 0，将不再触发更新，而在 Consumer 中有一个不稳定的 props，unstable_observedBits，若 Provider 的changedBits &amp; observedBits = 0，也将不触发更新。</p>
+<p>以下是完整的测试用例</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// From React v16.11.0 release react-reconciler/src/__tests__/ReactNewContext-test.internal.js</span></span><br><span class="line">it(<span class="string">'can skip consumers with bitmask'</span>, () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> Context = React.createContext(&#123;<span class="attr">foo</span>: <span class="number">0</span>, <span class="attr">bar</span>: <span class="number">0</span>&#125;, (a, b) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (a.foo !== b.foo) &#123;</span><br><span class="line">      result |= <span class="number">0b01</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (a.bar !== b.bar) &#123;</span><br><span class="line">      result |= <span class="number">0b10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">Provider</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;Context.Provider value=&#123;&#123;<span class="attr">foo</span>: props.foo, <span class="attr">bar</span>: props.bar&#125;&#125;&gt;</span><br><span class="line">        &#123;props.children&#125;</span><br><span class="line">      &lt;<span class="regexp">/Context.Provider&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  function Foo() &#123;</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;Context.Consumer unstable_observedBits=&#123;0b01&#125;&gt;</span></span><br><span class="line"><span class="regexp">        &#123;value =&gt; &#123;</span></span><br><span class="line"><span class="regexp">          ReactNoop.yield('Foo');</span></span><br><span class="line"><span class="regexp">          return &lt;span prop=&#123;'Foo: ' + value.foo&#125; /</span>&gt;;</span><br><span class="line">        &#125;&#125;</span><br><span class="line">      &lt;<span class="regexp">/Context.Consumer&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  function Bar() &#123;</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;Context.Consumer unstable_observedBits=&#123;0b10&#125;&gt;</span></span><br><span class="line"><span class="regexp">        &#123;value =&gt; &#123;</span></span><br><span class="line"><span class="regexp">          ReactNoop.yield('Bar');</span></span><br><span class="line"><span class="regexp">          return &lt;span prop=&#123;'Bar: ' + value.bar&#125; /</span>&gt;;</span><br><span class="line">        &#125;&#125;</span><br><span class="line">      &lt;<span class="regexp">/Context.Consumer&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  class Indirection extends React.Component &#123;</span></span><br><span class="line"><span class="regexp">    shouldComponentUpdate() &#123;</span></span><br><span class="line"><span class="regexp">      return false;</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">    render() &#123;</span></span><br><span class="line"><span class="regexp">      return this.props.children;</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  function App(props) &#123;</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;Provider foo=&#123;props.foo&#125; bar=&#123;props.bar&#125;&gt;</span></span><br><span class="line"><span class="regexp">        &lt;Indirection&gt;</span></span><br><span class="line"><span class="regexp">          &lt;Indirection&gt;</span></span><br><span class="line"><span class="regexp">            &lt;Foo /</span>&gt;</span><br><span class="line">          &lt;<span class="regexp">/Indirection&gt;</span></span><br><span class="line"><span class="regexp">          &lt;Indirection&gt;</span></span><br><span class="line"><span class="regexp">            &lt;Bar /</span>&gt;</span><br><span class="line">          &lt;<span class="regexp">/Indirection&gt;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>Indirection&gt;</span><br><span class="line">      &lt;<span class="regexp">/Provider&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  /</span><span class="regexp">/ 表示首次渲染</span></span><br><span class="line"><span class="regexp">  ReactNoop.render(&lt;App foo=&#123;1&#125; bar=&#123;1&#125; /</span>&gt;);</span><br><span class="line">  <span class="comment">// ReactNoop.yield('Foo'); 与 ReactNoop.yield('Bar'); 均执行了</span></span><br><span class="line">  expect(Scheduler).toFlushAndYield([<span class="string">'Foo'</span>, <span class="string">'Bar'</span>]);</span><br><span class="line">  <span class="comment">// 实际渲染结果校验</span></span><br><span class="line">  expect(ReactNoop.getChildren()).toEqual([</span><br><span class="line">    span(<span class="string">'Foo: 1'</span>),</span><br><span class="line">    span(<span class="string">'Bar: 1'</span>),</span><br><span class="line">  ]);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 仅更新foo，foo 的值为 2</span></span><br><span class="line">  <span class="comment">// 此时 a.foo !== b.foo，changedBits = 0b01，Provider 发生更新</span></span><br><span class="line">  ReactNoop.render(<span class="xml"><span class="tag">&lt;<span class="name">App</span> <span class="attr">foo</span>=<span class="string">&#123;2&#125;</span> <span class="attr">bar</span>=<span class="string">&#123;1&#125;</span> /&gt;</span></span>);</span><br><span class="line">  expect(Scheduler).toFlushAndYield([<span class="string">'Foo'</span>]);</span><br><span class="line">  expect(ReactNoop.getChildren()).toEqual([</span><br><span class="line">    span(<span class="string">'Foo: 2'</span>),</span><br><span class="line">    span(<span class="string">'Bar: 1'</span>),</span><br><span class="line">  ]);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 仅更新 bar ,bar 的值为 2</span></span><br><span class="line">  <span class="comment">// a.foo === b.foo 不更新</span></span><br><span class="line">  <span class="comment">// a.bar !== b.bar changedBits = 0b01，Provider 发生更新</span></span><br><span class="line">  ReactNoop.render(<span class="xml"><span class="tag">&lt;<span class="name">App</span> <span class="attr">foo</span>=<span class="string">&#123;2&#125;</span> <span class="attr">bar</span>=<span class="string">&#123;2&#125;</span> /&gt;</span></span>);</span><br><span class="line">  expect(Scheduler).toFlushAndYield([<span class="string">'Bar'</span>]);</span><br><span class="line">  expect(ReactNoop.getChildren()).toEqual([</span><br><span class="line">    span(<span class="string">'Foo: 2'</span>),</span><br><span class="line">    span(<span class="string">'Bar: 2'</span>),</span><br><span class="line">  ]);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 同时更新</span></span><br><span class="line">  <span class="comment">// a.foo ！== b.foo ，并且 a.bar !== b.bar changedBits = 0b01，Provider 发生更新</span></span><br><span class="line">  ReactNoop.render(<span class="xml"><span class="tag">&lt;<span class="name">App</span> <span class="attr">foo</span>=<span class="string">&#123;3&#125;</span> <span class="attr">bar</span>=<span class="string">&#123;3&#125;</span> /&gt;</span></span>);</span><br><span class="line">  expect(Scheduler).toFlushAndYield([<span class="string">'Foo'</span>, <span class="string">'Bar'</span>]);</span><br><span class="line">  expect(ReactNoop.getChildren()).toEqual([</span><br><span class="line">    span(<span class="string">'Foo: 3'</span>),</span><br><span class="line">    span(<span class="string">'Bar: 3'</span>),</span><br><span class="line">    ]);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>源码</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createContext</span>&lt;<span class="title">T</span>&gt;(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  defaultValue: T,</span></span></span><br><span class="line"><span class="function"><span class="params">  calculateChangedBits: ?(a: T, b: T</span>) =&gt; <span class="title">number</span>,</span></span><br><span class="line"><span class="function">): <span class="title">ReactContext</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (calculateChangedBits === <span class="literal">undefined</span>) &#123;</span><br><span class="line">    calculateChangedBits = <span class="literal">null</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (__DEV__) &#123;</span><br><span class="line">      <span class="comment">// 开发环境下判断是否函数</span></span><br><span class="line">      warningWithoutStack(</span><br><span class="line">        calculateChangedBits === <span class="literal">null</span> || <span class="keyword">typeof</span> calculateChangedBits === <span class="string">'function'</span>,</span><br><span class="line">        <span class="string">'createContext: Expected the optional second argument to be a  function. Instead received: %s'</span>,</span><br><span class="line">        calculateChangedBits,</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> context: ReactContext&lt;T&gt; = &#123;</span><br><span class="line">    $$<span class="keyword">typeof</span>: REACT_CONTEXT_TYPE,</span><br><span class="line">    <span class="comment">// 用来比对的函数</span></span><br><span class="line">    _calculateChangedBits: calculateChangedBits,</span><br><span class="line">    <span class="comment">// 记录最新的context值，_currentValue和_currentValue2它们的值是一样的，用的地方会不一样</span></span><br><span class="line">    _currentValue: defaultValue,</span><br><span class="line">    _currentValue2: defaultValue,</span><br><span class="line">    <span class="comment">//用于跟踪此上下文当前支持多少个并发程序。例如并行服务器渲染。</span></span><br><span class="line">    _threadCount: <span class="number">0</span>,</span><br><span class="line">    Provider: (<span class="literal">null</span>: any),</span><br><span class="line">    Consumer: (<span class="literal">null</span>: any),</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">// 将Provide的_context指向自身，而Consumer则直接指向自身，就可以直接通过_context和自身取到最新值</span></span><br><span class="line">  context.Provider = &#123;</span><br><span class="line">    $$<span class="keyword">typeof</span>: REACT_PROVIDER_TYPE,</span><br><span class="line">    _context: context,</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> hasWarnedAboutUsingNestedContextConsumers = <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">let</span> hasWarnedAboutUsingConsumerProvider = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (__DEV__) &#123;</span><br><span class="line">    <span class="comment">// A separate object, but proxies back to the original context object for backwards compatibility. It has a different $$typeof, so we can properly warn for the incorrect usage of Context as a Consumer.</span></span><br><span class="line">    <span class="comment">// 在开发环境下，如果开发者使用了旧版本的createContext，将提醒开发者使用最新的方式。</span></span><br><span class="line">    <span class="keyword">const</span> Consumer = &#123;</span><br><span class="line">      $$<span class="keyword">typeof</span>: REACT_CONTEXT_TYPE,</span><br><span class="line">      _context: context,</span><br><span class="line">      _calculateChangedBits: context._calculateChangedBits,</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// $FlowFixMe: Flow complains about not setting a value, which is intentional here</span></span><br><span class="line">    <span class="built_in">Object</span>.defineProperties(Consumer, &#123;</span><br><span class="line">      Provider: &#123;</span><br><span class="line">        <span class="keyword">get</span>() &#123;</span><br><span class="line">          <span class="keyword">if</span> (!hasWarnedAboutUsingConsumerProvider) &#123;</span><br><span class="line">            hasWarnedAboutUsingConsumerProvider = <span class="literal">true</span>;</span><br><span class="line">            warning(</span><br><span class="line">              <span class="literal">false</span>,</span><br><span class="line">              <span class="string">'Rendering &lt;Context.Consumer.Provider&gt; is not supported and will be removed in '</span> +</span><br><span class="line">                <span class="string">'a future major release. Did you mean to render &lt;Context.Provider&gt; instead?'</span>,</span><br><span class="line">            );</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> context.Provider;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="keyword">set</span>(_Provider) &#123;</span><br><span class="line">          context.Provider = _Provider;</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      _currentValue: &#123;</span><br><span class="line">        <span class="keyword">get</span>() &#123;</span><br><span class="line">          <span class="keyword">return</span> context._currentValue;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="keyword">set</span>(_currentValue) &#123;</span><br><span class="line">          context._currentValue = _currentValue;</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      _currentValue2: &#123;</span><br><span class="line">        <span class="keyword">get</span>() &#123;</span><br><span class="line">          <span class="keyword">return</span> context._currentValue2;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="keyword">set</span>(_currentValue2) &#123;</span><br><span class="line">          context._currentValue2 = _currentValue2;</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      _threadCount: &#123;</span><br><span class="line">        <span class="keyword">get</span>() &#123;</span><br><span class="line">          <span class="keyword">return</span> context._threadCount;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="keyword">set</span>(_threadCount) &#123;</span><br><span class="line">          context._threadCount = _threadCount;</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      Consumer: &#123;</span><br><span class="line">        <span class="keyword">get</span>() &#123;</span><br><span class="line">          <span class="keyword">if</span> (!hasWarnedAboutUsingNestedContextConsumers) &#123;</span><br><span class="line">            hasWarnedAboutUsingNestedContextConsumers = <span class="literal">true</span>;</span><br><span class="line">            warning(</span><br><span class="line">              <span class="literal">false</span>,</span><br><span class="line">              <span class="string">'Rendering &lt;Context.Consumer.Consumer&gt; is not supported and will be removed in '</span> +</span><br><span class="line">                <span class="string">'a future major release. Did you mean to render &lt;Context.Consumer&gt; instead?'</span>,</span><br><span class="line">            );</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> context.Consumer;</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">// $FlowFixMe: Flow complains about missing properties because it doesn't understand defineProperty</span></span><br><span class="line">    context.Consumer = Consumer;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// Provider 与 Consumer 使用同一个context里的 _currentValue，等同于上面</span></span><br><span class="line">    <span class="comment">// 当 Consumer 需要渲染时，直接从自身取得 context 最新值 _currentValue 去渲染</span></span><br><span class="line">    context.Consumer = context;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (__DEV__) &#123;</span><br><span class="line">    <span class="comment">// 在开发模式下，会跟踪有多少个视图进行渲染，react不支持一个context渲染多个视图</span></span><br><span class="line">   <span class="comment">// 如果有多个渲染器同时渲染，这里置为null是为了检测</span></span><br><span class="line">    context._currentRenderer = <span class="literal">null</span>;</span><br><span class="line">    context._currentRenderer2 = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> context;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="forwardRef"><a href="#forwardRef" class="headerlink" title="forwardRef"></a>forwardRef</h2><p>forwardRef用来转发ref，前面说到过，createElement在创建ReactElement的时候回将ref过滤掉，而当custom组件是无法接收到ref，所以需要做一层转发。</p>
+<p>使用方式</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">App</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">const</span> inputRef = useRef()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;MyInput ref=&#123;inputRef&#125;&gt;&lt;<span class="regexp">/MyInput&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> MyInput = React.forwardRef(<span class="function">(<span class="params">props,ref</span>)=&gt;</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">ref</span>=<span class="string">&#123;ref&#125;</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span></span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以通过转发拿到<code>input</code>节点。</p>
+<p>源码</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">forwardRef</span>&lt;<span class="title">Props</span>, <span class="title">ElementType</span>: <span class="title">React$ElementType</span>&gt;(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  render: (props: Props, ref: React$Ref&lt;ElementType&gt;</span>) =&gt; <span class="title">React$Node</span>,</span></span><br><span class="line"><span class="function">) </span>&#123;</span><br><span class="line">  <span class="comment">// 接收一个函数组件作为参数</span></span><br><span class="line">  <span class="keyword">if</span> (__DEV__) &#123;</span><br><span class="line">    <span class="comment">// 必须将forwardRef放在最外层，例如memo(forwardRef((props,ref)=&gt;&#123; ... &#125;))是错误的</span></span><br><span class="line">    <span class="keyword">if</span> (render != <span class="literal">null</span> &amp;&amp; render.$$<span class="keyword">typeof</span> === REACT_MEMO_TYPE) &#123;</span><br><span class="line">      warningWithoutStack(</span><br><span class="line">        <span class="literal">false</span>,</span><br><span class="line">        <span class="string">'forwardRef requires a render function but received a `memo` '</span> +</span><br><span class="line">          <span class="string">'component. Instead of forwardRef(memo(...)), use '</span> +</span><br><span class="line">          <span class="string">'memo(forwardRef(...)).'</span>,</span><br><span class="line">      );</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> render !== <span class="string">'function'</span>) &#123;</span><br><span class="line">      <span class="comment">// 只接受函数组件</span></span><br><span class="line">      warningWithoutStack(</span><br><span class="line">        <span class="literal">false</span>,</span><br><span class="line">        <span class="string">'forwardRef requires a render function but was given %s.'</span>,</span><br><span class="line">        render === <span class="literal">null</span> ? <span class="string">'null'</span> : <span class="keyword">typeof</span> render,</span><br><span class="line">      );</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// forwardRef 接收的函数组件必须为2个或者0个(使用形参)参数</span></span><br><span class="line">      warningWithoutStack(</span><br><span class="line">        <span class="comment">// Do not warn for 0 arguments because it could be due to usage of the 'arguments' object</span></span><br><span class="line">        render.length === <span class="number">0</span> || render.length === <span class="number">2</span>,</span><br><span class="line">        <span class="string">'forwardRef render functions accept exactly two parameters: props and ref. %s'</span>,</span><br><span class="line">        render.length === <span class="number">1</span></span><br><span class="line">          ? <span class="string">'Did you forget to use the ref parameter?'</span></span><br><span class="line">          : <span class="string">'Any additional parameter will be undefined.'</span>,</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (render != <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="comment">// forwardRef 不支持转发defaultProps和PropTypes ，不能将带有propTypes的组件传给forwardRef</span></span><br><span class="line">      warningWithoutStack(</span><br><span class="line">        render.defaultProps == <span class="literal">null</span> &amp;&amp; render.propTypes == <span class="literal">null</span>,</span><br><span class="line">        <span class="string">'forwardRef render functions do not support propTypes or defaultProps.  Did you accidentally pass a React component?'</span>,</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 在dom里对REACT_FORWARD_REF_TYPE做一层转发</span></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    $$<span class="keyword">typeof</span>: REACT_FORWARD_REF_TYPE,</span><br><span class="line">    render,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果只看<code>react</code>部分的源码貌似没有什么头绪，因为大部分处理逻辑都在<code>react-dom</code> 和 <code>react-reconciler</code> 里面.</p>
+<h2 id="memo"><a href="#memo" class="headerlink" title="memo"></a>memo</h2><p>memo会返回一个纯化(purified)的组件MemoFuncComponent，它的作用等同于PureComponent，只不过前者用于函数组件，后者用于类组件。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">App</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">const</span> [value,setValue] = useState(<span class="number">0</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">MyInput</span> <span class="attr">value</span>=<span class="string">&#123;value&#125;</span>&gt;</span><span class="tag">&lt;/<span class="name">MyInput</span>&gt;</span></span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> MyInput = memo(<span class="function">(<span class="params">props</span>)=&gt;</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">input</span> <span class="attr">value</span>=<span class="string">&#123;props.value&#125;</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span></span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>react会自动对props的值做<code>Object.is</code>比较，如果此次的值与上次的值不一样，则更新，否则不更新。也可以自定义比较方法，当compare函数返回true时代表更新，false则不更新。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> MyInput = memo(<span class="function">(<span class="params">props</span>)=&gt;</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">input</span> <span class="attr">value</span>=<span class="string">&#123;props.value&#125;</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span></span></span><br><span class="line">&#125;,(newProps,oldProps) =&gt; <span class="literal">false</span>) <span class="comment">// 始终不会更新</span></span><br></pre></td></tr></table></figure>
+
+<p>源码</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">memo</span>&lt;<span class="title">Props</span>&gt;(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  type: React$ElementType,</span></span></span><br><span class="line"><span class="function"><span class="params">  compare?: (oldProps: Props, newProps: Props</span>) =&gt; <span class="title">boolean</span>,</span></span><br><span class="line"><span class="function">) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (__DEV__) &#123;</span><br><span class="line">    <span class="comment">// memo只接受函数组件</span></span><br><span class="line">    <span class="keyword">if</span> (!isValidElementType(type)) &#123;</span><br><span class="line">      warningWithoutStack(</span><br><span class="line">        <span class="literal">false</span>,</span><br><span class="line">        <span class="string">'memo: The first argument must be a component. Instead '</span> +</span><br><span class="line">          <span class="string">'received: %s'</span>,</span><br><span class="line">        type === <span class="literal">null</span> ? <span class="string">'null'</span> : <span class="keyword">typeof</span> type,</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    $$<span class="keyword">typeof</span>: REACT_MEMO_TYPE,</span><br><span class="line">    type,</span><br><span class="line">    compare: compare === <span class="literal">undefined</span> ? <span class="literal">null</span> : compare,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当<code>compare</code>为<code>null</code>时代表默认<code>Object.is</code>比较。</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2019/10/30/React传-2/">blog.yuanziwen.cn/2019/10/30/React传-2/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/React/">React</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2019/11/17/React传-3/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">React传-3</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2019/10/06/重学原型与继承/">
+        <span class="next-text nav-default">重学原型与继承</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1593502174043')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

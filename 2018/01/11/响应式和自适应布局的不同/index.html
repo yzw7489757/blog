@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="响应式和自适应布局的不同"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2018/01/11/响应式和自适应布局的不同/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>响应式和自适应布局的不同 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music(NoAuto)
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music(NoAuto)
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">响应式和自适应布局的不同
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-01-11
+        </span></div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#自适应和响应式布局的差别"><span class="toc-text">自适应和响应式布局的差别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#自适应的体验"><span class="toc-text">自适应的体验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#响应式的体验"><span class="toc-text">响应式的体验</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设计方案"><span class="toc-text">设计方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#百分比的设计方案"><span class="toc-text">百分比的设计方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#两者设计的差别"><span class="toc-text">两者设计的差别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#QQmail"><span class="toc-text">QQmail</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Gmail"><span class="toc-text">Gmail</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方案"><span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#响应式的优缺点"><span class="toc-text">响应式的优缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自适应的优缺点"><span class="toc-text">自适应的优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现方式"><span class="toc-text">实现方式</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><h2 id="自适应和响应式布局的差别"><a href="#自适应和响应式布局的差别" class="headerlink" title="自适应和响应式布局的差别"></a>自适应和响应式布局的差别</h2><blockquote><p>发现大家都搅浑了自适应布局和响应式布局的差别。现在我来和大家说下它们的不同：</p>
+</blockquote>
+<blockquote><p><img src="https://static.yuanziwen.cn/blog/image/%E8%87%AA%E9%80%82%E5%BA%94-12.png" alt="alt"></p>
+</blockquote>
+<a id="more"></a>
+<h3 id="自适应的体验"><a href="#自适应的体验" class="headerlink" title="自适应的体验"></a>自适应的体验</h3><blockquote><p><a href="http://m.ctrip.com/html5/" target="_blank" rel="noopener">自适应的体验</a><br><img src="https://static.yuanziwen.cn/blog/image/%E8%87%AA%E9%80%82%E5%BA%94-14.jpg" alt="alt"></p>
+</blockquote>
+<h3 id="响应式的体验"><a href="#响应式的体验" class="headerlink" title="响应式的体验"></a>响应式的体验</h3><blockquote><p><a href="http://segmentfault.com/" target="_blank" rel="noopener">响应式的体验</a><br><img src="https://static.yuanziwen.cn/blog/image/%E8%87%AA%E9%80%82%E5%BA%94-13.jpg" alt="alt"></p>
+</blockquote>
+<blockquote><p>整理了自己查阅的知识点，给各位一些提示。</p>
+</blockquote>
+<blockquote><h2 id="设计方案"><a href="#设计方案" class="headerlink" title="设计方案"></a>设计方案</h2><p>起初，网页设计者都会涉及固定宽度的页面，最开始的电脑显示器分辨率种类不多，因为当时本来电脑就少，即使有变化也是800,850,870,880，比如开源中国的网页就是固定宽度为998来定制的，至于为啥是998，我也不知道。。。。。<br><img src="https://static.yuanziwen.cn/blog/image/%E8%87%AA%E9%80%82%E5%BA%94-4.jpg" alt="alt"></p>
+<p>后来随着显示器越来越多，以及笔记本的普及，这种方式的页面出现了问题，于是出现了一种新的布局方式————宽度自适应布局。我们平常讨论的宽度自适应布局，大多指的就是宽度自适应布局。这种布局出现了两种流派：百分比宽度布局 和 流式布局。</p>
+</blockquote>
+<h3 id="百分比的设计方案"><a href="#百分比的设计方案" class="headerlink" title="百分比的设计方案"></a>百分比的设计方案</h3><blockquote><p>百分比宽度布局是：宽度使用百分比，文字使用em，现在也很多使用rem了，也就是所谓的高清方案。  </p>
+</blockquote>
+<blockquote><p>流式布局是：以Google为代表的方法，渐进增强。不过已经停止了。</p>
+</blockquote>
+
+
+<h3 id="两者设计的差别"><a href="#两者设计的差别" class="headerlink" title="两者设计的差别"></a>两者设计的差别</h3><blockquote><p>一开始并没有响应式布局这个词语，但是慢慢就出现了一个词——渐进增强，新词的出现总是伴随的旧词一起出现，就好比3G网络出现之前，没人知道自己手机用的是2G网络。所以3G和2G是一起出现了，技术上当然是2G技术先出现。同理，渐进增强出现之后，另一个词[优雅降级]也随之出现了。</p>
+</blockquote>
+<p>词的意思可以看wiki、Google，我只在这举一个例子，Gmail和QQMail。</p>
+<blockquote><p>他们俩的宽度都是100%，都是自适应，但是！！！</p>
+<h4 id="QQmail"><a href="#QQmail" class="headerlink" title="QQmail"></a>QQmail</h4><blockquote><p>QQMail就是CSS hack的完美体现，你用任何一个浏览器，几乎可以看到同一个样子的邮箱，腾讯的前端工程师们用各种的CSS hack技术来展示邮箱页面，为的是统一用户体验。</p>
+</blockquote>
+<p><img src="https://static.yuanziwen.cn/blog/image/%E8%87%AA%E9%80%82%E5%BA%94-11.jpg" alt="alt"></p>
+<h4 id="Gmail"><a href="#Gmail" class="headerlink" title="Gmail"></a>Gmail</h4><blockquote><p>而Gmail使用了渐进增强，意思就是你的浏览器越强，你看到的效果就越好，用户体验越好。</p>
+</blockquote>
+<p><img src="https://static.yuanziwen.cn/blog/image/%E8%87%AA%E9%80%82%E5%BA%94-10.jpg" alt="alt"></p></blockquote>
+<blockquote><p>再后来就是大家熟知的Google发布了Android，于是互联网大战从PC打到了手机上，还有HTML5标准的发布。</p>
+<p>手机屏幕虽然变小了，打算却听歌了更丰富的功能，还记得以前用诺基亚上QQ的事情吗？我们访问的都是3g.qq.com，当时使用的是普遍都是Android2.0，访问wap.qq.com，再后来的智能手机都是访问的m.qq.com.</p>
+<p>不禁有人问，「真的要给每一个手机分别设计一个网页吗？」，「真的要给电脑PC和手机分别设计不同的网页吗？」，解决办法当然有很多种，可以去看看<span style="border-bottom: 1px dashed #389fff;"><span class="hint--top hint--rounded hint--info" aria-label="点击跳转" ontouchstart><a href="http://www.csszengarden.com/" target="_blank" rel="noopener">csszengardenCSS秘密花园</a></span></span>，值得一看。相信以前做过前端的人，都看过这个网站，一个神奇的网站。</p>
+</blockquote>
+<blockquote><p>不过，最终的解决方案胜出者是响应式布局。响应式布局被大家熟知的一个重要原因就是Twitter开源了bootstrap。Google第一次完成了从先驱到烈士。</p>
+</blockquote>
+<blockquote><p>下面再从直观一点的来看，响应式布局和自适应的区别：</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>首先两种的方式的解决问题是不一样的。</p>
+</blockquote>
+<blockquote><p>自适应是为了解决如何才能在不同大小的设备上呈现相同的网页。手机的屏幕比较小，宽度通常在600像素以下，pc的像素一般在1000像素以上，部分配置高的笔记本在2000像素以上的也有，同样的页面要显示在不同的设备上面，还要呈现出满意的效果，不是一件容易的事情。因此就有人想出了一个办法，能不能”一次设计，普遍适用”，让同一张网页自动适应不同大小的屏幕，根据屏幕的宽度，自动调节网页的内容大小，但是无论怎么样子，他们的主体的内容和布局是没有变化的。</p>
+</blockquote>
+<p><img src="https://static.yuanziwen.cn/blog/image/%E8%87%AA%E9%80%82%E5%BA%94-2.jpg" alt="alt"></p>
+<blockquote><p>手机的屏幕比较小，宽度通常在600像素以下；PC的屏幕宽度，一般都在1000像素以上（目前主流宽度是1366×768），有的还达到了2000像素。同样的内容，要在大小迥异的屏幕上，都呈现出满意的效果，并不是一件容易的事。</p>
+</blockquote>
+<blockquote><p>很多网站的解决方法，是为不同的设备提供不同的网页，比如专门提供一个mobile版本，或者iPhone / iPad版本。这样做固然保证了效果，但是比较麻烦，同时要维护好几个版本，而且如果一个网站有多个portal（入口），会大大增加架构设计的复杂度。</p>
+<p>响应式的概念应该是覆盖了自适应，但是包括的东西更多了。响应式布局可以根据屏幕的大小自动的调整页面的展现方式，以及布局</p>
+</blockquote>
+<h3 id="响应式的优缺点"><a href="#响应式的优缺点" class="headerlink" title="响应式的优缺点"></a>响应式的优缺点</h3><blockquote><p>响应式布局的一些技术点纪录：</p>
+<p>(1)允许网页的宽度自动的调整</p>
+<p>(2)尽量少使用绝对的宽度，多点百分比</p>
+<p>(3)相对大小的字体:字体不要使用px写死，最好使用相对大小的em，或者高清方案rem，这个不限制与字体，别的属性也可以这么设置</p>
+<p>(4)流式布局，float等float的好处是，如果宽度太小，放不下两个元素，后面的元素会自动滚动到前面元素的下方，不会在水平方向overflow（溢出），避免了水平滚动条的出现。</p>
+<p>(5)选择加载css，<code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; media=&quot;screen and (max-device-width: 400px)&quot; href=&quot;tinyScreen.css&quot; /&gt;</code>，这个意思是如果屏幕宽度小于400像素（max-device-width: 400px），就加载tinyScreen.css文件。</p>
+<p>但是无论怎样，他们主体的内容和布局是没有变的。</p>
+<p>响应式的概念应该覆盖了自适应，而且涵盖的内容更多。</p>
+</blockquote>
+<h3 id="自适应的优缺点"><a href="#自适应的优缺点" class="headerlink" title="自适应的优缺点"></a>自适应的优缺点</h3><p>自适应还是暴露出一个问题，如果屏幕太小，即使网页能够根据屏幕大小进行适配，但是会感觉在小屏幕上查看，内容过于拥挤，响应式正是为了解决这个问题而衍生出来的概念。它可以自动识别屏幕宽度、并做出相应调整的网页设计，布局和展示的内容可能会有所变动。如果下面的网址，屏幕宽度大于1300像素，则6张图片并排在一行。</p>
+<blockquote><p><img src="https://static.yuanziwen.cn/blog/image/%E8%87%AA%E9%80%82%E5%BA%94-5.jpg" alt="alt"></p>
+</blockquote>
+<p>如果屏幕宽度在600像素到1300像素之间，则6张图片分成两行。</p>
+<blockquote><p><img src="https://static.yuanziwen.cn/blog/image/%E8%87%AA%E9%80%82%E5%BA%94-6.jpg" alt="alt"></p>
+</blockquote>
+<blockquote><p><img src="https://static.yuanziwen.cn/blog/image/%E8%87%AA%E9%80%82%E5%BA%94-7.jpg" alt="alt"></p>
+</blockquote>
+<p>如果屏幕宽度在400像素以下，则6张图片分成三行。</p>
+<blockquote><p><img src="https://static.yuanziwen.cn/blog/image/%E8%87%AA%E9%80%82%E5%BA%94-8.jpg" alt="alt"></p>
+</blockquote>
+<p>说了一大堆，其实大家可能更多的是关心如何去实现。下面来聊一聊实现方式：</p>
+<blockquote></blockquote>
+<h2 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h2><blockquote><p> 1.允许网页宽度自动调整<br>“自适应网页设计”到底是怎么做到的？其实并不难。</p>
+<blockquote><p>v1.首先，在网页代码的头部，加入一行viewport元标签。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;meta name=<span class="string">"viewport"</span> content=<span class="string">"width=device-width, initial-scale=1"</span> /&gt;</span><br></pre></td></tr></table></figure>
+<p>viewport是网页默认的宽度和高度，上面这行代码的意思是，网页宽度默认等于屏幕宽度（width=device-width），原始缩放比例（initial-scale=1）为1.0，即网页初始大小占屏幕面积的100%。<br>所有主流浏览器都支持这个设置，包括IE9。对于那些老式浏览器（主要是IE6、7、8），需要使用css3-mediaqueries.js。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;!--[<span class="keyword">if</span> lt IE <span class="number">9</span>]&gt; </span><br><span class="line">　　　　&lt;script src=<span class="string">"http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"</span>&gt;&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">　　&lt;![endif]--&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote><p>v2.尽量少使用绝对宽度</p>
+</blockquote>
+<p>由于网页会根据屏幕宽度调整布局，所以不能使用绝对宽度的布局，也不能使用具有绝对宽度的元素。这一条非常重要。<br>具体说，CSS代码不能指定像素宽度：<br><span class="mycodeBlock1">width:xxx</span><br>通过指定百分比宽度来替代：同时还可以配合css的cal，进行计算宽度<br><span class="mycodeBlock1"> width: xx%;或者是width:auto;</span></p>
+<blockquote><p>v3.相对大小的字体</p>
+</blockquote>
+<p>字体也不能使用绝对大小（px），而只能使用相对大小（em）或者高清方案（rem）,rem不局限于字体大小，前面的宽度width也可以使用，代替百分比。<br><span class="mycodeBlock1 codem"><br>body {<br>   　　font: normal 100% Helvetica, Arial, sans-serif;<br>}<br></span><br>上面的代码指定，字体大小是页面默认大小的100%，即16像素。<br><span class="mycodeBlock1 codem"><br>h1 {<br>　　　　font-size: 1.5em;<br>　　}<br></span><br>然后，h1的大小是默认大小的1.5倍，即24像素（24/16=1.5）。<br><span class="mycodeBlock1 codem"><br>small {<br>　　　　font-size: 0.875em;<br>　　}<br></span><br>small元素的大小是默认大小的0.875倍，即14像素（14/16=0.875）。</p>
+<blockquote><p>v4.流动布局（fluid grid）</p>
+</blockquote>
+<p>“流动布局”的含义是，各个区块的位置都是浮动的，不是固定不变的。<br><span class="mycodeBlock1 codem"><br>.main {<br> 　　　　float: right;<br> 　　　　width: 70%;<br> 　　}</span></p>
+<p> 　　.leftBar {<br>　　　　 float: left;<br> 　　　　width: 25%;<br> 　　}<br><br>float的好处是，如果宽度太小，放不下两个元素，后面的元素会自动滚动到前面元素的下方，不会在水平方向overflow（溢出），避免了水平滚动条的出现。<br>另外，绝对定位（position: absolute）的使用，也要非常小心。</p>
+<blockquote><p>v5.选择加载CSS</p>
+</blockquote>
+<p>“自适应网页设计”的核心，就是CSS3引入的Media Jquery模块。<br>它的意思就是，自动探测屏幕宽度，然后加载相应的CSS文件。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;link rel=<span class="string">"stylesheet"</span> type=<span class="string">"text/css"</span>　media=<span class="string">"screen and (max-device-width: 400px)"</span>　href=<span class="string">"tinyScreen.css"</span> /&gt;</span><br></pre></td></tr></table></figure>
+<p>上面的代码意思是，如果屏幕宽度小于400像素（max-device-width: 400px），就加载tinyScreen.css文件。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;link rel=<span class="string">"stylesheet"</span> type=<span class="string">"text/css"</span></span><br><span class="line"> 　　　　media=<span class="string">"screen and (min-width: 400px) and (max-device-width: 600px)"</span></span><br><span class="line"> 　　　　href=<span class="string">"smallScreen.css"</span> /&gt;</span><br></pre></td></tr></table></figure>
+<p>如果屏幕宽度在400像素到600像素之间，则加载smallScreen.css文件。<br>除了用html标签加载CSS文件，还可以在现有CSS文件中加载。</p>
+<p><span class="mycodeBlock1">@import  url(“tinyScreen.css”) screen and (max-device-width: 400px);</span><br>CSS的@media规则</p>
+<p>同一个CSS文件中，也可以根据不同的屏幕分辨率，选择应用不同的CSS规则<br><span class="mycodeBlock1 codem"><br>@media  screen and (max-device-width: 400px) {<br> 　　　　.column {<br> 　　　　　　float: none;<br> 　　　　　　width:auto;<br> 　　　　}<br> 　　　　#sidebar {<br> 　　　　　　display:none;<br> 　　　　}<br> 　　}<br></span><br>上面的代码意思是，如果屏幕宽度小于400像素，则column块取消浮动（float:none）、宽度自动调节（width:auto），sidebar块不显示（display:none）。</p>
+<blockquote><p>v7.图片的自适应（fluid image）</p>
+</blockquote>
+<p>除了布局和文本，”自适应网页设计”还必须实现图片的自动缩放。</p>
+<p>这只要一行CSS代码：<br><span class="mycodeBlock1">img { max-width: 100%;}</span><br>这行代码对于大多数嵌入网页的视频也有效，所以可以写成：<br><span class="mycodeBlock1">img, object { max-width: 100%;}</span><br>老版本的IE不支持max-width，所以只好写成:<br><span class="mycodeBlock1">img { width: 100%; }</span><br>此外，windows平台缩放图片时，可能出现图像失真现象。这时，可以尝试使用IE的专有命令：<br><span class="mycodeBlock1">img { -ms-interpolation-mode: bicubic; }</span><br>不过，有条件的话，最好还是根据不同大小的屏幕，加载不同分辨率的图片。有很多办法可以做到这一条，服务器端和客户端都可以实现。</p></blockquote>
+
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2018/01/11/响应式和自适应布局的不同/">blog.yuanziwen.cn/2018/01/11/响应式和自适应布局的不同/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/HTML/">HTML</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/01/22/Vue-HOC-应用/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Vue HOC 应用</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/01/03/my-new-Post/">
+        <span class="next-text nav-default">失过话不言多(加密)</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1593502174043')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

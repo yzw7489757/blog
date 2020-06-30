@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="前端性能优化笔记（1）代码资源篇"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2018/04/21/前端性能优化笔记-1/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>前端性能优化笔记（1）代码资源篇 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music(NoAuto)
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music(NoAuto)
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">前端性能优化笔记（1）代码资源篇
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-04-21
+        </span></div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是优化的核心？"><span class="toc-text">什么是优化的核心？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#理解减少http请求数量和减少请求资源的两个大小要点！"><span class="toc-text">理解减少http请求数量和减少请求资源的两个大小要点！</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#浏览器从发送请求到返回都发生了什么事情？"><span class="toc-text">浏览器从发送请求到返回都发生了什么事情？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#可以优化的点"><span class="toc-text">可以优化的点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#掌握压缩和合并的原理"><span class="toc-text">掌握压缩和合并的原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#什么是前端html压缩呢？"><span class="toc-text">什么是前端html压缩呢？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#如何进行html压缩？"><span class="toc-text">如何进行html压缩？</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#掌握通过在线网站和fis3两种实现压缩和合并的方法"><span class="toc-text">掌握通过在线网站和fis3两种实现压缩和合并的方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#nodejs提供了html-minifier工具。"><span class="toc-text">nodejs提供了html-minifier工具。</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#文件合并"><span class="toc-text">文件合并</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#文件合并的优缺点"><span class="toc-text">文件合并的优缺点</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#中和办法。"><span class="toc-text">中和办法。</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#图片篇"><span class="toc-text">图片篇</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#jpg压缩过程"><span class="toc-text">jpg压缩过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#png8、png24、png32之间的区别"><span class="toc-text">png8、png24、png32之间的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#业务场景"><span class="toc-text">业务场景</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#雪碧图。"><span class="toc-text">雪碧图。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#images-inline"><span class="toc-text">images inline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#svg"><span class="toc-text">svg</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WebP"><span class="toc-text">WebP</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><p>最近在学习关于前端优化的一些东西，做个笔记，供分享！</p>
+<h2 id="什么是优化的核心？"><a href="#什么是优化的核心？" class="headerlink" title="什么是优化的核心？"></a>什么是优化的核心？</h2><p>优化核心是网络请求，很多人在输入 <code class="codes">url</code> 请求资源的时候，耗费最多时间的反而是网速，用户网速不理想，那我们是不是能做点什么？</p>
+<h3 id="理解减少http请求数量和减少请求资源的两个大小要点！"><a href="#理解减少http请求数量和减少请求资源的两个大小要点！" class="headerlink" title="理解减少http请求数量和减少请求资源的两个大小要点！"></a>理解减少http请求数量和减少请求资源的两个大小要点！</h3><blockquote><p><img src="https://static.yuanziwen.cn/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AC%94%E8%AE%B01.png_plain" alt="alt"><br><code class="codes">web</code>前端本身是一种<code class="codes">GUI</code>软件，本可以直接借鉴其他<code class="codes">GUI</code>系统架构设计方法，但<code class="codes">web</code>前端又有些特别，不一样。<code class="codes">GUI</code>软件使用的是<code class="codes">CS</code>架构，在安卓<code class="codes">APK</code>安装包的时候，就已经将<code class="codes">GUI</code>相关类型的一些文件保存在了本地，等用户下次访问的时候是本地资源。</p>
+<a id="more"></a>
+<p><img src="https://static.yuanziwen.cn/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AC%94%E8%AE%B02.png_plain" alt="alt"><br>而<code class="codes">BS</code>架构（<code class="codes">webserver</code>）模式是将<code class="codes">js</code>、<code class="codes">img</code>、<code class="codes">css</code>资源放在了服务器和<code class="codes">CDN</code>上，用户输入了<code class="codes">url</code>，这时候我们浏览器采取发出请求， 动态的，增量式的，去加载我们的静态资源，因为我们<code class="codes">web</code>前端去访问的过程实际上是一个动态的，增量式的加载静态资源的 一个过程，它是通过我们的<code class="codes">http</code>请求，通过浏览器，发送到我们的<code class="codes">server</code>进行返回，最终拿到我们的资源，如果在这个阶段，能更快的拿到资源，我们的接口返回的数据更快，那么实际来说，对用户的体验也就更好。</p>
+</blockquote>
+<h4 id="浏览器从发送请求到返回都发生了什么事情？"><a href="#浏览器从发送请求到返回都发生了什么事情？" class="headerlink" title="浏览器从发送请求到返回都发生了什么事情？"></a>浏览器从发送请求到返回都发生了什么事情？</h4><blockquote><p>  我们从中去找一些优化点，缩短<code class="codes">http</code>请求时间，从而提升速度 ，那么这样就要像一个问题，浏览器从发送请求到返回发生了什么？<br><img src="https://static.yuanziwen.cn/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AC%94%E8%AE%B03.png_plain" alt="alt"><br>  1.用户输入<code class="codes">url</code>请求后，浏览器内部的核心代码会将这个<code class="codes">url</code>进行拆分解析<code class="codes">domain</code>，最终将这个<code class="codes">domain</code>发送到<code class="codes">dns</code>服务器进行查询，然后返回<code class="codes">dns</code>的<code class="codes">host</code>相对应的一个<code class="codes">IP</code>地址，然后将<code class="codes">IP</code>地址返回给浏览器，浏览器收到请求后就知道要把请求发送到哪个地方去，将<code class="codes">IP</code>打在协议中并且参数也跟随协议发送一个请求到网络中去。<br>  2.经过局域网，交换机，路由器，主干网络最后到达服务端。<br>  3.服务端是一个具有<code class="codes">MVC</code>架构的系统，首先会进入到<code class="codes">Controller</code> ，在<code class="codes">controller</code>中进行逻辑处理和请求的分发，然后会调用<code class="codes">Model</code>层，<code class="codes">Model</code>层是和数据进行交互的，过程中会去调用<code class="codes">redis</code>、<code class="codes">db</code>、<code class="codes">mysql</code>等数据库调用数据，最后通过<code class="codes">view</code>层处理进行<code class="codes">response</code>，这么下来，一个从服务器端<code class="codes">response</code>就回到浏览器。<br>  4.浏览器拿到后会进行<code class="codes">render</code>过程， 根据请求回来的<code class="codes">html</code>，以及这个<code class="codes">html</code>关联的<code class="codes">css</code>、<code class="codes">js</code>进行一个渲染<code class="codes">render</code>树，<code class="codes">DOM</code>树以及对应的<code class="codes">CSS</code>树 ，然后将<code class="codes">DOM</code>树和<code class="codes">CSS</code>树进行一个整合，从而在页面进行一个样式的渲染。最后执行<code class="codes">js</code>脚本产生动态效果的能力，这就是整个浏览器请求的展现过程。</p>
+</blockquote>
+<h4 id="可以优化的点"><a href="#可以优化的点" class="headerlink" title="可以优化的点"></a>可以优化的点</h4><p>  1.<code class="codes">dns</code>可以做一个缓存。不用再到<code class="codes">dns</code>服务器解析。<br>  2.网络请求涉及到带宽、缓存、网络的选择 ，很多公司选择了<code class="codes">CDN</code>，免去了缓存问题和选择网络的一个过程。但是有个问题，<code class="codes">CDN</code>是储存静态资源，我们本身请求静态资源的时候是会有一个<code class="codes">cookie</code>，这个是没用的，我们希望请求静态资源的时候讲<code class="codes">cookie</code>从<code class="codes">https</code>请求的<code class="codes">header</code>中去掉。但是有很多时候<code class="codes">CDN</code>的域名和本身网站的域名相同。那么就会将一些<code class="codes">cookie</code>从我们主站的网络携带到<code class="codes">CDN</code>的服务端，这实际上是对网络无畏的损耗，所以<code class="codes">CDN</code>的域名尽量不要和主站一样。这样就能防止访问<code class="codes">CDN</code>还携带主站<code class="codes">cookie</code>的这个问题。<br>  3.有些接口是没法用<code class="codes">CDN</code>的，对于这个是否能做一些缓存呢？实际上，除了<code class="codes">CDN</code>，我们还可以在浏览器本地做一些缓存的。<br>  通过浏览器端的缓存策略， 我们对于一些相同的接口和相同的资源是可以去浏览器缓存中读取数据，这样的话，访问速度又得到了提升<br>  4.除了缓存和路径选择，带宽也是重要的一点，一个<code class="codes">http</code>请求如果在带宽相对较小的话，返回的速度肯定相对会快一些的，所以减小<code class="codes">http</code>请求的大小也是很重要的一点，另外每一个<code class="codes">http</code>请求都会重网络环境达到服务器，实际上每次请求都是对网络的损耗，如果能将多次<code class="codes">http</code>请求合并成一次，从而减少网络的损耗。也是可以优化的一点。<br>  5.现在大型框架，比如<code class="codes">vue</code>，<code class="codes">react</code>都是在浏览器中进行渲染的，首屏页面会有较大损耗，这是非常不利于前端性能优化的，所有才有<code class="codes">SSR</code>这类的服务端渲染方案，从而将<code class="codes">html</code>直出到浏览器端，而不是到浏览器端再渲染<code class="codes">html</code>。</p>
+<blockquote><p>综合上述，可以知道，潜在的一些前端性能优化点</p>
+<ol>
+<li><code class="codes">dns</code>是否可以通过缓存减少时间。</li>
+<li>网络请求是否走的是最近的网络环境.</li>
+<li>相同的静态资源是否被缓存。</li>
+<li>能否减少 <code class="codes">http</code> 请求大小。</li>
+<li>减少 <code class="codes">http</code> 请求。</li>
+<li>服务端渲染。</li>
+</ol>
+</blockquote>
+<h3 id="掌握压缩和合并的原理"><a href="#掌握压缩和合并的原理" class="headerlink" title="掌握压缩和合并的原理"></a>掌握压缩和合并的原理</h3><p>  压缩无非就是减少资源文件的大小，合并是减少HTTP请求的数量。<br>  google页面将换行和空格能减少的都删除了，而sina则没有.</p>
+<h4 id="什么是前端html压缩呢？"><a href="#什么是前端html压缩呢？" class="headerlink" title="什么是前端html压缩呢？"></a>什么是前端html压缩呢？</h4><p>  <img src="https://static.yuanziwen.cn/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AC%94%E8%AE%B04.png_plain" alt="alt"><br>  <code class="codes">HTML</code>本身是一种超文本的语言，本身在开发中，回车是能够帮助我们去理解、读取和分析代码结构的，但是在实际线上是没有太大作用，代码压缩就是压缩这些在文本文件中有意义，但是<code class="codes">HTML</code>不显示的字符，包括，空格，制表符，换行符等，还有一些其他意义的字符，如<code class="codes">HTML</code>注释也可以被压缩。<br>  <img src="https://static.yuanziwen.cn/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AC%94%E8%AE%B05.png"><br>  这是压缩前后的大小，压缩前后的对比真的不大吗？<br>  <blockquote><p>以谷歌为例：<br>  <code class="codes">google</code>的流量，占到整个互联网的<code class="codes">40%</code>，<code class="codes">2016</code>年全球网路流量达到<code class="codes">1.3ZB</code>（<code class="codes">1ZB</code> = <code class="codes">10^9TB</code>），那么<code class="codes">google</code>在<code class="codes">2016</code>年的流量就是<code class="codes">1.3ZB</code>*<code class="codes">40%</code>,如果<code class="codes">google</code>每<code class="codes">1MB</code>请求减少一个字节，每年可以节省近<code class="codes">500TB</code>。</p>
+</blockquote></p>
+<h4 id="如何进行html压缩？"><a href="#如何进行html压缩？" class="headerlink" title="如何进行html压缩？"></a>如何进行html压缩？</h4><h5 id="掌握通过在线网站和fis3两种实现压缩和合并的方法"><a href="#掌握通过在线网站和fis3两种实现压缩和合并的方法" class="headerlink" title="掌握通过在线网站和fis3两种实现压缩和合并的方法"></a>掌握通过在线网站和fis3两种实现压缩和合并的方法</h5><p>   现在有很多网站提供<code class="codes">html</code>、<code class="codes">css</code>、<code class="codes">js</code>压缩，百度上一搜一堆。这个就不多说了<br>   <a href="http://fis.baidu.com/fis3/docs/lv1.html" target="_blank" rel="noopener">FIS3</a>是一门面向前端的工程构建工具。解决前端工程中性能优化、资源加载（异步、同步、按需、预加载、依赖管理、合并、内嵌）、模块化开发、自动化工具、开发规范、代码部署等问题。压缩原理是通过正则和中间码的一些规则去进行源文件的分析，分析<code class="codes">require</code>语法及依赖，通过整体的依赖关系及语法的分析，建立依赖树，之后<code class="codes">fis.compile</code>(<code class="codes">file</code>)对单文件进行编译，所以<code class="codes">fis3</code>大体上分为两步，单文件的编译和打包的过程。</p>
+<h5 id="nodejs提供了html-minifier工具。"><a href="#nodejs提供了html-minifier工具。" class="headerlink" title="nodejs提供了html-minifier工具。"></a>nodejs提供了html-minifier工具。</h5><p>   <code class="codes">nodejs</code>是一门很强大的<code class="codes">js</code>语言。可以在前端，服务端运行，<code class="codes">vue</code>-<code class="codes">cli</code>里也有基于它的工具搭建的压缩工具，在<span class="codes">build</span>目录下的<span class="codes">webpack.prod.conf.js</span><br>webpack html压缩：<br>文件下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">new</span> HtmlWebpackPlugin(&#123;<span class="comment">//html压缩</span></span><br><span class="line">    filename: process.env.NODE_ENV === <span class="string">'testing'</span> ?</span><br><span class="line">        <span class="string">'index.html'</span> :</span><br><span class="line">        config.build.index,</span><br><span class="line">    template: <span class="string">'index.html'</span>,</span><br><span class="line">    inject: <span class="literal">true</span>,</span><br><span class="line">    minify: &#123;</span><br><span class="line">        removeComments: <span class="literal">true</span>,</span><br><span class="line">        collapseWhitespace: <span class="literal">true</span>,</span><br><span class="line">        removeAttributeQuotes: <span class="literal">true</span></span><br><span class="line">            <span class="comment">// more options:</span></span><br><span class="line">            <span class="comment">// https://github.com/kangax/html-minifier#options-quick-reference</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// necessary to consistently work with multiple chunks via CommonsChunkPlugin</span></span><br><span class="line">    chunksSortMode: <span class="string">'dependency'</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>如何进行 <code class="codes">css</code> 压缩呢？<br>  1.使用在线网站进行压缩。<br>  2.使用<code class="codes">html</code>-<code class="codes">minifier</code>对<code class="codes">html</code>中的<code class="codes">css</code>进行压缩。（<code class="codes">html</code>文件内的<code class="codes">css</code>）<br>  3.使用<code class="codes">clean</code>-<code class="codes">css</code>库对<code class="codes">css</code>进行压缩。<br>  webpack css压缩：<br> <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> OptimizeCSSPlugin = <span class="built_in">require</span>(<span class="string">'optimize-css-assets-webpack-plugin'</span>)</span><br><span class="line">  <span class="keyword">new</span> OptimizeCSSPlugin(&#123;<span class="comment">//css压缩</span></span><br><span class="line">       cssProcessorOptions: config.build.productionSourceMap ?</span><br><span class="line">           &#123; <span class="attr">safe</span>: <span class="literal">true</span>, <span class="attr">map</span>: &#123; <span class="attr">inline</span>: <span class="literal">false</span> &#125; &#125; :</span><br><span class="line">           &#123; <span class="attr">safe</span>: <span class="literal">true</span> &#125;</span><br><span class="line">   &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>js压缩有哪些方面<br>    1.删除无效字符。<br>    2.剔除注释。<br>    3.代码语义的缩减和优化，比如函数调用和封装…<br>    4.代码保护，这也是对代码安全非常重要的一部分。将代码压缩至不可读、不可解析的程度，防止通过网站漏洞进行攻击。<br>    js压缩和混乱的方式：<br>    1.使用在线网站进行压缩。<br>    2.使用<code class="codes">html</code>-<code class="codes">minifier</code>对<code class="codes">html</code>中的<code class="codes">js</code>进行压缩。<br>    3.使用<code class="codes">uglifyjs2</code>对<code class="codes">js</code>进行压缩。<br>webpack js压缩：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> UglifyJsPlugin = <span class="built_in">require</span>(<span class="string">'uglifyjs-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">new</span> UglifyJsPlugin(&#123;<span class="comment">//js压缩</span></span><br><span class="line">    uglifyOptions: &#123;</span><br><span class="line">        compress: &#123;</span><br><span class="line">            warnings: <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    sourceMap: config.build.productionSourceMap,</span><br><span class="line">    parallel: <span class="literal">true</span></span><br><span class="line">&#125;),</span><br></pre></td></tr></table></figure>
+
+<h4 id="文件合并"><a href="#文件合并" class="headerlink" title="文件合并"></a>文件合并</h4><h5 id="文件合并的优缺点"><a href="#文件合并的优缺点" class="headerlink" title="文件合并的优缺点"></a>文件合并的优缺点</h5><p><img src="https://static.yuanziwen.cn/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AC%94%E8%AE%B06.png_plain" alt="alt"><br>如图，左边是使用keep-alive但是不合并请求前的请求过程。当浏览器向服务器发起请求的时候，首先要建立连接，然后获取A的数据，服务器根据需求发送A.js给浏览器。浏览器之后再请求B的数据….  这样的可能会导致严重的网络延迟和丢包。而合并请求后，一次连接，一次请求就解决了所有文件。<br>可以看出，不合并请求前会有以下缺点：<br>1.文件和文件之间有插入的上行请求，增加了N-1个网络延迟。<br>2.受丢包问题影响更严重。<br>3.<code class="codes">keep-alive</code>请求，经过代理服务器时可能断开，不能保证持续的<code class="codes">keep-alive</code>状态。<br>但是文件合并也存在一定的问题。<br>1.首屏渲染问题，比如我们在首页的 <code class="codes">html</code>渲染是依赖于众多资源文件中的某个<code class="codes">js</code>，而合并请求势必会让总体的<code class="codes">js</code>文件比以前大，再有某个<code class="codes">js</code>文件比较大的话，首屏渲染会等到最后所有文件下载完毕后再进行渲染。严重拖慢了首屏的体验。<br>2.缓存失效问题，现在的<code class="codes">js</code>是有缓存的，如果这个<code class="codes">js</code>有更新，加载资源的时候会给这个<code class="codes">js</code>文件名后加一个<code class="codes">MD5</code>戳,以此来判断文件是否已经改变。<code class="codes">A.JS</code>、<code class="codes">B.js</code>、<code class="codes">C.js</code>合并后，<code class="codes">A.js</code>发生改变会导致整个缓存失效。需要重新加载，文件的不合并只有某个文件更新，而合并后存在着整体<code class="codes">js</code>缓存失效。</p>
+<h5 id="中和办法。"><a href="#中和办法。" class="headerlink" title="中和办法。"></a>中和办法。</h5><p>要想彻底解决目前是没办法的，鱼与熊掌不可兼得，那要怎么尽量去解决其中的问题呢？<br>1.公共库和业务库分开合并，平常开发项目中，公共库的改动是非常少的，而业务库的改动最为频繁。分开合并后，能够尽量的减少重新缓存的次数。<br>2.不同页面的合并，是针对于日常见到的单页应用，对于一个单页应用来说，在页面加载的时候，会请求当前单页应用所有的<code class="codes">js</code>文件，不是请求整个网站的<code class="codes">js</code>文件，这显然是不合理的，我们希望路由到当前页面的时候才去加载当前页面的<code class="codes">js</code>组件，而不是浏览<code class="codes">A</code>页面就已经进行下载<code class="codes">BCD</code>页面的<code class="codes">js</code>文件。对<code class="codes">A</code>页面的加载非常不利的，这一点对于目前的框架来说都有各自其实现的方式，例如<span class="codes">vue</span>的 <span class="codes">resolve =&gt; require([‘xxx.vue’], resolve)</span>,<span class="codes">angular</span>的 <span class="codes">loadChildren</span><br>3.真正的项目下会有不用的case，视情况而变吧，教程是死的，人是活的….<br>附上手动压缩的对比图，压缩前<br><img src="https://static.yuanziwen.cn/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AC%94%E8%AE%B07.png_plain" alt="alt"></p>
+<p>压缩后<br><img src="https://static.yuanziwen.cn/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AC%94%E8%AE%B08.png_plain" alt="alt"></p>
+<h2 id="图片篇"><a href="#图片篇" class="headerlink" title="图片篇"></a>图片篇</h2><h3 id="jpg压缩过程"><a href="#jpg压缩过程" class="headerlink" title="jpg压缩过程"></a>jpg压缩过程</h3><p><img src="https://static.yuanziwen.cn/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AC%94%E8%AE%B09.png_plain" alt="alt"><br>这个是<code class="codes">jpeg</code>图片压缩的整个过程，首先<code class="codes">Raw</code> <code class="codes">Image</code> <code class="codes">Data</code>=&gt;<code class="codes">Color</code> <code class="codes">Transform</code>阶段会将<code class="codes">jpeg</code>的图片颜色空间转到<code class="codes">rgb</code>的颜色空间，然后下一阶段进行重采样，区分高频和低频的颜色变换，到<code class="codes">Forward</code> <code class="codes">DCT</code>过程将图片的高频颜色变换，采样的结果，进行一个压缩，这样压缩的收益才会比较大。<code class="codes">Quantization</code>将数据进行一个量化，<code class="codes">Encoding</code>编码，最后才拿到了压缩过后的<code class="codes">jpg</code>图片。</p>
+<h3 id="png8、png24、png32之间的区别"><a href="#png8、png24、png32之间的区别" class="headerlink" title="png8、png24、png32之间的区别"></a>png8、png24、png32之间的区别</h3><p><code class="codes">png8</code>———256色，支持透明，因为png颜色本身就是一个索引，本身会自带药依赖的一些环境配置，png8之所以是256色是因为其内部有一个调色板，其中有256种颜色的索引，会建立一个颜色的索引表，支持2的8次方的颜色索引，但png8的颜色只会在这256种颜色中选择，所以不会有那么多的颜色供其选择，优点是只需要2^8次方（8-比特）的颜色索引就能够锁定一个颜色，文件会较小。<br><code class="codes">png24</code>———2^24色，不支持透明，2的24次方，一个颜色就需要24-比特(长度也是png8的3倍长度)，而且不支持透明。<br><code class="codes">png32</code>———2^24色，支持透明，简单来说就是在png24的基础上增加了8位色，以此来支持png的透明。</p>
+<h4 id="业务场景"><a href="#业务场景" class="headerlink" title="业务场景"></a>业务场景</h4><p>假如我们有一张大海，蓝天的图，这种颜色差别不会太大的图，我们使用png8位也能够展示图片信息。每种图片格式都有自己的特点，针对不同的业务场景选择不同的图片格式很重要。<br>jpg ： 有损压缩，但是压缩率高，不支持透明。适合不需要透明的图片都可以采用。<br>png ： 支持透明，浏览器兼容性好，并且有png8、png24、png32提供选择，针对不同图片选择色位数。适合需要透明图片的业务场景。<br>webp ： 是2010年谷歌提出的一种图片格式，安卓已经支持，压缩程度更好，但是在ios Safari webview有兼容性的问题。适用于安卓全部。<br>svg矢量图 ：是一种利用html标签绘制的图片，代码内嵌，相对较小，图片样式相对简单的场景，由于是一种矢量图，不会随着图片面积扩大而出现马赛克的现象，适用于图片样式相对简单（比如iconfont/fontawesome）的业务场景。<br>gif ： 需要上动画就用它吧。</p>
+<h3 id="雪碧图。"><a href="#雪碧图。" class="headerlink" title="雪碧图。"></a>雪碧图。</h3><p>雪碧图是将多张图片合并到一张透明的<code class="codes">png</code>图片上，运用<code class="codes">background-position</code>进行定位选择，减少了<code class="codes">http</code>请求次数，弊端是无法进行压缩，文件过大等原因。整个页面会依赖于这张图片的加载完成。目前<code class="codes">facebook</code>就是采用雪碧图的方式，中和方式就是将各组小型图片进行雪碧图合并。如果对雪碧图有不熟悉的，可以到[spritecow](<code class="codes"><a href="http://www.spritecow.com" target="_blank" rel="noopener">www.spritecow.com</a></code>)网站工具辅助定位。</p>
+<h3 id="images-inline"><a href="#images-inline" class="headerlink" title="images inline"></a>images inline</h3><p>当一些过小的图片，比如icon存在于html中。十个0.1kb的icon真的要发出十次请求吗？耗费的过程不在于文件大小，而在于请求过程了，这显然是不合理的。我们需要将<code class="codes">icon</code>转换为<code class="codes">base64</code>位图片，存在于<code class="codes">html</code>的某个<code class="codes">dom</code>节点上，不需要其进行请求。</p>
+<h3 id="svg"><a href="#svg" class="headerlink" title="svg"></a>svg</h3><p>使用svg进行矢量图的绘制，</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">version</span>=<span class="string">"1.1"</span> <span class="attr">id</span>=<span class="string">"web-skill"</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/2000/svg"</span> <span class="attr">xmlns:xlink</span>=<span class="string">"http://www.w3.org/1999/xlink"</span> <span class="attr">x</span>=<span class="string">"0px"</span> <span class="attr">y</span>=<span class="string">"0px"</span> <span class="attr">width</span>=<span class="string">"160px"</span> <span class="attr">height</span>=<span class="string">"108px"</span> <span class="attr">viewBox</span>=<span class="string">"0 0 160 108"</span> <span class="attr">enable-background</span>=<span class="string">"new 0 0 160 108"</span> <span class="attr">xml:space</span>=<span class="string">"preserve"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">g</span> <span class="attr">id</span>=<span class="string">"mobile"</span> <span class="attr">style</span>=<span class="string">"transform: matrix(1, 0, 0, 1, 0, 0);"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">path</span> <span class="attr">fill</span>=<span class="string">"#FFFFFF"</span> <span class="attr">d</span>=<span class="string">"M49.1,102.4c0,1.2-1,2.1-2.1,2.1H20.6c-1.2,0-2.1-1-2.1-2.1v-56c0-1.2,1-2.1,2.1-2.1h26.3</span></span></span><br><span class="line"><span class="tag"><span class="string">c1.2,0,2.1,1,2.1,2.1v56H49.1z"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">path</span> <span class="attr">fill</span>=<span class="string">"#00D9B3"</span> <span class="attr">d</span>=<span class="string">"M46.9,106H20.6c-2,0-3.6-1.6-3.6-3.6v-56c0-2,1.6-3.6,3.6-3.6h26.3c2,0,3.6,1.6,3.6,3.6v56</span></span></span><br><span class="line"><span class="tag"><span class="string">C50.6,104.4,48.9,106,46.9,106z M20.6,45.7c-0.3,0-0.6,0.3-0.6,0.6v56c0,0.4,0.3,0.6,0.6,0.6h26.3c0.4,0,0.6-0.3,0.6-0.6v-56</span></span></span><br><span class="line"><span class="tag"><span class="string">c0-0.4-0.3-0.6-0.6-0.6H20.6z"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">path</span> <span class="attr">fill</span>=<span class="string">"#00D9B3"</span> <span class="attr">d</span>=<span class="string">"M35.9,97.2c0,1.2-1,2.1-2.1,2.1c-1.2,0-2.1-1-2.1-2.1c0-1.2,1-2.1,2.1-2.1C35,95,35.9,96,35.9,97.2"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span><span class="tag">&lt;<span class="name">path</span> <span class="attr">fill</span>=<span class="string">"#00D9B3"</span> <span class="attr">d</span>=<span class="string">"M35.4,76.5c2.3-0.8,3.9-2.9,3.9-5.4c0-3.2-2.6-5.7-5.7-5.7c-3.2,0-5.7,2.6-5.7,5.7v10.1</span></span></span><br><span class="line"><span class="tag"><span class="string">c0,0.5,0.4,0.9,0.9,0.9h10.1c0.4,0,0.7-0.2,0.8-0.5c0.1-0.3,0.1-0.7-0.2-1L35.4,76.5z M33.6,67.1c2.2,0,4,1.8,4,4</span></span></span><br><span class="line"><span class="tag"><span class="string">c0,2.1-1.6,3.8-3.6,4l-4.3-4.3C29.8,68.7,31.5,67.1,33.6,67.1 M29.6,80.3v-7.1l7.1,7.1H29.6z"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">g</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">g</span> <span class="attr">id</span>=<span class="string">"desktop"</span> <span class="attr">style</span>=<span class="string">"transform: matrix(1, 0, 0, 1, 0, 0);"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">path</span> <span class="attr">fill</span>=<span class="string">"#FFFFFF"</span> <span class="attr">d</span>=<span class="string">"M128.6,77.6c0,1.7-1.3,3-3,3H46.5c-1.7,0-3-1.3-3-3V21.1c0-1.7,1.3-3,3-3h79.1c1.7,0,3,1.3,3,3V77.6z"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">path</span> <span class="attr">fill</span>=<span class="string">"#00D9B3"</span> <span class="attr">d</span>=<span class="string">"M125.6,82.1H46.5c-2.5,0-4.5-2-4.5-4.5V21.1c0-2.5,2-4.5,4.5-4.5h79.1c2.5,0,4.5,2,4.5,4.5v56.5</span></span></span><br><span class="line"><span class="tag"><span class="string">C130.1,80.1,128.1,82.1,125.6,82.1z M46.5,19.6c-0.8,0-1.5,0.7-1.5,1.5v56.5c0,0.8,0.7,1.5,1.5,1.5h79.1c0.8,0,1.5-0.7,1.5-1.5</span></span></span><br><span class="line"><span class="tag"><span class="string">V21.1c0-0.8-0.7-1.5-1.5-1.5H46.5z"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">path</span> <span class="attr">fill</span>=<span class="string">"#00D9B3"</span> <span class="attr">d</span>=<span class="string">"M101.8,106c-7.3,0-13.2-5.9-13.2-13.2V80.6c0-0.8,0.7-1.5,1.5-1.5c0.8,0,1.5,0.7,1.5,1.5v12.2</span></span></span><br><span class="line"><span class="tag"><span class="string">c0,5.6,4.6,10.2,10.2,10.2c0.8,0,1.5,0.7,1.5,1.5S102.7,106,101.8,106z"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">path</span> <span class="attr">fill</span>=<span class="string">"#00D9B3"</span> <span class="attr">d</span>=<span class="string">"M70.2,106c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5c5.6,0,10.2-4.6,10.2-10.2V80.6c0-0.8,0.7-1.5,1.5-1.5</span></span></span><br><span class="line"><span class="tag"><span class="string">c0.8,0,1.5,0.7,1.5,1.5v12.2C83.4,100.1,77.5,106,70.2,106z"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">path</span> <span class="attr">fill</span>=<span class="string">"#00D9B3"</span> <span class="attr">d</span>=<span class="string">"M88.6,53.8c3.6-1.2,6.2-4.6,6.2-8.6c0-5-4.1-9-9-9c-4.9,0-9,4.1-9,9v15.9c0,0.8,0.6,1.4,1.4,1.4H94</span></span></span><br><span class="line"><span class="tag"><span class="string">c0.6,0,1.1-0.3,1.3-0.8s0.1-1.1-0.3-1.5L88.6,53.8z M85.7,38.9c3.5,0,6.3,2.8,6.3,6.3c0,3.3-2.5,6-5.7,6.3l-6.8-6.8</span></span></span><br><span class="line"><span class="tag"><span class="string">C79.8,41.5,82.5,38.9,85.7,38.9 M79.5,59.7V48.5l11.2,11.2H79.5z"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">g</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">g</span> <span class="attr">id</span>=<span class="string">"mobile2"</span> <span class="attr">opacity</span>=<span class="string">"0"</span> <span class="attr">style</span>=<span class="string">"transform: matrix(1, 0, 0, 1, 0, 0); opacity: 0;"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">path</span> <span class="attr">fill</span>=<span class="string">"#FFFFFF"</span> <span class="attr">d</span>=<span class="string">"M49.1,102.4c0,1.2-1,2.1-2.1,2.1H20.6c-1.2,0-2.1-1-2.1-2.1v-56c0-1.2,1-2.1,2.1-2.1h26.3</span></span></span><br><span class="line"><span class="tag"><span class="string">c1.2,0,2.1,1,2.1,2.1L49.1,102.4L49.1,102.4z"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">path</span> <span class="attr">fill</span>=<span class="string">"#00D9B3"</span> <span class="attr">d</span>=<span class="string">"M46.9,106H20.6c-2,0-3.6-1.6-3.6-3.6v-56c0-2,1.6-3.6,3.6-3.6h26.3c2,0,3.6,1.6,3.6,3.6v56</span></span></span><br><span class="line"><span class="tag"><span class="string">C50.6,104.4,48.9,106,46.9,106z M20.6,45.7c-0.3,0-0.6,0.3-0.6,0.6v56c0,0.4,0.3,0.6,0.6,0.6h26.3c0.4,0,0.6-0.3,0.6-0.6v-56</span></span></span><br><span class="line"><span class="tag"><span class="string">c0-0.4-0.3-0.6-0.6-0.6H20.6z"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">path</span> <span class="attr">fill</span>=<span class="string">"#00D9B3"</span> <span class="attr">d</span>=<span class="string">"M35.9,97.2c0,1.2-1,2.1-2.1,2.1c-1.2,0-2.1-1-2.1-2.1c0-1.2,1-2.1,2.1-2.1C35,95,35.9,96,35.9,97.2"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span><span class="tag">&lt;<span class="name">path</span> <span class="attr">fill</span>=<span class="string">"#00D9B3"</span> <span class="attr">d</span>=<span class="string">"M35.4,76.5c2.3-0.8,3.9-2.9,3.9-5.4c0-3.2-2.6-5.7-5.7-5.7c-3.2,0-5.7,2.6-5.7,5.7v10.1</span></span></span><br><span class="line"><span class="tag"><span class="string">c0,0.5,0.4,0.9,0.9,0.9h10.1c0.4,0,0.7-0.2,0.8-0.5c0.1-0.3,0.1-0.7-0.2-1L35.4,76.5z M33.6,67.1c2.2,0,4,1.8,4,4</span></span></span><br><span class="line"><span class="tag"><span class="string">c0,2.1-1.6,3.8-3.6,4l-4.3-4.3C29.8,68.7,31.5,67.1,33.6,67.1 M29.6,80.3v-7.1l7.1,7.1H29.6z"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">g</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>效果图。<br><img src="https://static.yuanziwen.cn/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AC%94%E8%AE%B011.png_plain" alt="alt"><br>别以为这个很复杂，其实如果你了解<code class="codes">SVG</code>语法的话，你会觉得很简单，这仅仅利用的<code class="codes">path</code>画点画线而已。<br>第三方矢量图库，例如<code class="codes">iconfont</code>和<code class="codes">fontawesome</code>。在业务场景中是经常使用的。引进当前项目的<code class="codes">iconfont.css</code>，行内标签使用&lt;<code class="codes">code</code> <code class="codes">class</code>=”<code class="codes">codes</code>“&gt;&lt;<code class="codes">i</code> <code class="codes">class</code>=”<code class="codes">iconfont</code> <code class="codes">icon</code>-<code class="codes">xxx</code>“&gt;&lt;/<code class="codes">i</code>&gt;&lt;/<code class="codes">code</code>&gt;进行使用。</p>
+<h3 id="WebP"><a href="#WebP" class="headerlink" title="WebP"></a>WebP</h3><p>优势体现在它具有更优的图像数据压缩算法，能带来更小的图片体积，而且拥有肉眼识别无差异的图像质量，同时具备了有损和无损的压缩模式，<code class="codes">alpha</code>透明以及动画的特性，在jpeg和png上的转换效都非常优秀、稳定和统一。<br><a href="http://zhitu.isux.us/" target="_blank" rel="noopener">智图</a>是一个将jpg.png图片转换成webp的在线网站.</p>
+<p>推荐一个网站：<a href="www.tinypng.com">www.tinypng.com</a> 是对png、jpeg图片进行在线压缩的网站。将图片内高频的色位<code class="codes">bit</code>压缩成低频。png32降至png24、png8。达到压缩的目的。特别是对于颜色样式简单的图片来说。</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2018/04/21/前端性能优化笔记-1/">blog.yuanziwen.cn/2018/04/21/前端性能优化笔记-1/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/优化笔记/">优化笔记</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/04/24/前端性能优化笔记-2/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">前端性能优化笔记(2)</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/04/17/ESlint-eslintrc配置/">
+        <span class="next-text nav-default">ESlint-eslintrc配置手记</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1593502174043')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

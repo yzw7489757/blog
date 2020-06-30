@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="网页高效重构思想-模块化"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2018/05/17/网页高效重构思想-模块化/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>网页高效重构思想-模块化 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music(NoAuto)
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music(NoAuto)
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">网页高效重构思想-模块化
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-05-17
+        </span></div>
+    </header>
+
+    <div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><blockquote><p>说起模块化，首先想到的是编程中的模块设计，以功能块为单位进行程序设计，最后通过模块的选择和组合构成最终产品。把这种思想运用到页面构建中，也已经不是什么新鲜事。相信很大一部分页面构建工程师都经历了这样几个阶段：</p>
+<a id="more"></a>
+<blockquote><p>第一阶段:在一个css文件中把多个页面按自己的习惯顺序从上往下编写样式，基本不考虑有无公用样式，以完成设计呈现为首要目的； </p>
+</blockquote>
+<blockquote><p>第二阶段:提取不同页面中的通用样式，如公用颜色、图标、按钮等，实现一些基本元素的复用; </p>
+</blockquote>
+<blockquote><p>第三阶段:提取公用功能模块，如导航、版权信息等，实现部分公用模块的复用。 </p>
+</blockquote></blockquote>
+<p>刚才描述的第三阶段的方法已经包含了<span class="myText">模块化思想</span>，不少团队也都有一套成熟的模块化开发方案。模块化构建方式的意思指，比如某些产品中要求使用一种称为<span class="myText">UIO方式</span>，模块化通用的功能模块或组件，以达到最大程度的模块独立性与复用性。</p>
+<p>那么，如果我们运用模块化构建的方式，优势在哪呢？也许在开始尝试之处，需要一个适应的过程，可能会使同一个团队的成员之间出现不习惯，但当大家都适应并熟练这种工作方式之后，必定能极大地提高页面构建的效率。</p>
+<blockquote><p>假设有这样一个场景，团队接到一个页面非常多、工作量非常大的紧急项目，</p>
+<blockquote><p>第一个团队这么做：组长给每人分配几个页面，大家分头做完各自的页面，统一交付，对于不同页面之间结构呈现相似的模块，细心点的团队可能会约定让某个人写好，再复制给每个需要用到的人，不太在意的，则让每个人把各自页面上的所有内容都写一遍，已完成任务为重。</p>
+</blockquote>
+<blockquote><p>第二个团队事先根据所有的页面划分公用或重复模块，再按模块唯一性分配给每个人，有人负责搭建框架，有人制作模块，最后合并框架和模块，再按开发的工作计划，顺序交付页面。对比的结果是，由于第二个团队是多人共同制作一个页面，他们能以最快的速度产出开发需要的第一页面，而且越到后期越能发现页面中可重用的模块越多，最后整个工作时间也许能比第一个团队缩减一半。模块的复用不单是对本团队的工作时间有很大影响，同样，对于下游的开发者来说，意味着他们也不需要为相同的模块重套代码或重新开发。此外，代码的冗余量、以及产品升级时两种工作方式的代码扩展性也体现出很大的差距。css的模块化是最好的配合手段，或者说是必须的。</p>
+</blockquote>
+<blockquote><p><a href="https://www.zhihu.com/question/27226086/answer/35811288" target="_blank" rel="noopener">可以参考知乎-小猪的回答</a></p>
+</blockquote>
+</blockquote>
+
+<p>当决定使用模块化构建的工作方式时，遵循某些原则对模块化的顺利推进有很大的帮助。<br>![alt](<a href="https://static.yuanziwen.cn/blog/image/重构思想-1.png_plain" target="_blank" rel="noopener">https://static.yuanziwen.cn/blog/image/重构思想-1.png_plain</a> %}<img src="/href=https:/static.yuanziwen.cn/blog/image/重构思想-3.png_plain>https:/static.yuanziwen.cn/blog/image/重构思想-3.png_plain</a>)</p>" class="<a" title="<p>曾经有一篇关于面向对象css的文章中指出，面向对象的css有两个主要原则：<span class=myButton>separate the structure from the skin，separate the container from the content</span>。第一个原则体现在模块化思想可以理解为，模块的设计制作和布局框架本身相分离，意味着你的模块不能只为某个布局而编写样式，像微博这类存在换肤功能的产品更是如此，如果模块在不同的皮肤样式下需要另写很多样式甚至是修改结构的时候，这个模块的制作就是失败的；第二个原则说的布局与内容的分离，布局中某个位置不必只能放置某种内容，反过来可以理解为模块的灵活性和复用性。</p> <p><span class=myText>其次遵守团队协作开发规范原则</span>。这个规范可以包含文件目录结构、文件和样式命名规范、图片sprite规范、模块划分和调用规范等，例如我们对文件目录深度的规定、公用样式使用规定、模块的样式名唯一性规定、模块文件名和样式名必须一致的规定等等，确保所有人产出的模块是统一、规范的。</p> <p><span class=myText>按结构呈现形式划分模块的原则</span>。这一点和模块化编程有较大的区别，通常在编程开发时是以模块的功能来划分的，而在页面构建上，有时候不同功能的模块呈现的样式是一样的，为达到模块样式最大程度的复用，就不能按功能来划分模块，简单来说，哪些模块外观结构一样，我们就可以把它们归为一个模块，以微博右侧模块举例，“可能感兴趣的人”和“推荐应用”模块的外观是一样，都是左侧一个图片、右侧文字和功能按钮，那它们就是同一个样式模块。</p> <p><span class=myText>模块稳固性原则</span>。“你觉得怎样体现你写的代码质量高，比一般人好？”，大多数人会回答遵守语义化，减小不必要的嵌套，代码尽量精简。语义化和代码精简固然是评价质量的一个重要方面，但是我认为，代码是否考虑到数据遍历的合理性，是否考虑到dom节点的可操作性，是否考虑到因扩展造成的抗破坏行，更能体现一个页面构建工程师的水平。</p> <p><span class=myText>模块自适应性原则</span>。指的是任何一个模块，都尽可能实现宽度和高度的自适应，非特殊情况不要设置模块的宽高，采取这种原则制作出的模块具有很好的即插即用功能，是高效完成页面拼合工作的重要前提。试想如果每个模块都定义了宽度，那么在不同的布局上你就必须重新定义每个模块的宽高或边距等属性来适应当前布局。</p> <p><span class=myText>Margin-bottom原则</span>。一般情况下，网页的布局都是从上到下的流式布局（多栏结构也可以看成各栏内的流式布局），所以，我们可以为每个模块统一预设margin-bottom，达到统一间距的目的，避免出现有些模块设置上边距、有些模块设置下边距的情况发生。（左右间距通常是由布局框架的样式设置）</p> <p> ![alt](<a href=https://static.yuanziwen.cn/blog/image/重构思想-7.png>https://static.yuanziwen.cn/blog/image/重构思想-7.png</a> 改变 )</p> <p>在制订好团队的合作规范、遵守的原则后，并不代表你就可以完全按你的思路启动工作，团队配合是多向的，除了团队内部，其他团队的支持也是不可或缺的，所以还需要以下两个前置条件：</p> <p><span class=myText>设计必须严格遵循栅格化</span>。模块是独立的，但最终模块还是嵌套在布局中，因为我们的最终产出物是完整的静态页面，如何将分离的模块在最短的时间内，拼成一个符合设计师意图和产品要求的页面？栅格化是快捷的保障，在一个严格按照栅格化设计的布局框架中，工程师只需要设置好布局框架样式和分栏的内外间距，后续的工作只需要把该页面所使用的模块嵌套进来，再调用对应模块的样式，由于模块的自适应性，在所有模块准备充分的情况下，通常一个页面的拼合只需要几分钟的时间。</p> <p><span class=myText>产品、设计与交互的规范统一</span>。通常在项目的某个阶段，产品和设计在模块上的统一是比较容易的，但如果在同一个项目的不同阶段，尤其是在不同项目之间或不同产品之间要达到规范统一，就不是一件简单的事情。当规范统一性出现问题时，导致模块化只停留在某个项目阶段，每次添加新功能、增加新内容都需要增加全新的模块样式，移植性和复用性大打折扣，无法发挥应有的效果。当然，产品是持续改变和创新的，我们不能要求一个产品永远按照某个规范来进行设计，但我们还是应该共同努力寻求阶段性共赢的解决方案。在微博，经过各方长时间的努力，特别是交互设计对产品功能组件的统一，构建的WDL规范库对我们的模块化提供了很大帮助。</p> <p> ![alt](<a href=https://static.yuanziwen.cn/blog/image/重构思想-8.png>https://static.yuanziwen.cn/blog/image/重构思想-8.png</a> 从被动到主动 )</p> <p>根据实际情况来看，要达到所有满足的条件往往不是一帆风顺的，特别是第二个条件的达成。但是退一步来说，即使不能使模块化在每个项目、每个产品中长期稳定的发挥它的最大能量，至少可以在每一次项目任务中获得模块化给团队带来的效率提升。</p> <p>如果经过大家的努力，在所有条件都满足，而且模块化工作方式能在团队顺利开展的情况下，我们依然可能会遇到各式各样的问题，一个无法避免的问题就是，产品功能升级引起的模块变化，这时候是修改原有的模块还是另起一个新的模块？二是模块的划分程度，有些时候从模块的呈现和功能划分都比较模糊，有些时候对某些内容是否划为公用样式还是模块、还是页面独有内容都是见仁见智的；三是模块的分类，采取何种方式分类便于查找？类似这些问题还有很多，在不同的项目和形势下，需要具体问题具体分析，发挥团队的智慧，寻找最合理的应对方案。</p> <p>虽然在实施过程中可能会遇到各种问题和团队配合之间的阻力，但是当你逐渐适应这种模块化团队构建的工作方式时，你会爱上它！而当你的团队高效地完成每个工作的时候，人们也会爱上你的团队！</p> <p><img src=https://static.yuanziwen.cn/blog/image/%E9%87%8D%E6%9E%84%E6%80%9D%E6%83%B3-13.png_plain alt=alt></p>"></p>
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2018/05/17/网页高效重构思想-模块化/">blog.yuanziwen.cn/2018/05/17/网页高效重构思想-模块化/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/模块/">模块</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/06/09/论浏览器本地存储Cookie、Session-Local、indexDB、ServiceWork优劣及趋向/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">本地存储Cookie、Session/Local、indexDB、ServiceWork</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/05/05/Vue-js运行机制/">
+        <span class="next-text nav-default">Vue.js运行机制</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1593502174043')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

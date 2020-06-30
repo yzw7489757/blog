@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="[译] 从 0 创建自定义元素"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2019/04/14/译-从-0-创建自定义元素/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>[译] 从 0 创建自定义元素 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music(NoAuto)
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music(NoAuto)
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">[译] 从 0 创建自定义元素
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-04-14
+        </span></div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#系列文章："><span class="toc-text">系列文章：</span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#添加一个自定义元素"><span class="toc-text">添加一个自定义元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义元素生命周期方法"><span class="toc-text">自定义元素生命周期方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#另一个概念：非演示组件"><span class="toc-text">另一个概念：非演示组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#这是对自定义元素的深入了解"><span class="toc-text">这是对自定义元素的深入了解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#系列文章：-1"><span class="toc-text">系列文章：</span></a></li></ol>
+    </li></div>
+  </div><div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><blockquote>
+<ul>
+<li>原文地址：<a href="https://css-tricks.com/creating-a-custom-element-from-scratch/" target="_blank" rel="noopener">Creating a Custom Element from Scratch</a></li>
+<li>原文作者：<a href="https://css-tricks.com/author/calebdwilliams/" target="_blank" rel="noopener">Caleb Williams</a></li>
+<li>译文出自：<a href="https://github.com/xitu/gold-miner" target="_blank" rel="noopener">掘金翻译计划</a></li>
+<li>本文永久链接：<a href="https://github.com/xitu/gold-miner/blob/master/TODO1/creating-a-custom-element-from-scratch.md" target="_blank" rel="noopener">https://github.com/xitu/gold-miner/blob/master/TODO1/creating-a-custom-element-from-scratch.md</a></li>
+<li>译者：<a href="https://github.com/yzw7489757" target="_blank" rel="noopener">Seven</a></li>
+<li>校对者：<a href="https://github.com/portandbridge" target="_blank" rel="noopener">portandbridge</a>, <a href="https://github.com/wznonstop" target="_blank" rel="noopener">wznonstop</a></li>
+</ul>
+</blockquote>
+<p>在<a href="https://github.com/xitu/gold-miner/blob/master/TODO1/crafting-reusable-html-templates.md" target="_blank" rel="noopener">上一篇文章</a>，我们在文档中创建了 HTML 模板，希望它们在需要时才呈现，这让我们开始接触 Web 组件。</p>
+<a id="more"></a>
+
+<p>接下来，我们将继续创建对话框组件的自定义元素版本，该自定义元素版本目前仅使用 <code>HTMLTemplateElement</code>。</p>
+<p>请在 <a href="https://codepen.io" target="_blank" rel="noopener">CodePen</a> 上查看由 Caleb Williams (<a href="https://codepen.io/calebdwilliams" target="_blank" rel="noopener">@calebdwilliams</a>) 创建的<a href="https://codepen.io/calebdwilliams/pen/JzjLyQ/" target="_blank" rel="noopener">带有脚本的模板对话框</a> Demo。</p>
+<p>因此，下一步我们将创建一个自定义元素，该元素实时使用我们的 <code>template#dialog-template</code> 元素。</p>
+<h4 id="系列文章："><a href="#系列文章：" class="headerlink" title="系列文章："></a>系列文章：</h4><ol>
+<li><a href="https://juejin.im/post/5c9a3cce5188252d9b3771ad" target="_blank" rel="noopener">Web Components 简介</a></li>
+<li><a href="https://github.com/xitu/gold-miner/blob/master/TODO1/crafting-reusable-html-templates.md" target="_blank" rel="noopener">编写可复用的 HTML 模板</a></li>
+<li><a href="https://github.com/xitu/gold-miner/blob/master/TODO1/creating-a-custom-element-from-scratch.md" target="_blank" rel="noopener">从 0 开始创建自定义元素（<strong>本文</strong>）</a></li>
+<li><a href="https://github.com/xitu/gold-miner/blob/master/TODO1/encapsulating-style-and-structure-with-shadow-dom.md" target="_blank" rel="noopener">使用 Shadow DOM 封装样式和结构</a></li>
+<li><a href="https://github.com/xitu/gold-miner/blob/master/TODO1/advanced-tooling-for-web-components/.md" target="_blank" rel="noopener">Web 组件的高阶工具</a></li>
+</ol>
+<hr>
+<h3 id="添加一个自定义元素"><a href="#添加一个自定义元素" class="headerlink" title="添加一个自定义元素"></a>添加一个自定义元素</h3><p>Web 组件的基础元素是<strong>自定义元素</strong>。该 <code>customElements</code> 的 API 为我们提供了创建自定义 HTML 标签的途径，这些标签可以在包含定义类的任何文档中使用。</p>
+<p>可以把它想象成 React 或 Angular 组件（例如 <code>&lt;MyCard /&gt;</code>），但实际上它不依赖于 React 或 Angular。原生自定义组件是这样的：<code>&lt;my-card&gt;&lt;/my-card&gt;</code>。更重要的是，将它视为一个标准元素，可以在你的 React、Angular、Vue、[insert-framework-you’re-interested-in-this-week] 应用中使用，而不必大惊小怪。</p>
+<p>从本质上讲，一个自定义元素分为两个部分组成：一个<strong>标签名称</strong>和一个 <strong>Class</strong> 类扩展内置 <code>HTMLElement</code> 类。我们自定义元素的简易 demo 版本如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class OneDialog extends HTMLElement &#123;</span><br><span class="line">  connectedCallback() &#123;</span><br><span class="line">    this.innerHTML = `&lt;h1&gt;Hello, World!&lt;/h1&gt;`;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">customElements.define(&apos;one-dialog&apos;, OneDialog);</span><br></pre></td></tr></table></figure>
+
+<p>注意：在整个自定义元素中，this 值是对自身自定义元素实例的引用。</p>
+<p>在上面的示例中，我们定义了一个符合标准的新 HTML 元素，<code>&lt;one-dialog&gt;&lt;/one-dialog&gt;</code>。它现在暂时还做不了什么…，在任何 HTML 文档中使用 <code>&lt;one-dialog&gt;</code> 标签将会创建一个带着 <code>&lt;h1&gt;</code> 标签显示 “Hello, World!” 的新元素。</p>
+<p>我们肯定想把它做的更 NB，很幸运。在<a href="https://css-tricks.com/crafting-reusable-html-templates" target="_blank" rel="noopener">上一篇文章中</a>，我们为弹出框创建模板，并且能够拿到模板，让我们在自定义元素中使用它。我们在该示例中添加了一个 script 标签来执行一些对话框魔术。我们暂时删除它，因为我们将把逻辑从 HTML 模板移到自定义元素类中。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class OneDialog extends HTMLElement &#123;</span><br><span class="line">  connectedCallback() &#123;</span><br><span class="line">    const template = document.getElementById(&apos;one-dialog&apos;);</span><br><span class="line">    const node = document.importNode(template.content, true);</span><br><span class="line">    this.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在，定义了自定义元素（<code>&lt;one-dialog&gt;</code>）并指示浏览器呈现包含在调用自定义元素的 HTML 模板中的内容。</p>
+<p>下一步是将我们的逻辑转移到组件类中。</p>
+<h3 id="自定义元素生命周期方法"><a href="#自定义元素生命周期方法" class="headerlink" title="自定义元素生命周期方法"></a>自定义元素生命周期方法</h3><p>与 React 或 Angular 一样，自定义元素具有<strong>生命周期方法</strong>。笔者已经向各位介绍过 <code>connectedCallback</code>，当我们的元素被添加到 DOM 的时候调用它。</p>
+<p><code>connectedCallback</code> 与元素的 <code>constructor</code> 是分开的。函数用于设置元素的基本骨架，而 <code>connectedCallback</code> 通常用于向元素添加内容、设置事件监听器或以其他方式初始化组件。</p>
+<p>实际上，构造函数不能用于设计或修改或操作元素的属性，如果我们要使用对话框创建新实例，<code>document.createElement</code> 则会调用构造函数。元素的使用者需要一个没有插入属性或内容的简单节点。</p>
+<p>该 createElement 函数没有可以用于配置将返回的元素的选项。这是符合情理的，那么话说回来了，既然这个函数没有选项可以配置会返回的元素，那我们唯一的选择就是 <code>connectedCallback</code>。</p>
+<p>在标准内置元素中，元素的状态通常通过元素上存在的属性和这些属性的值来反映。对于我们的示例，我们将仅查看一个属性：<code>[open]</code>。为此，我们需要观察该属性的更改，我们需要 <code>attributeChangedCallback</code> 来做到这一点。只要其中一个元素构造函数 <code>observedAttributes</code> 之一的属性发生变化就会触发第二个生命周期方法。</p>
+<p>这可能听起来难以实现，但语法非常简单：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class OneDialog extends HTMLElement &#123;</span><br><span class="line">  static get observedAttributes() &#123;</span><br><span class="line">    return [&apos;open&apos;];</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  attributeChangedCallback(attrName, oldValue, newValue) &#123;</span><br><span class="line">    if (newValue !== oldValue) &#123;</span><br><span class="line">      this[attrName] = this.hasAttribute(attrName);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  connectedCallback() &#123;</span><br><span class="line">    const template = document.getElementById(&apos;one-dialog&apos;);</span><br><span class="line">    const node = document.importNode(template.content, true);</span><br><span class="line">    this.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的例子中，我们只关心属性是否设置，我们不关心具体的值（这类似于 HTML5 input 输入框上的 <code>required</code> 属性）。更新此属性时，我们更新元素的 <code>open</code> 属性。属性（property）存在于 JavaScript 对象上，HTML Elements 也具有属性（attribute）；这个生命周期方法可以帮助我们让两种属性保持同步。</p>
+<p>我们将 updater 包含在 <code>attributeChangedCallback</code> 内部的条件检查中，以查看新值和旧值是否相等。我们这样做是为了防止程序中出现无限循环，因为稍后我们将创建一个 getter 和 setter 属性，它将通过在元素的属性（property）更新时设置元素的属性（attribute）来保持属性（attribute）和属性（property）的同步。<code>attributeChangedCallback</code> 反向执行：当属性更改时更新属性。</p>
+<p>现在，开发者可以使用我们的组件，并且利用 <code>open</code> 属性决定对话框是否默认打开。为了使它更具动态性，我们可以在元素的 <code>open</code> 属性中添加自定义 getter 和 setter：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class OneDialog extends HTMLElement &#123;</span><br><span class="line">  static get boundAttributes() &#123;</span><br><span class="line">    return [&apos;open&apos;];</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  attributeChangedCallback(attrName, oldValue, newValue) &#123;</span><br><span class="line">    this[attrName] = this.hasAttribute(attrName);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  connectedCallback() &#123;</span><br><span class="line">    const template = document.getElementById(&apos;one-dialog&apos;);</span><br><span class="line">    const node = document.importNode(template.content, true);</span><br><span class="line">    this.appendChild(node);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  get open() &#123;</span><br><span class="line">    return this.hasAttribute(&apos;open&apos;);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  set open(isOpen) &#123;</span><br><span class="line">    if (isOpen) &#123;</span><br><span class="line">      this.setAttribute(&apos;open&apos;, true);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      this.removeAttribute(&apos;open&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>getter 和 setter 将保证（HTML 元素节点上）的 <code>open</code> 特性和属性（在 DOM 对象上）的值同步。添加 <code>open</code> 特性会将 <code>element.open</code> 设置为 <code>true</code>，同理，将 <code>element.open</code> 设置为 <code>true</code> 会添加 <code>open</code> 属性。我们这样做是为了确保元素的状态由其属性反映出来。虽然在技术层面上不一定需要，但被认为是创建自定义元素的最优办法。</p>
+<p>虽然这难免引入一些样板文件，但是通过循环观察到的属性列表并使用 <code>Object.defineProperty</code> 创建一个保持这些属性同步的抽象类是一项相当简单的任务。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class AbstractClass extends HTMLElement &#123;</span><br><span class="line">  constructor() &#123;</span><br><span class="line">    super();</span><br><span class="line">    // 检查观察到的属性是否已定义并具有长度</span><br><span class="line">    if (this.constructor.observedAttributes &amp;&amp; this.constructor.observedAttributes.length) &#123;</span><br><span class="line">      // 通过观察到的属性进行循环</span><br><span class="line">      this.constructor.observedAttributes.forEach(attribute =&gt; &#123;</span><br><span class="line">        // 动态定义 getter/setter 原型</span><br><span class="line">        Object.defineProperty(this, attribute, &#123;</span><br><span class="line">          get() &#123; return this.getAttribute(attribute); &#125;,</span><br><span class="line">          set(attrValue) &#123;</span><br><span class="line">            if (attrValue) &#123;</span><br><span class="line">              this.setAttribute(attribute, attrValue);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">              this.removeAttribute(attribute);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 我们可以扩展抽象类，而不是直接扩展 HTMLElement</span><br><span class="line">class SomeElement extends AbstractClass &#123; /** 省略 **/ &#125;</span><br><span class="line"></span><br><span class="line">customElements.define(&apos;some-element&apos;, SomeElement);</span><br></pre></td></tr></table></figure>
+
+<p>上面的例子并不完美，它没有考虑实现像 <code>open</code> 这样的属性的可能性，这些属性没有被赋值，而仅仅依赖于属性的存在。做一个完美的版本将超出本文的范围。</p>
+<p>现在我们已经知道我们的对话框是否打开了，让我们添加一些逻辑来实际地进行显示和隐藏：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class OneDialog extends HTMLElement &#123;  </span><br><span class="line">  /** 省略 */</span><br><span class="line">  constructor() &#123;</span><br><span class="line">    super();</span><br><span class="line">    this.close = this.close.bind(this);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  set open(isOpen) &#123;</span><br><span class="line">    this.querySelector(&apos;.wrapper&apos;).classList.toggle(&apos;open&apos;, isOpen);</span><br><span class="line">    this.querySelector(&apos;.wrapper&apos;).setAttribute(&apos;aria-hidden&apos;, !isOpen);</span><br><span class="line">    if (isOpen) &#123;</span><br><span class="line">      this._wasFocused = document.activeElement;</span><br><span class="line">      this.setAttribute(&apos;open&apos;, &apos;&apos;);</span><br><span class="line">      document.addEventListener(&apos;keydown&apos;, this._watchEscape);</span><br><span class="line">      this.focus();</span><br><span class="line">      this.querySelector(&apos;button&apos;).focus();</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      this._wasFocused &amp;&amp; this._wasFocused.focus &amp;&amp; this._wasFocused.focus();</span><br><span class="line">      this.removeAttribute(&apos;open&apos;);</span><br><span class="line">      document.removeEventListener(&apos;keydown&apos;, this._watchEscape);</span><br><span class="line">      this.close();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  close() &#123;</span><br><span class="line">    if (this.open !== false) &#123;</span><br><span class="line">      this.open = false;</span><br><span class="line">    &#125;</span><br><span class="line">    const closeEvent = new CustomEvent(&apos;dialog-closed&apos;);</span><br><span class="line">    this.dispatchEvent(closeEvent);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  _watchEscape(event) &#123;</span><br><span class="line">    if (event.key === &apos;Escape&apos;) &#123;</span><br><span class="line">        this.close();   </span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里发生了很多事情，让我们来梳理一下。我们要做的第一件事就是获取我们的容器，在 <code>isOpen</code> 的基础上切换 <code>.open</code> 类。为了使我们的元素可以访问，我们还需要切换 <code>aria-hidden</code> 属性。</p>
+<p>如果对话框已经打开了，那么我们希望保存对先前聚焦元素的引用。这是为了考虑可访问性标准。我们还将一个 keydown 监听器添加到名为 <code>WatEscape</code> 的文档中，该文档在构造函数中绑定元素的 <code>this</code>，其模式类似于 React 处理类组件中的方法调用的方式。</p>
+<p>我们这样做不仅是为了确保正确绑定 <code>this.close</code>，还因为 <code>Function.prototype.bind</code> 返回带绑定调用栈的函数的实例。通过在构造函数中保存对新绑定方法的引用，我们可以在对话框断开时删除事件（稍后将详细介绍）。最后，我们将注意力集中在元素上，并将焦点设置在 shadow root 中的适当元素上。</p>
+<p>我们还创建了一个很好的小实用工具方法来关闭我们的对话框，它分派一个自定义事件来通知某个监听器对话框已经关闭。</p>
+<p>如果元素是关闭的（即 <code>!open</code>），我们检查以确保 <code>this._wasFocused</code> 属性已定义并具有 <code>focus</code> 方法并调用该方法以将用户的焦点返回到常规 DOM。然后我们删除我们的事件监听器以避免任何内存泄漏。</p>
+<p>说到为自己的代码做好清理善后，就自然也要说下我们采用了另一种生命周期方法：<code>disconnectedCallback</code>。<code>disconnectedCallback</code> 与 <code>connectedCallback</code> 相反，因为一旦从 DOM 中删除了元素，该方法就会被调用，它允许我们清理附加到元素的任何事件监听器或 <code>MutationObservers</code>。</p>
+<p>碰巧的是，我们还有几个事件侦听器要连接起来：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class OneDialog extends HTMLElement &#123;</span><br><span class="line">  /** Omitted */</span><br><span class="line">  </span><br><span class="line">  connectedCallback() &#123;    </span><br><span class="line">    this.querySelector(&apos;button&apos;).addEventListener(&apos;click&apos;, this.close);</span><br><span class="line">    this.querySelector(&apos;.overlay&apos;).addEventListener(&apos;click&apos;, this.close);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  disconnectedCallback() &#123;</span><br><span class="line">    this.querySelector(&apos;button&apos;).removeEventListener(&apos;click&apos;, this.close);</span><br><span class="line">    this.querySelector(&apos;.overlay&apos;).removeEventListener(&apos;click&apos;, this.close);</span><br><span class="line">  &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在我们有一个运行良好，大部分可访问的对话框元素。我们可以做一些修饰，比如将焦点集中在元素上，但这超出了我们在本文学习的范围。</p>
+<p>还有一个生命周期方法 <code>adoptedCallback</code>。它不适用于我们的元素，其作用是元素被采用（插入）到 DOM 的另一部分时触发。</p>
+<p>在下面的示例中，您将看到我们的模板元素正被一个标准元素 <code>&lt;one-dialog&gt;</code> 所使用。</p>
+<p>请在 <a href="https://codepen.io" target="_blank" rel="noopener">CodePen</a> 上查看由 Caleb Williams (<a href="https://codepen.io/calebdwilliams" target="_blank" rel="noopener">@calebdwilliams</a>) 创建的<a href="https://codepen.io/calebdwilliams/pen/vbVXqv/" target="_blank" rel="noopener">对话框组件使用模板</a> Demo。</p>
+<h3 id="另一个概念：非演示组件"><a href="#另一个概念：非演示组件" class="headerlink" title="另一个概念：非演示组件"></a>另一个概念：非演示组件</h3><p>到目前为止，我们创建的 <code>&lt;one-template&gt;</code> 是一个典型的自定义元素，它包含了当元素包含在文档中时被插入到文档中的标记和行为。然而，并不是所有的元素都需要直观地呈现。在 React 生态系统中，组件通常用于管理应用程序状态或其他一些主要功能，像<a href="https://redux.js.org/basics/usage-with-react" target="_blank" rel="noopener">react-redux</a> 里的 <code>&lt;Provider /&gt;</code>。</p>
+<p>让我们想象一下，我们的组件是工作流中一系列对话框的一部分。当一个对话框关闭时，下一个对话框应该打开。我们可以创建一个容器组件来监听我们的 <code>dialog-closed</code> 事件并在整个工作流程中进行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class DialogWorkflow extends HTMLElement &#123;</span><br><span class="line">  connectedCallback() &#123;</span><br><span class="line">    this._onDialogClosed = this._onDialogClosed.bind(this);</span><br><span class="line">    this.addEventListener(&apos;dialog-closed&apos;, this._onDialogClosed);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  get dialogs() &#123;</span><br><span class="line">    return Array.from(this.querySelectorAll(&apos;one-dialog&apos;));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  _onDialogClosed(event) &#123;</span><br><span class="line">    const dialogClosed = event.target;</span><br><span class="line">    const nextIndex = this.dialogs.indexOf(dialogClosed);</span><br><span class="line">    if (nextIndex !== -1) &#123;</span><br><span class="line">      this.dialogs[nextIndex].open = true;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个元素没有任何表示逻辑，但它充当了应用程序状态的控制器。只需稍加努力，我们就可以重新创建类似 Redux 的状态管理系统，只使用一个自定义元素，可以在 React 的 Redux 容器组件所在的同一个应用程序中管理整个应用程序的状态。</p>
+<h3 id="这是对自定义元素的深入了解"><a href="#这是对自定义元素的深入了解" class="headerlink" title="这是对自定义元素的深入了解"></a>这是对自定义元素的深入了解</h3><p>现在我们对自定义元素有了很好的理解，我们的对话框开始融合在一起。但它仍然存在一些问题。</p>
+<p>请注意，我们必须添加一些 CSS 来重新设置对话框按钮，因为元素的样式会干扰页面的其余部分。虽然我们可以利用命名策略（如 BEM）来确保我们的样式不会与其他组件产生冲突，但是有一种更友好的方式来隔离样式。那就是 shadow DOM。本文系列 Web Components 专题的下一篇文章就会谈到它。</p>
+<p><strong>我们需要做的另一件事是为每个组件定义一个新模板，或者为我们的对话框找到一些切换模板的方法。就目前而言，每页只能有一个对话框类型，因为它使用的模板必须始终存在。因此，我们要么需要注入动态内容的方法，要么需要替换模板的方法。</strong></p>
+<p>在下一篇文章中，我们将研究如何通过使用 shadow DOM 合并样式和内容封装来提高我们刚刚创建的 <code>&lt;one-dialog&gt;</code> 元素的可用性。</p>
+<h4 id="系列文章：-1"><a href="#系列文章：-1" class="headerlink" title="系列文章："></a>系列文章：</h4><ol>
+<li><a href="https://juejin.im/post/5c9a3cce5188252d9b3771ad" target="_blank" rel="noopener">Web Components 简介</a></li>
+<li><a href="https://github.com/xitu/gold-miner/blob/master/TODO1/crafting-reusable-html-templates.md" target="_blank" rel="noopener">编写可重复使用的 HTML 模板</a></li>
+<li><a href="https://github.com/xitu/gold-miner/blob/master/TODO1/creating-a-custom-element-from-scratch.md" target="_blank" rel="noopener">从 0 开始创建自定义元素（<strong>本文</strong>）</a></li>
+<li><a href="https://github.com/xitu/gold-miner/blob/master/TODO1/encapsulating-style-and-structure-with-shadow-dom.md" target="_blank" rel="noopener">使用 Shadow DOM 封装样式和结构</a></li>
+<li><a href="https://github.com/xitu/gold-miner/blob/master/TODO1/advanced-tooling-for-web-components/.md" target="_blank" rel="noopener">Web 组件的高阶工具</a></li>
+</ol>
+<blockquote>
+<p>如果发现译文存在错误或其他需要改进的地方，欢迎到 <a href="https://github.com/xitu/gold-miner" target="_blank" rel="noopener">掘金翻译计划</a> 对译文进行修改并 PR，也可获得相应奖励积分。文章开头的 <strong>本文永久链接</strong> 即为本文在 GitHub 上的 MarkDown 链接。</p>
+</blockquote>
+<hr>
+<blockquote>
+<p><a href="https://github.com/xitu/gold-miner" target="_blank" rel="noopener">掘金翻译计划</a> 是一个翻译优质互联网技术文章的社区，文章来源为 <a href="https://juejin.im" target="_blank" rel="noopener">掘金</a> 上的英文分享文章。内容覆盖 <a href="https://github.com/xitu/gold-miner#android" target="_blank" rel="noopener">Android</a>、<a href="https://github.com/xitu/gold-miner#ios" target="_blank" rel="noopener">iOS</a>、<a href="https://github.com/xitu/gold-miner#前端" target="_blank" rel="noopener">前端</a>、<a href="https://github.com/xitu/gold-miner#后端" target="_blank" rel="noopener">后端</a>、<a href="https://github.com/xitu/gold-miner#区块链" target="_blank" rel="noopener">区块链</a>、<a href="https://github.com/xitu/gold-miner#产品" target="_blank" rel="noopener">产品</a>、<a href="https://github.com/xitu/gold-miner#设计" target="_blank" rel="noopener">设计</a>、<a href="https://github.com/xitu/gold-miner#人工智能" target="_blank" rel="noopener">人工智能</a>等领域，想要查看更多优质译文请持续关注 <a href="https://github.com/xitu/gold-miner" target="_blank" rel="noopener">掘金翻译计划</a>、<a href="http://weibo.com/juejinfanyi" target="_blank" rel="noopener">官方微博</a>、<a href="https://zhuanlan.zhihu.com/juejinfanyi" target="_blank" rel="noopener">知乎专栏</a>。</p>
+</blockquote>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2019/04/14/译-从-0-创建自定义元素/">blog.yuanziwen.cn/2019/04/14/译-从-0-创建自定义元素/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/掘金翻译计划/">掘金翻译计划</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2019/06/13/仅使用-HTML-和-CSS-创建多级嵌套弹出式导航菜单/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">仅使用 HTML 和 CSS 创建多级嵌套弹出式导航菜单</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2019/04/01/彻底刨析-Redux-源码/">
+        <span class="next-text nav-default">彻底刨析 Redux 源码</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1593502174043')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>
