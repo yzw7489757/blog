@@ -66,8 +66,11 @@
       </a><a href="/archives/">
         <li class="mobile-menu-item">Record
           </li>
+      </a><a href="/logs/">
+        <li class="mobile-menu-item">Log
+          </li>
       </a><a href="/music/">
-        <li class="mobile-menu-item">Music(NoAuto)
+        <li class="mobile-menu-item">Music
           </li>
       </a><a href="/photo/">
         <li class="mobile-menu-item">Album
@@ -93,8 +96,13 @@
             </a>
         </li>
       <li class="menu-item">
+          <a class="menu-item-link" href="/logs/">
+            Log
+            </a>
+        </li>
+      <li class="menu-item">
           <a class="menu-item-link" href="/music/">
-            Music(NoAuto)
+            Music
             </a>
         </li>
       <li class="menu-item">
@@ -113,6 +121,61 @@
       <main id="main" class="main">
         <div class="content-wrapper">
           <div id="content" class="content"><section id="posts" class="posts"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/2021/06/01/使用React构建多端容器/">使用React构建多端容器</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-06-01
+        </span></div>
+    </header>
+
+    <div class="post-content"><h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><p>本文就如何设计多端容器做出实现方案。本文指的多端并非是跨端，多端容器泛指容器提供统一能力，以供下游应用在多种环境下的容器加载并正常运行。各端容器提供的能力可能不同，下游也无需关心上层实现及依赖，只依赖于抽象接口，遵循依赖反转原则。</p>
+<p>小伙伴应该接触过以下这种需求场景：应用既可以在web browser运行，也可以以Hybrid的方式内嵌 webview、三方应用(alipay,wx,微应用等)浏览器。可能有些同学会问：“同是 Browser Environment，提供的上下文能力不都一样吗”，但实际上，会有一些容器对加载内容的能力做一些限制和添加特色功能，端容器需要做的就是将它们对齐。当处于可以访问DOM的环境调用社区的动画库，处于原生应用中时调用JSBridge使用原生应用的交互能力，处于其他端例如小程序时使用三方生态提供的能力 —— 当无法最优解时，可以自动降级到兜底方案。</p>
+          <div class="read-more">
+            <a href="/2021/06/01/使用React构建多端容器/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/2021/05/06/数据管控路由实现状态持久化/">数据管控路由实现状态持久化</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-05-06
+        </span></div>
+    </header>
+
+    <div class="post-content"><h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><p>近几年大多数常规应用都是采用MPA、SPA的方式，对每个路由绑定对应规则，达到匹配路由规则渲染组件的能力。</p>
+<p>最近在开发一个聊天类应用，简称XX，经常使用微信、钉钉的应该体验过其状态和数据缓存的能力，e.g. 和好友聊天内容输入一半，其他应用弹出一条消息或由于某些情况中止剩余内容的输入，切出了和该好友的对话界面甚至切出了XX应用，待回到和该好友聊天界面内，之前输入的内容还在，可以继续输入。</p>
+<p>这种体验放在原生应用上或许很常见，但移动端WEB少有聊天应用。不仅是web体验交互差，兼容成本也远超原生应用。web 数据持久化的难点是：</p>
+<ul>
+<li>不具备完善的数据缓存机制，BOM API支持能力的差异与数据关系映射结构复杂不利管理。</li>
+<li>低端机型浏览器易崩溃、用户刷新网页都会导致状态丢失。</li>
+<li>路由机制，应用运行时一旦切路由上一个路由就失去了其最后状态和数据。
+          <div class="read-more">
+            <a href="/2021/05/06/数据管控路由实现状态持久化/" class="read-more-link">Read more..</a>
+          </div>
+        </li></ul></div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/2021/01/06/Lighthouse-流程/">Lighthouse 流程架构</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-01-06
+        </span></div>
+    </header>
+
+    <div class="post-content"><h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>前段时间紧急上线了一个门户项目，两端静态页面，首页考虑到需要极致体验必须使用硬编码搭建，部分子页面采用可视化搭建，要求Lighthouse必须接近满分，尽管通过一些手段优化了首屏但上线之后，离目标还有一大段偏差。<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e2c1ab63272a43ef903059be261c8158~tplv-k3u1fbpfcp-watermark.image" alt></p>
+          <div class="read-more">
+            <a href="/2021/01/06/Lighthouse-流程/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
     <header class="post-header">
       <h1 class="post-title"><a class="post-link" href="/2020/06/30/实现简版eval/">实现简版eval</a>
         </h1>
@@ -229,64 +292,6 @@
             <a href="/2019/09/24/React传-1/" class="read-more-link">Read more..</a>
           </div>
         </div></article>
-      <article class="post">
-    <header class="post-header">
-      <h1 class="post-title"><a class="post-link" href="/2019/09/13/制定专属自己的-React-Hooks/">制定专属自己的 React Hooks</a>
-        </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2019-09-13
-        </span></div>
-    </header>
-
-    <div class="post-content"><p>Hooks 是 <code>16.7.0-alpha</code> 新加入的新特性，目的解决状态逻辑复用，使无状态组件拥有了许多状态组件的能力，如自更新能力(useState)、访问ref(useRef)、上下文context(useContext)、更高级的setState(useReducer)及周期方法(useEffect/useLayoutEffect)及缓存(useMemo、useCallback)。其底层实现没有太多变动，整体更接近函数式语法，逻辑内聚，高阶封装这两大特点，让你同时领悟到 Hooks 的强大与优雅。</p>
-          <div class="read-more">
-            <a href="/2019/09/13/制定专属自己的-React-Hooks/" class="read-more-link">Read more..</a>
-          </div>
-        </div></article>
-      <article class="post">
-    <header class="post-header">
-      <h1 class="post-title"><a class="post-link" href="/2019/07/23/数据结构与算法/">数据结构与算法(未完结)</a>
-        </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2019-07-23
-        </span></div>
-    </header>
-
-    <div class="post-content"><p>作为一个非科班生的伪程序员、数据结构和算法一直是弱项，得以有时间来研究.</p>
-          <div class="read-more">
-            <a href="/2019/07/23/数据结构与算法/" class="read-more-link">Read more..</a>
-          </div>
-        </div></article>
-      <article class="post">
-    <header class="post-header">
-      <h1 class="post-title"><a class="post-link" href="/2019/06/13/仅使用-HTML-和-CSS-创建多级嵌套弹出式导航菜单/">仅使用 HTML 和 CSS 创建多级嵌套弹出式导航菜单</a>
-        </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2019-06-13
-        </span></div>
-    </header>
-
-    <div class="post-content"><blockquote>
-<ul>
-<li>原文地址：<a href="https://www.ghosh.dev/posts/creating-a-multi-level-hierarchical-flyout-navigation-menu-using-only-html-and-css/" target="_blank" rel="noopener">Creating a multi-level hierarchical flyout navigation menu using only HTML and CSS</a></li>
-<li>原文作者：<a href="https://www.ghosh.dev/" target="_blank" rel="noopener">Abhishek Ghosh</a></li>
-<li>译文出自：<a href="https://github.com/xitu/gold-miner" target="_blank" rel="noopener">掘金翻译计划</a></li>
-<li>本文永久链接：<a href="https://github.com/xitu/gold-miner/blob/master/TODO1/creating-a-multi-level-hierarchical-flyout-navigation-menu-using-only-html-and-css.md" target="_blank" rel="noopener">https://github.com/xitu/gold-miner/blob/master/TODO1/creating-a-multi-level-hierarchical-flyout-navigation-menu-using-only-html-and-css.md</a></li>
-<li>译者：<a href="https://github.com/yzw7489757" target="_blank" rel="noopener">Seven</a></li>
-<li>校对者：<a href="https://github.com/Pingren" target="_blank" rel="noopener">Pingren</a></li>
-</ul>
-</blockquote>
-<h1 id="仅使用-HTML-和-CSS-创建多级嵌套弹出式导航菜单"><a href="#仅使用-HTML-和-CSS-创建多级嵌套弹出式导航菜单" class="headerlink" title="仅使用 HTML 和 CSS 创建多级嵌套弹出式导航菜单"></a>仅使用 HTML 和 CSS 创建多级嵌套弹出式导航菜单</h1>
-          <div class="read-more">
-            <a href="/2019/06/13/仅使用-HTML-和-CSS-创建多级嵌套弹出式导航菜单/" class="read-more-link">Read more..</a>
-          </div>
-        </div></article>
       <nav class="pagination"><a class="next" href="/page/2/">
         <span class="next-text">Next</span>
         <i class="iconfont icon-right"></i>
@@ -304,7 +309,7 @@
   <span class="power-by">
    <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
   </span>
-  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+  <span class="copyright-year">&copy;2017 - 2021<span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
     <span class="author">Seven</span>
@@ -320,7 +325,7 @@
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
   <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1593502596546')
+  navigator.serviceWorker.register('/sw.js?t=1624262701310')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

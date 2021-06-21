@@ -24,15 +24,15 @@ var precacheUrls = [];
 
   precacheUrls.push('/');
 
-  precacheUrls.push('/2018/07/24/一次性搞懂JvaScript执行机制/');
-
-  precacheUrls.push('/2019/04/01/彻底刨析-Redux-源码/');
-
-  precacheUrls.push('/2019/09/13/制定专属自己的-React-Hooks/');
-
-  precacheUrls.push('/2020/06/30/实现简版eval/');
-
   precacheUrls.push('/2019/09/24/React传-1/');
+
+  precacheUrls.push('/2018/04/17/ESlint-eslintrc配置/');
+
+  precacheUrls.push('/2018/01/22/Vue-HOC-应用/');
+
+  precacheUrls.push('/2018/02/12/CCS开启硬件加速提高网站性能/');
+
+  precacheUrls.push('/2021/01/06/Lighthouse-流程/');
 
 toolbox.precache(precacheUrls);
 toolbox.options = {"networkTimeoutSeconds":5};

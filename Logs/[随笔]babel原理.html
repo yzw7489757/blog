@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="babel原理"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/Logs/[随笔]babel原理.html">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>babel原理 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/logs/">
+        <li class="mobile-menu-item">Log
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/logs/">
+            Log
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <div class="post-content">
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><p>webpack 本身就像是一个工厂，所负责的就是配置管理与集成工具。</p>
+<a id="more"></a>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params">modules</span>) </span>&#123; </span><br><span class="line">    <span class="keyword">var</span> installedModules = &#123;&#125;;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__webpack_require__</span>(<span class="params">moduleId</span>) </span>&#123; <span class="comment">// required方法</span></span><br><span class="line">        <span class="comment">// ...others</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">module</span>.exports;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> __webpack_require__(__webpack_require__.s = <span class="string">"./src/index.js"</span>); <span class="comment">// 入口文件</span></span><br><span class="line">&#125;)</span><br><span class="line">(&#123;</span><br><span class="line">    <span class="string">"./src/a.js"</span>: (<span class="function"><span class="keyword">function</span> (<span class="params"><span class="built_in">module</span>, exports, __webpack_require__</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">eval</span>(<span class="string">"var b = __webpack_require__(\"./src/b.js\");\n\nvar a = 'a' + b;\nmodule.exports = a;\n\n//# sourceURL=webpack:///./src/a.js?"</span>);</span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="string">"./src/b.js"</span>: (<span class="function"><span class="keyword">function</span> (<span class="params"><span class="built_in">module</span>, exports</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">eval</span>(<span class="string">"b = 'b';\nmodule.exports = b\n\n//# sourceURL=webpack:///./src/b.js?"</span>);</span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="string">"./src/index.js"</span>: (<span class="function"><span class="keyword">function</span> (<span class="params"><span class="built_in">module</span>, exports, __webpack_require__</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">eval</span>(<span class="string">"var a = __webpack_require__(\"./src/a.js\");\n\nconsole.log(a)\n\n//# sourceURL=webpack:///./src/index.js?"</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="主要模块"><a href="#主要模块" class="headerlink" title="主要模块"></a>主要模块</h3><h4 id="babel-parser"><a href="#babel-parser" class="headerlink" title="@babel/parser"></a>@babel/parser</h4><p>JavaScript 解析器，用于将代码转换成AST。</p>
+<h4 id="babel-core"><a href="#babel-core" class="headerlink" title="@babel/core"></a>@babel/core</h4><p>babel的核心包，也是基础部分，与parser 不同的是，它仅提供分析语法树的能力，并不进行任何源码的编译，可以把它看成用来配置loader的工具。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> babel <span class="keyword">from</span> <span class="string">'babel-core'</span>;</span><br><span class="line">babel.transform(code: <span class="built_in">String</span>, options?: <span class="built_in">Object</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="babel-traverse"><a href="#babel-traverse" class="headerlink" title="@babel/traverse"></a>@babel/traverse</h4><p>以深度优先的方式遍历AST，维护AST树的整体状态，并且可完成对其的替换，删除或者增加节点，这个方法的参数为原始AST和自定义的转换规则，返回结果为转换后的AST。</p>
+<h4 id="babel-generator"><a href="#babel-generator" class="headerlink" title="@babel/generator"></a>@babel/generator</h4><p>将AST转换为代码。</p>
+<h4 id="babel-types"><a href="#babel-types" class="headerlink" title="@babel/types"></a>@babel/types</h4><p>Lodash式的工具库，专供AST，对于验证、修改AST非常方便。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> traverse <span class="keyword">from</span> <span class="string">"babel-traverse"</span>;</span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> t <span class="keyword">from</span> <span class="string">"babel-types"</span>;</span><br><span class="line">traverse(ast, &#123;</span><br><span class="line">  enter(path) &#123;</span><br><span class="line">    <span class="keyword">if</span> (t.isIdentifier(path.node, &#123; <span class="attr">name</span>: <span class="string">"n"</span> &#125;)) &#123;</span><br><span class="line">      path.node.name = <span class="string">"x"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a><img src="https://intranetproxy.alipay.com/skylark/lark/0/2020/png/275580/1597052664315-58ea14ef-f54e-4dfe-ad1d-64f436a7e18c.png#align=left&display=inline&height=207&margin=%5Bobject%20Object%5D&name=image.png&originHeight=207&originWidth=800&size=55561&status=done&style=shadow&width=800" alt="image.png">解析</h3><p>解析分为词法分析（Lexical Analysis） 和 语法分析（Syntactic Analysis）。</p>
+<p>词法分析阶段把字符串形式的代码转换为 令牌（tokens）流，如 ceval 里使用有限状态机解析成 token 流。每个token都有其标识属性，比如type、index、end、start、len等等。<br>语法分析则是将token流转换为AST的过程，由于后续操作的需要，会根据token的特征值转换为AST。解析使用的解析器是babylon。</p>
+<h3 id="转换"><a href="#转换" class="headerlink" title="转换"></a>转换</h3><p>接收AST对其进行遍历，涉及到添加、删除、替换节点，例如 es6 =&gt; es5</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> fn = <span class="function">(<span class="params">a</span>) =&gt;</span> a;</span><br><span class="line"><span class="comment">// 转换成 </span></span><br><span class="line"><span class="keyword">var</span> fn = <span class="function"><span class="keyword">function</span> (<span class="params">a</span>) </span>&#123; <span class="keyword">return</span> a &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这也是编译器最复杂的步骤。<br>plugins/preset 都是在此步骤进行处理。</p>
+<h3 id="生成"><a href="#生成" class="headerlink" title="生成"></a>生成</h3><p>深度优先遍历整个AST，通过上面的 @babel/generator 将其转换为字符串形式的代码，同时生成sourceMap，也是压缩与删除注释等进行的步骤。</p>
+
+    </div>
+  </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1624262701310')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

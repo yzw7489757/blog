@@ -66,8 +66,11 @@
       </a><a href="/archives/">
         <li class="mobile-menu-item">Record
           </li>
+      </a><a href="/logs/">
+        <li class="mobile-menu-item">Log
+          </li>
       </a><a href="/music/">
-        <li class="mobile-menu-item">Music(NoAuto)
+        <li class="mobile-menu-item">Music
           </li>
       </a><a href="/photo/">
         <li class="mobile-menu-item">Album
@@ -93,8 +96,13 @@
             </a>
         </li>
       <li class="menu-item">
+          <a class="menu-item-link" href="/logs/">
+            Log
+            </a>
+        </li>
+      <li class="menu-item">
           <a class="menu-item-link" href="/music/">
-            Music(NoAuto)
+            Music
             </a>
         </li>
       <li class="menu-item">
@@ -218,7 +226,7 @@
 <h3 id="Children-toArray"><a href="#Children-toArray" class="headerlink" title="Children.toArray"></a>Children.toArray</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">toArray</span>(<span class="params">children</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> result = [];</span><br><span class="line">  mapIntoWithKeyPrefixInternal(children, result, <span class="literal">null</span>, child =&gt; child);</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>用来将<code>children</code>转化成普通的数组，原理和 mapChildren 一样，可以用来将传入的<code>children</code>重新进行排序。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">Sort</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">   render () &#123;</span><br><span class="line">     <span class="keyword">const</span> children = React.Children.toArray(<span class="keyword">this</span>.props.children);</span><br><span class="line">     <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;children.sort((a,b)=&gt;a-b).join('-')&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> &lt;Sort&gt;</span><br><span class="line">  &#123;<span class="number">2</span>&#125;&#123;<span class="number">5</span>&#125;&#123;<span class="number">8</span>&#125;&#123;<span class="number">4</span>&#125;&#123;<span class="number">9</span>&#125;</span><br><span class="line"> &lt;<span class="regexp">/Sort&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/  view</span></span><br><span class="line"><span class="regexp">2-4-5-8-9</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">Sort</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">   render () &#123;</span><br><span class="line">     <span class="keyword">const</span> children = React.Children.toArray(<span class="keyword">this</span>.props.children);</span><br><span class="line">     <span class="keyword">return</span> &lt;p&gt;&#123;children.sort((a,b)=&gt;a-b).join('-')&#125;&lt;/p&gt;</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> &lt;Sort&gt;</span><br><span class="line">  &#123;<span class="number">2</span>&#125;&#123;<span class="number">5</span>&#125;&#123;<span class="number">8</span>&#125;&#123;<span class="number">4</span>&#125;&#123;<span class="number">9</span>&#125;</span><br><span class="line"> &lt;<span class="regexp">/Sort&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/  view</span></span><br><span class="line"><span class="regexp">2-4-5-8-9</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="Children-only"><a href="#Children-only" class="headerlink" title="Children.only"></a>Children.only</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onlyChild</span>(<span class="params">children</span>) </span>&#123;</span><br><span class="line">  invariant(</span><br><span class="line">    isValidElement(children),</span><br><span class="line">    <span class="string">'React.Children.only expected to receive a single React element child.'</span>,</span><br><span class="line">  );</span><br><span class="line">  <span class="keyword">return</span> children;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -335,7 +343,7 @@
   <span class="power-by">
    <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
   </span>
-  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+  <span class="copyright-year">&copy;2017 - 2021<span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
     <span class="author">Seven</span>
@@ -351,7 +359,7 @@
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
   <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1593502596546')
+  navigator.serviceWorker.register('/sw.js?t=1624262701310')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

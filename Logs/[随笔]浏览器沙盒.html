@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="安全沙盒"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/Logs/[随笔]浏览器沙盒.html">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>安全沙盒 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/logs/">
+        <li class="mobile-menu-item">Log
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/logs/">
+            Log
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <div class="post-content">
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><p>沙盒的核心本质是隔离副作用，独立运行，达到各应用间互不影响的目的。</p>
+<a id="more"></a>
+<p>Xspace 微前端容器包裹着应用层与插件层，目前整体架构尚不清楚，但平台下大致是分为配置层 、容器层 =&gt;  应用层 + 插件层。插件层的现况是通过插件内手动兼容得到 ErrorBoundary。但沙盒本身就是容器，是否可以与Xspace本身的容器进行结合？不止是容器需要沙盒，各应用与插件乃至小程序也需要防止因为某个错误而导致整个容器的崩溃。</p>
+<p>有两个问题</p>
+<ul>
+<li>插件中做全局属性重写会影响到其他应用插件。例如多个应用 Array 原型被加塞方法，对本应用生效并重写可控。</li>
+<li>安全性</li>
+</ul>
+<p>沙盒的目的除了解决以上问题的能力，还需要具有</p>
+<ul>
+<li>回溯，应用卸载后对修改还原。（但仍然存在的问题是多个应用乱序重写后还原的顺序）</li>
+<li>容错，作为业务容器还兼顾 ErrorBoundary。</li>
+<li>协同，获取其它App下的数据，通过消息通道可以进行广播和收集。</li>
+</ul>
+<p>单纯的沙盒做到以上几点即可以，但不希望沙盒仅仅是作为“沙盒”使用，更希望它具有协同与分享运行环境——例如 Docker。</p>
+<p>面向服务编程早就存在，不过由于兑现只有虚拟机一种方案导致发展缓慢，服务端微服务通过Docker技术获得虚拟化的底层支持，这也是Docker近年飞速发展的基辅。与服务端沙盒相比，前端沙盒也是一个运行时容器，如何赋予其具备Docker的能力？</p>
+<p>iframe 是可控性低的方案。</p>
+<p>已知开源库都以项目为粒子，插件本质上属于一个小项目，全局消息通道通过容器下发到每个App。</p>
+<p>隔离环境主要手段是通过切换执行上下文，N个App就有N个执行上下文。在所有App卸载后都会进入到空闲状态，字节艾石光采用的方案就是模拟浏览器进程切换策略，每个App都是一个“进程”，每个“进程”又有其独立的上下文，单进程可以简单控制根路由等规则激活App，手动切换上下文；多进程就正好利用JavaScript的特性，封装每个独立的事件循环，在执行实际的function前手动切换context，具体样例由于技术保护原因没有使用过，但个人觉得风险较大；蚂蚁的 qiankun 采用的是劫持方案 —— Proxy，通过App挂载时复制window可枚举等属性</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> white_list = [];</span><br><span class="line"><span class="keyword">const</span> _window = <span class="keyword">new</span> Proxy(<span class="built_in">window</span>, &#123;</span><br><span class="line">	<span class="keyword">get</span>: <span class="function"><span class="keyword">function</span>(<span class="params">key, target</span>) </span>&#123;</span><br><span class="line">  	<span class="comment">/* handle */</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">set</span>: <span class="function"><span class="keyword">function</span>(<span class="params">key, target</span>) </span>&#123;</span><br><span class="line">  	<span class="comment">/* handle white_list */</span></span><br><span class="line">    <span class="comment">/* assign to _window */</span></span><br><span class="line">    <span class="keyword">return</span> _window[key]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// ... 处理枚举等操作</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">eval</span>(<span class="string">`(function(window)&#123; /* umd bundle source code */&#125;)(<span class="subst">$&#123;_window&#125;</span>)`</span>);</span><br></pre></td></tr></table></figure>
+
+<p>更趋向于后者方式，两种本质上来说都是相同方式—— 切换 context 执行脚本，第一种本质上来说应用场景受限，而且协作通信上管理性较差。</p>
+<p>确实通过劫持Proxy能起到隔离上下文的效果，但有时候确实有写入属性的需求；可以让沙盒给所有App传递UpdateWindow方法写入属性，当写入后通过消息通道eventBus等方式广播到当前所有App进行更新，难点是大部分广播方式都是中心化的，无论事件分发还是订阅模式都需要某个载体作为中心继而接收广播，解耦性差，一定程度上与平台有关联关系。</p>
+<p>可以在加载容器的时候</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> emiter = <span class="built_in">window</span>.sandbox_emiter || (<span class="built_in">window</span>.sandbox_emiter = <span class="keyword">new</span> emiter());</span><br><span class="line"></span><br><span class="line">emiter.on(<span class="string">'changed'</span>, <span class="function">(<span class="params">key, value, target</span>) =&gt;</span> &#123;</span><br><span class="line">	_window[key] = value;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>其实不应该把沙盒与微前端的东西扯一起。但顺便提一嘴。</p>
+<p>一个是css，现阶段没有比 scoped css 更适合的方案了。目前部分App采用的 module css 方案，由于Mirror-form样式修改的原因部分应用未归纳到的部分，也有Xspace现有规范与工具去约束。</p>
+<p>ErrorBoundary的问题，当前技术栈仍然是统一的，Assets-loader 类似实现即可。也可以创建Fragment节点，将内容渲染上去再append。</p>
+<p>安全性老生常谈，与融合能力的概念相同，不重复了。去年写个篇<a href="https://juejin.im/post/6844904035468705806" target="_blank" rel="noopener">文章</a>参考下</p>
+
+    </div>
+  </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1624262701310')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

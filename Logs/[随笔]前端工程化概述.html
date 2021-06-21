@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="前端工程化概述"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/Logs/[随笔]前端工程化概述.html">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>前端工程化概述 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/logs/">
+        <li class="mobile-menu-item">Log
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/logs/">
+            Log
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <div class="post-content">
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><p>最近投入到工程化的时间挺多的，但大部分都止步于想法，fstz。</p>
+<a id="more"></a>
+<p>关于工程化的事情之前也做过一些，cli、性能监测平台(半成品)，但结果都不怎样，是没做好？还是团队阶段不适用工程化？如果没做好的话，工程化的衡量标准到底是什么？</p>
+<p>我觉得可以从两个方面：过程中 与 结果后</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="过程中"><a href="#过程中" class="headerlink" title="过程中"></a>过程中</h3><p>过程中大多数指的是研发提效（工具、横向能力）与稳定性。</p>
+<h4 id="研发提效"><a href="#研发提效" class="headerlink" title="研发提效"></a>研发提效</h4><p>几乎所有前端工程化的目的都是为研发提效，工具(xbox-cli 、react-cli)最直接加快了工程的效率，企业级框架umi也起到提效的作用，而横向能力建设是为了能更好的为业务服务。</p>
+<h4 id="稳定性"><a href="#稳定性" class="headerlink" title="稳定性"></a>稳定性</h4><p>这个稳定性与交付后的运行稳定性不是一码事，可以称它为研发支撑。举个例子，现XSpace平台的ViewEngine主版本是1.1.5, MirrorForm为2.3.3。MirrorForm依赖于ViewEngine。为了向下兼容，很多新的特性要打polyfill 或者 warn。在开发环境如果没有注意到ViewEngine版本是否和XP相同，本地调试代理都好的，但很有可能发到线上就崩了，那如何去避免此类情况发生？ xbox 里每次起服务都要拉一遍配置，保证本地与主站相同。</p>
+<h3 id="结果后"><a href="#结果后" class="headerlink" title="结果后"></a>结果后</h3><p>分为交付后与运行稳定性。</p>
+<h4 id="交付后"><a href="#交付后" class="headerlink" title="交付后"></a>交付后</h4><p>交付时间相对于不使用该工具或者是使用其他工程化工具的减免耗时与交付质量的利害关系。</p>
+<h4 id="稳定性-1"><a href="#稳定性-1" class="headerlink" title="稳定性"></a>稳定性</h4><p>支撑保障后续稳定性的能力。大致有两方面</p>
+<ul>
+<li>部署：容器化docker、冷启动、热更新方案等等</li>
+<li>维护：例如各大性能监测平台、链路追踪、行为还原，利于后续维护定位问题快速fix。<h4 id="回源"><a href="#回源" class="headerlink" title="回源"></a>回源</h4>这个是一个可选能力，最直接的例子是如何让你的代码在支付宝小程序上能运行，也能在微信小程序上跑。解决方案有 loader 与 parser，与静态与非静态的 compiler。这些工作完全可以交由工程化自动完成。<br>在xp里也在存在这样的场景，一套业务代码兼容多个业务身份，例如一套售后的业务代码，既支持高德也要支持口碑、饿了么、盒马、星巴克，其最终目的是反哺利于纵向能力建设。</li>
+</ul>
+<h2 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h2><p>衡量的关键指标是流速与带宽以及实际效应。</p>
+<p>流速指的是有多少应用依赖于工程化，带宽是可用、可拓展于什么场景下的应用 —— 例如asset-loader。<br>如果只有一两个应用依赖于工程化工具，那效益方面老板首先不答应了，所以这也是工程化在初创公司等小型团队落地难的主要因素。</p>
+
+    </div>
+  </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1624262701310')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

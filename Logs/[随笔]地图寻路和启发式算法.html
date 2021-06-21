@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="地图寻路与启发式寻路"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/Logs/[随笔]地图寻路和启发式算法.html">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>地图寻路与启发式寻路 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/logs/">
+        <li class="mobile-menu-item">Log
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/logs/">
+            Log
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <div class="post-content">
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><p><a href="https://riddle.alibaba-inc.com/riddles/ce83c785?mode=jsx" target="_blank" rel="noopener">https://riddle.alibaba-inc.com/riddles/ce83c785?mode=jsx</a> </p>
+<a id="more"></a>
+
+<p><img src="https://intranetproxy.alipay.com/skylark/lark/0/2020/png/275580/1602747211210-fdb28f44-1543-4a22-ae39-b1231b40f583.png#align=left&display=inline&height=802&margin=%5Bobject%20Object%5D&name=image.png&originHeight=802&originWidth=655&size=618192&status=done&style=none&width=655" alt="image.png"><br><img src="https://intranetproxy.alipay.com/skylark/lark/0/2020/png/275580/1602749381005-cd8dabd6-591e-44a9-b89e-c270f2d97fe6.png#align=left&display=inline&height=354&margin=%5Bobject%20Object%5D&name=image.png&originHeight=708&originWidth=702&size=1038647&status=done&style=none&width=351" alt="image.png">)<img src="https://intranetproxy.alipay.com/skylark/lark/0/2020/png/275580/1602749444113-29eb2be9-bbd9-47cb-b4b4-0cb3cbd3147d.png#align=left&display=inline&height=350&margin=%5Bobject%20Object%5D&name=image.png&originHeight=700&originWidth=700&size=963253&status=done&style=none&width=350" alt="image.png"></p>
+<p>广度搜索寻路的方式对于普通场景下够用了，比较笨。</p>
+<p>绿色的为搜索过的点，遇到“C”型或者死角目标就性能就浪费的较多，如何避免无用功？</p>
+<p>启发式寻路是一种解决方案<br><img src="https://intranetproxy.alipay.com/skylark/lark/0/2020/png/275580/1602752348004-b947d2bf-a661-4836-b508-5460369fed7c.png#align=left&display=inline&height=354&margin=%5Bobject%20Object%5D&name=image.png&originHeight=707&originWidth=706&size=472240&status=done&style=none&width=353" alt="image.png">)<img src="https://intranetproxy.alipay.com/skylark/lark/0/2020/png/275580/1602752407746-fc99b233-93f4-4691-9df4-5cefa9c40aa0.png#align=left&display=inline&height=352&margin=%5Bobject%20Object%5D&name=image.png&originHeight=703&originWidth=703&size=446102&status=done&style=none&width=351.5" alt="image.png"><br>设定每次寻找与目标位置最佳的点，如何定义最佳的点？例如[0,0] =&gt; [100, 100]之间，哪个点对于[0,0]来说是最接近[100, 100]的点？ 当然是[1,1]。</p>
+<ul>
+<li>[0,0] 开始搜集点</li>
+<li>[0,1] [1,0] [1,1]</li>
+<li>take 其中离[100,100]最近的点。</li>
+</ul>
+<p>制定sort排序可以使用 , 两点之间直线最短的原则，</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sorted</span>(<span class="params">data, compare</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.data = data.slice();</span><br><span class="line">  <span class="keyword">this</span>.compare = compare || <span class="function">(<span class="params">(<span class="params">a, b</span>) =&gt; a - b</span>);</span></span><br><span class="line"><span class="function">&#125;</span></span><br><span class="line"><span class="function">// 取出</span></span><br><span class="line"><span class="function"><span class="params">sorted</span>.<span class="params">prototype</span>.<span class="params">take</span> = <span class="params">function</span> <span class="params">()</span> &#123;</span></span><br><span class="line"><span class="function">  <span class="params">if</span> (<span class="params">!<span class="keyword">this</span>.data.length</span>) <span class="params">return</span>;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">  <span class="params">let</span> <span class="params">minIndex</span> = 0;</span></span><br><span class="line"><span class="function">  <span class="params">let</span> <span class="params">min</span> = <span class="params">this</span>.<span class="params">data</span>[<span class="params">minIndex</span>];</span></span><br><span class="line"><span class="function">  <span class="params">const</span> &#123; <span class="params">length</span> &#125; = <span class="params">this</span>.<span class="params">data</span>;</span></span><br><span class="line"><span class="function">  <span class="params">for</span> (<span class="params"><span class="keyword">let</span> i = minIndex + 1; i &lt; length; i++</span>) &#123;</span></span><br><span class="line"><span class="function">    <span class="params">if</span> (<span class="params"><span class="keyword">this</span>.compare(<span class="params"><span class="keyword">this</span>.data[i], min</span>) &lt; 0</span>) &#123;</span></span><br><span class="line"><span class="function">      <span class="params">minIndex</span> = <span class="params">i</span>;</span></span><br><span class="line"><span class="function">      <span class="params">min</span> = <span class="params">this</span>.<span class="params">data</span>[<span class="params">minIndex</span>];</span></span><br><span class="line"><span class="function">    &#125;</span></span><br><span class="line"><span class="function">  &#125;</span></span><br><span class="line"><span class="function">  <span class="params">this</span>.<span class="params">data</span>[<span class="params">minIndex</span>] = <span class="params">this</span>.<span class="params">data</span>[<span class="params">length</span> - 1];</span></span><br><span class="line"><span class="function">  <span class="params">this</span>.<span class="params">data</span>.<span class="params">pop</span><span class="params">()</span>;</span></span><br><span class="line"><span class="function">  <span class="params">return</span> <span class="params">min</span>;</span></span><br><span class="line"><span class="function">&#125;;</span></span><br><span class="line"><span class="function">// 推入</span></span><br><span class="line"><span class="function"><span class="params">sorted</span>.<span class="params">prototype</span>.<span class="params">give</span> = <span class="params">function</span> (<span class="params">v</span>) &#123;</span></span><br><span class="line"><span class="function">  <span class="params">this</span>.<span class="params">data</span>.<span class="params">push</span>(<span class="params">v</span>);</span></span><br><span class="line"><span class="function">&#125;;</span></span><br><span class="line"><span class="function"><span class="params">const</span> <span class="params">start</span> = [0, 0];</span></span><br><span class="line"><span class="function"><span class="params">const</span> <span class="params">end</span> = [100, 100];</span></span><br><span class="line"><span class="function"><span class="params">const</span> <span class="params">queue</span> = <span class="params">new</span> <span class="params">sorted</span>(<span class="params">[start], (<span class="params">a, b</span>) =&gt; distance(<span class="params">a</span>) - distance(<span class="params">b</span>)</span>);</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="params">function</span> <span class="params">distance</span>(<span class="params">point</span>) &#123;</span></span><br><span class="line"><span class="function">  <span class="params">return</span> (<span class="params">point[0] - end[0]</span>) ** 2 + (<span class="params">point[1] - end[1]</span>) ** 2;</span></span><br><span class="line"><span class="function">&#125;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="params">queue</span>.<span class="params">take</span><span class="params">()</span>; // [0, 0]</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="params">queue</span>.<span class="params">give</span>(<span class="params">[0,1]</span>);</span></span><br><span class="line"><span class="function"><span class="params">queue</span>.<span class="params">give</span>(<span class="params">[1,1]</span>);</span></span><br><span class="line"><span class="function"><span class="params">queue</span>.<span class="params">give</span>(<span class="params">[1,0]</span>);</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="params">queue</span>.<span class="params">take</span><span class="params">()</span>; // [1,1]</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://riddle.alibaba-inc.com/riddles/da44f3a5?mode=jsx" target="_blank" rel="noopener">https://riddle.alibaba-inc.com/riddles/da44f3a5?mode=jsx</a></p>
+
+    </div>
+  </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1624262701310')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

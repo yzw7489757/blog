@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="数据管控路由实现状态持久化"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2021/05/06/数据管控路由实现状态持久化/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>数据管控路由实现状态持久化 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/logs/">
+        <li class="mobile-menu-item">Log
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/logs/">
+            Log
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">数据管控路由实现状态持久化
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-05-06
+        </span></div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#序言"><span class="toc-text">序言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方案"><span class="toc-text">方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方法"><span class="toc-text">使用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#制定协议"><span class="toc-text">制定协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#API-amp-数据结构"><span class="toc-text">API &amp; 数据结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模拟页面栈"><span class="toc-text">模拟页面栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化路由层"><span class="toc-text">初始化路由层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PageLoader"><span class="toc-text">PageLoader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缓存"><span class="toc-text">缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#如何制定match规则"><span class="toc-text">如何制定match规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#如何去缓存页面-amp-如何激活对应的缓存路由"><span class="toc-text">如何去缓存页面 &amp; 如何激活对应的缓存路由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#缓存后的页面组件更新逻辑该如何处理"><span class="toc-text">缓存后的页面组件更新逻辑该如何处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#改造路由层"><span class="toc-text">改造路由层</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#路由回调"><span class="toc-text">路由回调</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><p>近几年大多数常规应用都是采用MPA、SPA的方式，对每个路由绑定对应规则，达到匹配路由规则渲染组件的能力。</p>
+<p>最近在开发一个聊天类应用，简称XX，经常使用微信、钉钉的应该体验过其状态和数据缓存的能力，e.g. 和好友聊天内容输入一半，其他应用弹出一条消息或由于某些情况中止剩余内容的输入，切出了和该好友的对话界面甚至切出了XX应用，待回到和该好友聊天界面内，之前输入的内容还在，可以继续输入。</p>
+<p>这种体验放在原生应用上或许很常见，但移动端WEB少有聊天应用。不仅是web体验交互差，兼容成本也远超原生应用。web 数据持久化的难点是：</p>
+<ul>
+<li>不具备完善的数据缓存机制，BOM API支持能力的差异与数据关系映射结构复杂不利管理。</li>
+<li>低端机型浏览器易崩溃、用户刷新网页都会导致状态丢失。</li>
+<li>路由机制，应用运行时一旦切路由上一个路由就失去了其最后状态和数据。<a id="more"></a>
+在应用初始化阶段 Web 可以借助会话 Storage、Cache、IndexDB等API读取缓存数据或者读取存放在云端的数据来完成初始化达到目的，</li>
+</ul>
+<p>PD：“数据和状态的持久化必须要有，而且聊天界面也要缓存，能够直接从好友A的聊天界面切到好友B，不需要回到聊天列表。其他页面乜”</p>
+<p><img src="https://static.yuanziwen.cn/blog/route_lasting/1.png_plain" alt="image.png"></p>
+<h2 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h2><ul>
+<li>首先想到的就是路由缓存方案，找下了实现，大部分基本都是mock路由保存状态/路由缓存器缓存来源页面，命中缓存页面路由后再提取激活，不具备match单个路由规则缓存多个副本的能力。</li>
+<li>数据管控路由，根据数据驱动路由控制视图，路由管理器match维护组件状态。</li>
+</ul>
+<p>web初始化状态是硬伤无法避免，本文只介绍运行时的路由方案。</p>
+<p>运行时的实现思路是使用 history API 模拟一个页面栈 PageStack，对外暴露导航方法，所有导航方法的操作都是基于 PageStack，搭配 popstate event 响应返回事件，提供统一的 PageLoader，挂载在 PageLoader 容器上供页面使用，容器对于应用本身无感，使用的方法大概如下：</p>
+<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; withContext, containerContext &#125; <span class="keyword">from</span> <span class="string">'@internal/container'</span>;</span><br><span class="line"><span class="keyword">import</span> React, &#123; useContext, useEffect &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// login page</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">Login</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; navApi &#125; = useContext(containerContext);</span><br><span class="line">  <span class="keyword">const</span> goToHome = useCallback(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      navApi.navigateTo(<span class="string">'home.dashboard'</span>, &#123; xxx: <span class="string">'xxx'</span> &#125;);</span><br><span class="line">  &#125;, [navApi]);</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;button onClick=&#123;gotoHome&#125;&gt;Login&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ home page</span></span><br><span class="line"><span class="regexp">export function Dashboard() &#123;</span></span><br><span class="line"><span class="regexp">    const &#123; navApi &#125; = useContext(containerContext);</span></span><br><span class="line"><span class="regexp">    return (&lt;button onClick=&#123;navApi.back&#125;&gt;back&lt;/</span>button&gt;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同时也应该具备响应事件回调的能力，</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// home page</span></span><br><span class="line"><span class="keyword">const</span> waitCb = navApi.navigateToAndWaitBack(<span class="string">'chat.session'</span>, &#123; xxx: <span class="string">'xxx'</span> &#125;);</span><br><span class="line">waitCb.then(<span class="function"><span class="params">res</span> =&gt;</span> &#123; <span class="built_in">console</span>.log(res) &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// session page</span></span><br><span class="line">navApi.backWithResponse(&#123; msg: <span class="string">'I\'m back'</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// result "I\'m back"</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="制定协议"><a href="#制定协议" class="headerlink" title="制定协议"></a>制定协议</h3><p>页面可能已经有路由的情况，假设当前路由为 <code>https://0.0.0.0:7104/overview</code>，跳转 <code>home.dashboard</code>，向 pageStack 和 history 栈中应该推入栈的地址是</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="string">`https://0.0.0.0:7104/overview/?page=home.dashboard&amp;pageParams=&#123;\"from\":\"xxx\"&#125;`</span></span><br></pre></td></tr></table></figure>
+
+<p>提供本地/外置二方组件包是 UMD/AMD 方式加载，考虑到业务组件的拓展性，跳转路由可以增加协议前缀。组件分为页面级和组件级，前者囊括后者，需要一个组件 Loader 去分析协议并加载对应页面级组件，组件 Loader 也具备加载组件，得出新的协议： <code>schema?://namespace[module?][#subModule?]</code>, 其中 schema 用于区分是什么类型的组件，namespace 表示仓库或者是组件， module 表示导出的模块名称，subModule 表示子模块，例如 </p>
+<ul>
+<li><code>internal://Loading</code> 表示加载本地的Loading组件，</li>
+<li><code>group://home.dashboard#subModule</code> 表示加载团队二方库下的home组件中导出的dashboard模块，并渲染导出的subModule子模块，默认缺省为 default 导出。</li>
+<li><code>https://xxx.com/xxx/0.1.0/umd/antd-mobile.js#DatePicker</code> 表示加载antd-mobile下的 DatePicker 模块。</li>
+</ul>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="string">`https://0.0.0.0:7104/overview/?page=group://home.dashboard#subModule&amp;pageParams=&#123;\"from\":\"xxx\"&#125;`</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="API-amp-数据结构"><a href="#API-amp-数据结构" class="headerlink" title="API &amp; 数据结构"></a>API &amp; 数据结构</h3><p>定好API&amp;数据结构</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 导航对外提供的方法</span></span><br><span class="line"><span class="keyword">interface</span> NavigationAPI &#123;</span><br><span class="line">  navigateTo(page: <span class="built_in">string</span>, params?: Record&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt;): <span class="built_in">void</span>;</span><br><span class="line">  back(): <span class="built_in">void</span>;</span><br><span class="line"></span><br><span class="line">  replace(page: <span class="built_in">string</span>, params?: Record&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt;): <span class="built_in">void</span>;</span><br><span class="line"></span><br><span class="line">  open(page: <span class="built_in">string</span>, params?: Record&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt;): <span class="built_in">void</span>;</span><br><span class="line">  reload(): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模拟的堆栈</span></span><br><span class="line"><span class="keyword">type</span> PageStackItem &#123;</span><br><span class="line">  page: <span class="built_in">string</span>;</span><br><span class="line">  rawPageParams: <span class="built_in">string</span>;</span><br><span class="line">  getPageParams: <span class="function"><span class="params">()</span> =&gt;</span> Record&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 控制堆栈的内置方法</span></span><br><span class="line"><span class="keyword">interface</span> IPageStack &#123;</span><br><span class="line">  getStack(): ReadonlyArray&lt;PageStackItem&gt;;</span><br><span class="line">  size: <span class="built_in">number</span>;</span><br><span class="line">  push(item: PageStackItem): <span class="built_in">void</span>;</span><br><span class="line">  pop(): PageStackItem | <span class="literal">undefined</span>;</span><br><span class="line">  replace(item: PageStackItem): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="模拟页面栈"><a href="#模拟页面栈" class="headerlink" title="模拟页面栈"></a>模拟页面栈</h3><p>由于还没有对 url 参数有明确的规则限制，暂允许任何类型。</p>
+<p>实现基本的堆栈操作，history API <code>replaceState</code> 和 <code>pushState</code> 都只会添加记录，页面内容不会自动更新，需要暴露主动更新的方法。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> NavWithStack = &#123;</span><br><span class="line">   pageStack: ReadonlyArray&lt;PageStackItem&gt;,</span><br><span class="line">   navApi: NavigationAPI</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">useNavigator</span>(<span class="params"></span>): <span class="title">NavWithStack</span> </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> forceRefresh = useForceUpdate();</span><br><span class="line">    <span class="comment">// 初始化页面栈，缺省为当前页面</span></span><br><span class="line">    <span class="keyword">const</span> data = useMemo&lt;&#123; items: PageStackItem[] &#125;&gt;<span class="function">(<span class="params">(<span class="params"></span>) =&gt; &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">const</span> query: Record&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt; = getQueryForUrl(<span class="params"></span>); <span class="comment">// 获取当前href query;</span></span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">return</span> &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">          items: [</span></span></span><br><span class="line"><span class="function"><span class="params">            &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">              page: query.page,</span></span></span><br><span class="line"><span class="function"><span class="params">              rawPageParams: query.pageParams,</span></span></span><br><span class="line"><span class="function"><span class="params">              getPageParams: (<span class="params"></span>) =&gt; safeParseJSON(<span class="params">query.pageParams</span>),</span></span></span><br><span class="line"><span class="function"><span class="params">            &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">          ],</span></span></span><br><span class="line"><span class="function"><span class="params">        &#125;;</span></span></span><br><span class="line"><span class="function"><span class="params">    &#125;, []</span>);</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    <span class="params">const</span> <span class="params">pageStack</span> = <span class="params">useMemo</span>&lt;<span class="params">IPageStack</span>&gt;(<span class="params">(<span class="params"></span>) =&gt; (<span class="params">&#123;</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">        getStack: (<span class="params"></span>) =&gt; data.items,</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">        <span class="keyword">get</span> size(<span class="params"></span>) &#123;</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">            <span class="keyword">return</span> data.items.length</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">        &#125;,</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">        push: (<span class="params">item: PageStackItem</span>) =&gt; &#123;</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">            data.items.push(<span class="params">item</span>);</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">            forceRefresh(<span class="params"></span>);</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">        &#125;,</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">        pop: (<span class="params"></span>): PageStackItem | <span class="literal">undefined</span> =&gt; &#123;</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">            <span class="keyword">const</span> preStack = data.items.pop(<span class="params"></span>);</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">            forceRefresh(<span class="params"></span>);</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">            <span class="keyword">return</span> preStack;</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">        &#125;,</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">        replace: (<span class="params">item: PageStackItem</span>) =&gt; &#123;</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">            data.items.pop(<span class="params"></span>);</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">            data.items.push(<span class="params">item</span>);</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">            forceRefresh(<span class="params"></span>);</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">        &#125;</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="params">    &#125;</span>), [data.items, forceRefresh]</span>);</span></span><br><span class="line"><span class="function">    </span></span><br><span class="line"><span class="function">    // 暴露所有导航方法</span></span><br><span class="line"><span class="function">    <span class="params">const</span> <span class="params">navApi</span> = <span class="params">useHistoryNavigation</span>(<span class="params">pageStack</span>);</span></span><br><span class="line"><span class="function">    </span></span><br><span class="line"><span class="function">    <span class="params">return</span> &#123;</span></span><br><span class="line"><span class="function">        <span class="params">pageStack</span>,</span></span><br><span class="line"><span class="function">        <span class="params">navApi</span></span></span><br><span class="line"><span class="function">    &#125;</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>genFullUrlWithQuery</code> 负责拼接url与参数生成完整的链接，<code>getQueryForUrl</code> 处理当前 href 内已有的其他查询字符串序列化成对象。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">useHistoryNavigation</span>(<span class="params">pageStack: IPageStack</span>): <span class="title">NavigationAPI</span> </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; history &#125; = <span class="built_in">window</span>;</span><br><span class="line">    <span class="keyword">const</span> generateUrl = <span class="function">(<span class="params">page: <span class="built_in">string</span>, params?: Record&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt;</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (isFullUrl(page)) &#123; <span class="comment">// https? 协议开头 非站内跳转</span></span><br><span class="line">          <span class="keyword">return</span> genFullUrlWithQuery(page, params);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">const</span> currentHostAndPath = <span class="built_in">window</span>.location.href.replace(<span class="regexp">/[?#].*$/</span>, <span class="string">''</span>);</span><br><span class="line">        <span class="keyword">const</span> pageParams = <span class="built_in">JSON</span>.stringify(params || &#123;&#125;) || <span class="string">''</span>;</span><br><span class="line">        <span class="keyword">return</span> genFullUrlWithQuery(currentHostAndPath, &#123;</span><br><span class="line">          ...getQueryForUrl(),</span><br><span class="line">          page,</span><br><span class="line">          pageParams, <span class="comment">// 暂不处理url query超长的问题</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">open</span>(<span class="params">page: <span class="built_in">string</span>, params?: Record&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt;</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">window</span>.open(generateUrl(page, params || &#123;&#125;));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 导航跳转</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">navigateTo</span>(<span class="params">page: <span class="built_in">string</span>, params?: Record&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt; = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">        history.pushState(</span><br><span class="line">          &#123; page,  params &#125;,</span><br><span class="line">          <span class="built_in">document</span>.title,</span><br><span class="line">          generateUrl(page, params)</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        pageStack.push(&#123;</span><br><span class="line">          page,</span><br><span class="line">          rawPageParams: buildQueryString(params),</span><br><span class="line">          getPageParams: <span class="function"><span class="params">()</span> =&gt;</span> params,</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">back</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        pageStack.pop();</span><br><span class="line">        history.back();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">replace</span>(<span class="params">page: <span class="built_in">string</span>, params?: Record&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt; = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">        history.replaceState(</span><br><span class="line">          &#123; page,  params &#125;,</span><br><span class="line">          <span class="built_in">document</span>.title,</span><br><span class="line">          generateUrl(page, params)</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        pageStack.replace(&#123;</span><br><span class="line">          page,</span><br><span class="line">          rawPageParams: buildQueryString(params),</span><br><span class="line">          getPageParams: <span class="function"><span class="params">()</span> =&gt;</span> params,</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">reload</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">window</span>.location.reload();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        navigateTo,</span><br><span class="line">        back,</span><br><span class="line">        replace,</span><br><span class="line">        open,</span><br><span class="line">        reload</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="初始化路由层"><a href="#初始化路由层" class="headerlink" title="初始化路由层"></a>初始化路由层</h3><p>初始化context，让子组件可以消费这些能力</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">unimplementedFunction</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Functions not implemented'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">unimplementedComponent</span>: <span class="title">React</span>.<span class="title">ComponentType</span>&lt;<span class="title">any</span>&gt;(<span class="params"></span>): <span class="title">any</span> </span>&#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Component not implemented'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> containerContext: Context&lt;ContainerAbility&gt; = React.creareContext(&#123;</span><br><span class="line">   nav: &#123;</span><br><span class="line">        navigateTo: unimplementedFunction,</span><br><span class="line">        back: unimplementedFunction,</span><br><span class="line">        replace: unimplementedFunction,</span><br><span class="line">        open: unimplementedFunction,</span><br><span class="line">        reload: unimplementedFunction</span><br><span class="line">   &#125;,</span><br><span class="line">   ComponentLoader: unimplementedComponent</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">NavigatorContainer</span>(<span class="params">props</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; nav, pageStack &#125; = useNavigator();</span><br><span class="line">    <span class="keyword">const</span> originalContainer = useContext(ContainerContext);</span><br><span class="line">    <span class="keyword">const</span> container = useMemo(<span class="function"><span class="params">()</span> =&gt;</span> (&#123;</span><br><span class="line">            ...originalContainer,</span><br><span class="line">            nav,</span><br><span class="line">          &#125;),[originalContainer]);</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        &lt;ContainerContext.Provider value=&#123;container&#125;&gt;</span><br><span class="line">            </span><br><span class="line">        &lt;<span class="regexp">/ContainerContext.Provider&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>栈数据拿到了，如何渲染路由页面？需要一个遍历器负责去遍历页面栈，每个页面栈都是一个页面，对应一个页面根节点，可以使用 PageLoader 去生成，为了使 PageLoader 的职责更加单一，它负责把 ComponentLoader 包装一层，也可以作为容器使用。当作为容器使用时，不应该有加载动作。</p>
+<p><img src="https://static.yuanziwen.cn/blog/route_lasting/2.png_plain" alt="image.png"></p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 遍历器</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">PageStack</span>&lt;<span class="title">TItem</span>&gt;(<span class="params">&#123; items, renderItem &#125;: PageStackProps&lt;TItem&gt;</span>): <span class="title">any</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> items.map(renderItem);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 页面根节点</span></span><br><span class="line"><span class="keyword">const</span> PageRoot: React.FC&lt;&#123; visible: <span class="built_in">boolean</span> &#125; &amp; PageStackItem&gt; = <span class="function">(<span class="params">&#123; visible, children, page &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [pageRootEl, setPageRootEl] = useState(<span class="literal">null</span>);</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">      &lt;&gt;</span><br><span class="line">      &lt;div</span><br><span class="line">        className=&#123;classnames(<span class="string">'page-root'</span>, &#123; <span class="string">'page-visible'</span>: visible &#125;)&#125;</span><br><span class="line">        data-page=&#123;page&#125;</span><br><span class="line">        data-role=<span class="string">"page-root"</span></span><br><span class="line">        ref=&#123;setPageRootEl&#125;</span><br><span class="line">      /&gt;</span><br><span class="line">      &#123;pageRootEl ? createPortal(children, pageRootEl) : <span class="literal">null</span>&#125;</span><br><span class="line">    &lt;<span class="regexp">/&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">const PageLoader: React.FC&lt;PageStackItem&gt; = (&#123; page, getPageParams, children &#125;) =&gt; &#123;</span></span><br><span class="line"><span class="regexp">  const &#123; ComponentLoader &#125; = useContext(ContainerContext);</span></span><br><span class="line"><span class="regexp">  if (!page) return children as ReactElement;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  return &lt;ComponentLoader componentURI=&#123;page&#125; props=&#123;getPageParams()&#125; /</span>&gt;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">NavigatorContainer</span>(<span class="params">props: ContainerProps</span>): <span class="title">ReactElement</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;ContainerContext.Provider value=&#123;container&#125;&gt;</span><br><span class="line">      &lt;PageStack&lt;PageStackItem&gt;</span><br><span class="line">        items=&#123;pageStack.getStack()&#125;</span><br><span class="line">        renderItem=&#123;<span class="function">(<span class="params">itemProps, idx</span>) =&gt;</span> (</span><br><span class="line">          &lt;PageRoot key=&#123;idx&#125; &#123;...itemProps&#125; visible=&#123;idx === pageStack.size - <span class="number">1</span>&#125;&gt;</span><br><span class="line">            &lt;PageLoader &#123;...itemProps&#125;&gt;&#123;props.children&#125;&lt;<span class="regexp">/PageLoader&gt;</span></span><br><span class="line"><span class="regexp">          &lt;/</span>PageRoot&gt;</span><br><span class="line">        )&#125;</span><br><span class="line">      /&gt;</span><br><span class="line">    &lt;<span class="regexp">/ContainerContext.Provider&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export function Container(props: ContainerProps): ReactElement &#123;</span></span><br><span class="line"><span class="regexp">  return (</span></span><br><span class="line"><span class="regexp">    &lt;BasicContainer &#123;...props&#125;&gt;</span></span><br><span class="line"><span class="regexp">      &lt;NavigatorContainer &#123;...props&#125;&gt;&#123;props.children&#125;&lt;/</span>NavigatorContainer&gt;</span><br><span class="line">    &lt;<span class="regexp">/BasicContainer&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>类名 <code>page-root</code> 主要是给所有组件添加屏蔽点击事件行为和定义显示类型为隐藏, 只有被激活的组件，才会附加<code>page-visible</code> 处于可见状态。</p>
+<h3 id="PageLoader"><a href="#PageLoader" class="headerlink" title="PageLoader"></a>PageLoader</h3><p>页面组件可能动态加载，在一般场景下，我们使用 React.lazy 也能完成基本功能，但要想更高程度的定制功能，例如ErrorBoundary、预加载组件、Suspense，我们的容器层需要注入不同环境下甚至跨端的加载能力，还有协议解析和脚本加载等能力，下一篇文章会出如何实现高定制能力的容器层。本章不涉及ComponentLoader的内容，有兴趣的小伙伴可以插个眼。</p>
+<p>组件加载加载完毕后，因为包装了路由层，可以引入Context使用其能力，如下图，已经具备了部分缓存能力。使用方式如下</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; useEffect, ReactElement, useRef, useContext &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; containerContext, Container &#125; <span class="keyword">from</span> <span class="string">'@internal/container'</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ChatList</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">     <span class="keyword">const</span> &#123; navAPI &#125; = useContext(containerContext);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &lt;ul&gt;</span><br><span class="line">        ...</span><br><span class="line">        &lt;li onClick=&#123;<span class="function"><span class="params">()</span> =&gt;</span> navAPI.navigateTo(<span class="string">'group://chat#default'</span>, &#123; data: xxx &#125;) &#125;&gt;...&lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/u</span>l&gt;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ContainerDemo</span>(<span class="params"></span>): <span class="title">ReactElement</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">      &lt;Container &gt;</span><br><span class="line">        &lt;ChatList /&gt;</span><br><span class="line">      &lt;<span class="regexp">/Container&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>Demo:</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c4e6465573524ffda6930371f2ae0c2a~tplv-k3u1fbpfcp-watermark.image" alt="Kapture 2021-05-06 at 15.57.03.gif"></p>
+<p>可以看到，从A页面跳B页面时，返回后A仍然处于导航前的状态，A-&gt;B-&gt;A导航前后符合预期，但再次A-&gt;B时，B页面没有被缓存。</p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>思考以下问题</p>
+<ul>
+<li>如何制定match规则？</li>
+<li>如何去缓存页面？</li>
+<li>单个路由match多个副本的情况如何知道需要激活哪个缓存路由？</li>
+<li>缓存后的页面组件更新逻辑该如何处理？</li>
+</ul>
+<h4 id="如何制定match规则"><a href="#如何制定match规则" class="headerlink" title="如何制定match规则"></a>如何制定match规则</h4><p>更希望对下层无感可控，既然是一对多，那么就需要一个标识用于区分彼此。可以从容器层传入匹配规则，符合规则的组件将会被缓存。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Container</span> <span class="attr">cacheOptions</span>=<span class="string">&#123;[/^(group:\/\/)?chat(\.[A-Za-z0-9_]+)?(#\w+)?$/i]&#125;</span> &gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ChatList</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Container</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>路由协议微调，<code>group://chat#default:cacheId</code> 可以作为协议的一部分。对需要缓存的页面指定一个标识，当跳转到该路由时，必须携带一个缓存id, e.g.</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line">navAPI.navigateTo(<span class="string">'group://chat#default:cacheId'</span>, data)</span><br></pre></td></tr></table></figure>
+
+<h4 id="如何去缓存页面-amp-如何激活对应的缓存路由"><a href="#如何去缓存页面-amp-如何激活对应的缓存路由" class="headerlink" title="如何去缓存页面 &amp; 如何激活对应的缓存路由"></a>如何去缓存页面 &amp; 如何激活对应的缓存路由</h4><p>首先要知道为什么路由不会缓存页面，一般在Route中，一旦没有命中规则，路由会返回null，即使再次被激活，组件也会重新创建，丢失之前的状态。</p>
+<p>通过数据管控，当前栈之前已经被激活的页面组件都不会被销毁，这也是数据管控路由模式的好处，本身已经具备单路由规则多实例的能力，根据分别对应“不同”的路由创建新的页面栈，但因为每个 PageLoader 都对应着一个 pageStack，一旦后退之前的创建的节点也会被销毁掉，缓存成立的前提是单纯基于length不改变的情况下。可以将它们两者的关系改变为pageStack包容前者。</p>
+<p>pageStack 和 cachePageStack 之间的关系。当 pageStack 里包含了符合缓存命中条件的栈，就备份副本在 CachePageStack 中，如果当前被激活的栈 pageURI 存在于 CachePageStack 里，那就使用副本。</p>
+<p><img src="https://static.yuanziwen.cn/blog/route_lasting/3.png_plain" alt="image.png"></p>
+<h4 id="缓存后的页面组件更新逻辑该如何处理"><a href="#缓存后的页面组件更新逻辑该如何处理" class="headerlink" title="缓存后的页面组件更新逻辑该如何处理"></a>缓存后的页面组件更新逻辑该如何处理</h4><p>给 pageRoot 包一层触发器。<code>shouldComponentUpdate</code>、<code>useMemo</code> 都能达到目的。</p>
+<p>目前所接触的业务，大部分路由都是根据业务域划分的，不应该存在跨页面级路由通信，单纯由数据驱动，实际上仍然会面临一些只涉及状态触发更新的跨路由通信在容许范围内，更新的机制可以自行定制这里就不凑字数了，就以路由激活作为唯一条件。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Updatable</span></span><br><span class="line"><span class="keyword">class</span> Updatable <span class="keyword">extends</span> Component &#123;</span><br><span class="line">  <span class="keyword">static</span> propsTypes = &#123;</span><br><span class="line">    when: PropTypes.bool.isRequired</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  shouldComponentUpdate = <span class="function">(<span class="params">&#123; when &#125;</span>) =&gt;</span> when</span><br><span class="line"></span><br><span class="line">  render = <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">this</span>.props.children</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="改造路由层"><a href="#改造路由层" class="headerlink" title="改造路由层"></a>改造路由层</h4><figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// NavigatorContainer</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">NavigatorContainer</span>(<span class="params">props: ContainerProps</span>): <span class="title">ReactElement</span> </span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">    &lt;ContainerContext.Provider value=&#123;container&#125;&gt;</span><br><span class="line">      &lt;PageStack&lt;PageStackItem &amp; Pick&lt;ContainerProps, <span class="string">'cacheOptions'</span>&gt;&gt;</span><br><span class="line">        cacheOptions=&#123;props.cacheOptions&#125;</span><br><span class="line">        items=&#123;pageStack.getStack()&#125;</span><br><span class="line">        renderItem=&#123;<span class="function">(<span class="params">itemProps, idx</span>) =&gt;</span> (</span><br><span class="line">          &lt;PageRoot key=&#123;itemProps.page || idx&#125; &#123;...itemProps&#125; visible=&#123;idx === pageStack.size - <span class="number">1</span>&#125;&gt;</span><br><span class="line">            &lt;Updatable when=&#123;idx === pageStack.size - <span class="number">1</span>&#125;&gt;</span><br><span class="line">              &lt;PageLoader &#123;...itemProps&#125;&gt;&#123;props.children&#125;&lt;<span class="regexp">/PageLoader&gt;</span></span><br><span class="line"><span class="regexp">            &lt;/</span>Updatable&gt;</span><br><span class="line">          &lt;<span class="regexp">/PageRoot&gt;</span></span><br><span class="line"><span class="regexp">        )&#125;</span></span><br><span class="line"><span class="regexp">      /</span>&gt;</span><br><span class="line">    &lt;<span class="regexp">/ContainerContext.Provider&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>PageStack </p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// PageStack</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">PageStack</span>&lt;<span class="title">TItem</span> <span class="title">extends</span> <span class="title">PageStackItem</span>&gt;(<span class="params">&#123; items, renderItem, cacheOptions&#125;: PageStackProps&lt;TItem&gt;</span>): <span class="title">any</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> forceUpdate = useForceUpdate();</span><br><span class="line">  <span class="keyword">const</span> CacheRouteMap = useMemo(<span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">new</span> Map&lt;<span class="built_in">string</span>, TItem&gt;(), []);</span><br><span class="line"></span><br><span class="line">  useDeepDiffEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(cacheOptions)) &#123;</span><br><span class="line">      cacheOptions.forEach(<span class="function"><span class="params">reg</span> =&gt;</span> &#123;</span><br><span class="line">        items.forEach(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">const</span> &#123; page = <span class="string">''</span>, cacheId &#125; = item;</span><br><span class="line">          <span class="comment">// match 缓存路由</span></span><br><span class="line">          <span class="keyword">if</span> (reg.test(page.replace(<span class="string">`:<span class="subst">$&#123;cacheId&#125;</span>`</span>, <span class="string">''</span>)) &amp;&amp; cacheId &amp;&amp; !CacheRouteMap.get(page)) &#123;</span><br><span class="line">            CacheRouteMap.set(page, &#123; ...item &#125;);</span><br><span class="line">            forceUpdate();</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, [items, cacheOptions]);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 生成新栈</span></span><br><span class="line">  <span class="keyword">const</span> genPageStack = (): ReadonlyArray&lt;TItem&gt; =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> currentMap = items.filter(<span class="function"><span class="params">t</span> =&gt;</span> t.page).reduce(<span class="function">(<span class="params">map, item</span>) =&gt;</span> (&#123; ...map, [item.page]: item &#125;), &#123;&#125;);</span><br><span class="line">    <span class="keyword">const</span> copyRouteMap = [...CacheRouteMap.keys()].filter(</span><br><span class="line">      key =&gt; !<span class="built_in">Object</span>.prototype.hasOwnProperty.call(currentMap, key)</span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">return</span> items.concat(copyRouteMap.map(<span class="function"><span class="params">key</span> =&gt;</span> CacheRouteMap.get(key)).filter(<span class="built_in">Boolean</span>));</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> genPageStack().map(renderItem);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ccba71a9c34e4c258b33b7a593ec2de1~tplv-k3u1fbpfcp-watermark.image" alt="1620281708889.gif"></p>
+<h3 id="路由回调"><a href="#路由回调" class="headerlink" title="路由回调"></a>路由回调</h3><p>在某些情况下确实需要类似跨路由通信的能力，例如，从聊天界面回来需要刷新聊天列表，甚至要携带一些数据回来(表单是否提交等)。相比通信更像是属于导航API的能力，使用方法如下</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line">navAPI.navigateAndWaitBack(<span class="string">'group://chat#default:123'</span>).then(<span class="function">(<span class="params">submit</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(submit) dosomething...</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>为了遵循API职责单一，对外暴露两个新的方法</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> NavigationAPI &#123;</span><br><span class="line">  <span class="comment">//... other api,</span></span><br><span class="line">  navigateAndWaitBack(page: <span class="built_in">string</span>, params?: Record&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt;): <span class="built_in">Promise</span>&lt;<span class="built_in">any</span>&gt;;</span><br><span class="line">  backWithData(data?: <span class="built_in">any</span>): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">useHistoryNavigationByPageStack</span>(<span class="params">pageStack: IPageStack</span>): <span class="title">NavigationAPI</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> callbackQueue = useMemo&lt;<span class="built_in">Array</span>&lt;Fn&gt;&gt;<span class="function">(<span class="params">(<span class="params"></span>) =&gt; [], []</span>); // 回调队列以应对多次响应路由的情况</span></span><br><span class="line"><span class="function">  <span class="params">const</span> <span class="params">callbackDataRef</span> = <span class="params">useRef</span>&lt;<span class="params">any</span>&gt;<span class="params">()</span>;</span></span><br><span class="line"><span class="function">  </span></span><br><span class="line"><span class="function">    <span class="params">function</span> <span class="params">navigateTo</span>(<span class="params">page: <span class="built_in">string</span>, params?: Record&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt;, navigatorOption?: &#123; callbackEvent: Fn &#125;</span>) &#123;</span></span><br><span class="line"><span class="function">    // ...<span class="params">other</span></span></span><br><span class="line"><span class="function">    <span class="params">callbackQueue</span>.<span class="params">push</span>(<span class="params">navigatorOption ? navigatorOption.callbackEvent : <span class="literal">undefined</span></span>);</span></span><br><span class="line"><span class="function">  &#125;</span></span><br><span class="line"><span class="function">  </span></span><br><span class="line"><span class="function">  // 推入回调队列</span></span><br><span class="line"><span class="function">  <span class="params">function</span> <span class="params">navigateAndWaitBack</span>(<span class="params">page: <span class="built_in">string</span>, params: Record&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt;</span>) &#123;</span></span><br><span class="line"><span class="function">    <span class="params">return</span> <span class="params">new</span> <span class="params">Promise</span>(<span class="params">resolve =&gt; &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">      navigateTo(<span class="params">page, params, &#123; callbackEvent: resolve &#125;</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">    &#125;</span>);</span></span><br><span class="line"><span class="function">  &#125;</span></span><br><span class="line"><span class="function">  </span></span><br><span class="line"><span class="function">  // 暂存数据</span></span><br><span class="line"><span class="function">  <span class="params">function</span> <span class="params">backWithResponse</span>(<span class="params">data: <span class="built_in">any</span></span>) &#123;</span></span><br><span class="line"><span class="function">    <span class="params">callbackDataRef</span>.<span class="params">current</span> = <span class="params">data</span>;</span></span><br><span class="line"><span class="function">    <span class="params">back</span><span class="params">()</span>;</span></span><br><span class="line"><span class="function">  &#125;</span></span><br><span class="line"><span class="function">  </span></span><br><span class="line"><span class="function">  <span class="params">return</span> &#123;</span></span><br><span class="line"><span class="function">     //...,</span></span><br><span class="line"><span class="function">     <span class="params">navigateAndWaitBack</span>,</span></span><br><span class="line"><span class="function">     <span class="params">backWithResponse</span></span></span><br><span class="line"><span class="function">  &#125;</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>在 popstate 时机去执行该次回调，并清理副作用。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> popStateHandle = <span class="function">(<span class="params">event: PopStateEvent</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 1.pop page stack</span></span><br><span class="line">      pageStack.pop();</span><br><span class="line">      <span class="comment">// 栈如果为空，缺省为当前页</span></span><br><span class="line">      <span class="keyword">if</span> (pageStack.size === <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> pageState = event.state || &#123;&#125;;</span><br><span class="line">        pageStack.push(&#123;</span><br><span class="line">          page: pageState.page,</span><br><span class="line">          cacheId: getCacheId(pageState.page),</span><br><span class="line">          rawPageParams: pageState.params,</span><br><span class="line">          getPageParams: <span class="function"><span class="params">()</span> =&gt;</span> pageState.params,</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 2.reactive callback event</span></span><br><span class="line">      <span class="keyword">const</span> data = callbackDataRef.current;</span><br><span class="line">      callbackDataRef.current = <span class="literal">null</span>;</span><br><span class="line">      <span class="keyword">const</span> fn = callbackQueue.pop();</span><br><span class="line">      <span class="keyword">if</span> (fn) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          fn.call(<span class="literal">null</span>, data);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">          <span class="built_in">console</span>.error(<span class="string">'invoke route backResponse callback fail'</span>, err);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="built_in">window</span>.addEventListener(<span class="string">'popstate'</span>, popStateHandle);</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">window</span>.removeEventListener(<span class="string">'popstate'</span>, popStateHandle);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;, [callbackQueue]);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/843e7c2305d1408aa990705da9273c7e~tplv-k3u1fbpfcp-watermark.image" alt="Kapture 2021-05-06 at 15.23.22.gif"></p>
+<p>至此路由层就完成了，Demo中还有一些不足的地方，例如路由回调应对刷新页面怎么处理、栈变化时的过场动画、参数过长等问题。</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2021/05/06/数据管控路由实现状态持久化/">blog.yuanziwen.cn/2021/05/06/数据管控路由实现状态持久化/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2021/06/01/使用React构建多端容器/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">使用React构建多端容器</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2021/01/06/Lighthouse-流程/">
+        <span class="next-text nav-default">Lighthouse 流程架构</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1624262701310')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

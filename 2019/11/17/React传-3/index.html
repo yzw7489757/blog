@@ -66,8 +66,11 @@
       </a><a href="/archives/">
         <li class="mobile-menu-item">Record
           </li>
+      </a><a href="/logs/">
+        <li class="mobile-menu-item">Log
+          </li>
       </a><a href="/music/">
-        <li class="mobile-menu-item">Music(NoAuto)
+        <li class="mobile-menu-item">Music
           </li>
       </a><a href="/photo/">
         <li class="mobile-menu-item">Album
@@ -93,8 +96,13 @@
             </a>
         </li>
       <li class="menu-item">
+          <a class="menu-item-link" href="/logs/">
+            Log
+            </a>
+        </li>
+      <li class="menu-item">
           <a class="menu-item-link" href="/music/">
-            Music(NoAuto)
+            Music
             </a>
         </li>
       <li class="menu-item">
@@ -197,7 +205,7 @@
 
 <p>最后一个阶段在<a href="https://github.com/preactjs/preact/blob/1142fff2b863f59297ee014611deb3f28929dfaa/src/diff/children.js#L26" target="_blank" rel="noopener">diffChildren</a> 删除vnode之前执行.</p>
 <h3 id="useImperativeHandle"><a href="#useImperativeHandle" class="headerlink" title="useImperativeHandle"></a>useImperativeHandle</h3><p>在官方例子里,<code>useImperativeHandle</code>用于获取子组件实例方法.因为自定义组件会过滤ref所以通常要与 <code>forwardRef</code> 组合搭配.</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> FancyInput = forwardRef(</span><br><span class="line">  (props, ref) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> inputRef = useRef();</span><br><span class="line">    useImperativeHandle(ref, () =&gt; (&#123;</span><br><span class="line">      focus: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        inputRef.current.focus();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;));</span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">input</span> <span class="attr">ref</span>=<span class="string">&#123;inputRef&#125;</span> <span class="attr">...</span> /&gt;</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">App</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">const</span> childrenRef = useRef()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;FancyInput ref=&#123;childrenRef&#125;/&gt;</span><br><span class="line">      &lt;button onClick=&#123;() =&gt; childrenRef.focus()&#125;&gt;click&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> FancyInput = forwardRef(</span><br><span class="line">  (props, ref) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> inputRef = useRef();</span><br><span class="line">    useImperativeHandle(ref, () =&gt; (&#123;</span><br><span class="line">      focus: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        inputRef.current.focus();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;));</span><br><span class="line">    <span class="keyword">return</span> &lt;input ref=&#123;inputRef&#125; ... /&gt;;</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">App</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">const</span> childrenRef = useRef()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;FancyInput ref=&#123;childrenRef&#125;/&gt;</span><br><span class="line">      &lt;button onClick=&#123;() =&gt; childrenRef.focus()&#125;&gt;click&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>其原理是获取到父组件的ref后将实例方法对象传入.</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;object&#125;</span> <span class="variable">ref</span></span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;() =&gt; object&#125;</span> <span class="variable">createHandle</span></span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;any[]&#125;</span> <span class="variable">args</span></span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">useImperativeHandle</span>(<span class="params">ref, createHandle, args</span>) </span>&#123;</span><br><span class="line">  useLayoutEffect(</span><br><span class="line">    () =&gt; &#123;</span><br><span class="line">      <span class="comment">//兼容旧版本createRef</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> ref === <span class="string">'function'</span>) ref(createHandle());</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> (ref) ref.current = createHandle();</span><br><span class="line">    &#125;,</span><br><span class="line">    args == <span class="literal">null</span> ? args : args.concat(ref) <span class="comment">// 依赖值</span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -280,7 +288,7 @@
   <span class="power-by">
    <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
   </span>
-  <span class="copyright-year">&copy;2017 - 2020<span class="heart">
+  <span class="copyright-year">&copy;2017 - 2021<span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
     <span class="author">Seven</span>
@@ -296,7 +304,7 @@
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
   <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1593502596546')
+  navigator.serviceWorker.register('/sw.js?t=1624262701310')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

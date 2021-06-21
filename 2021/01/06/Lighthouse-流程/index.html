@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta name="generator" content="Hexo 3.9.0"><link rel="manifest" href="/manifest.json"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Lighthouse 流程架构"><meta name="keywords" content="Seven YuanZiWen"><link rel="alternate" href="/atom.xml" title="Seven Blog"><link rel="shortcut icon" type="image/x-icon" href="https://static.yuanziwen.cn/blog/favicon.ico?v=2.11.0">
+<link rel="canonical" href="blog.yuanziwen.cn/2021/01/06/Lighthouse-流程/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1e4ffaffd9b2bc832b39e2b866a92c7b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>Lighthouse 流程架构 - Seven Blog</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Seven Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Record
+          </li>
+      </a><a href="/logs/">
+        <li class="mobile-menu-item">Log
+          </li>
+      </a><a href="/music/">
+        <li class="mobile-menu-item">Music
+          </li>
+      </a><a href="/photo/">
+        <li class="mobile-menu-item">Album
+          </li>
+      </a><a href="/book/">
+        <li class="mobile-menu-item">Book
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Seven Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Record
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/logs/">
+            Log
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/music/">
+            Music
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/photo/">
+            Album
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/book/">
+            Book
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Lighthouse 流程架构
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-01-06
+        </span></div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#起因"><span class="toc-text">起因</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LightHouse流程架构"><span class="toc-text">LightHouse流程架构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#整体流程"><span class="toc-text">整体流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#名词释义"><span class="toc-text">名词释义</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Driver"><span class="toc-text">Driver</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gatherers"><span class="toc-text">Gatherers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Artifacts"><span class="toc-text">Artifacts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Audits"><span class="toc-text">Audits</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Report"><span class="toc-text">Report</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基本概念"><span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#从入口开始"><span class="toc-text">从入口开始</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#流程概览"><span class="toc-text">流程概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成Runner-Options"><span class="toc-text">生成Runner Options</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ChromeProtocol-交互"><span class="toc-text">ChromeProtocol 交互</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#收集Gatherer"><span class="toc-text">收集Gatherer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#执行审计"><span class="toc-text">执行审计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON-amp-Output"><span class="toc-text">JSON &amp; Output</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#自绘流程"><span class="toc-text">自绘流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文件依赖"><span class="toc-text">文件依赖</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.2.1/css/hint.min.css"><h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>前段时间紧急上线了一个门户项目，两端静态页面，首页考虑到需要极致体验必须使用硬编码搭建，部分子页面采用可视化搭建，要求Lighthouse必须接近满分，尽管通过一些手段优化了首屏但上线之后，离目标还有一大段偏差。<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e2c1ab63272a43ef903059be261c8158~tplv-k3u1fbpfcp-watermark.image" alt></p>
+<a id="more"></a>
+<p>于是去挖lh源码关注各类指标对分值的影响程度，有了针对性的方向，剩下的工作就简单的多。<br><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f8912e383a59444f8f4aa001760f9d8d~tplv-k3u1fbpfcp-watermark.image" alt></p>
+<p>顺便整理了源码。</p>
+<h1 id="LightHouse流程架构"><a href="#LightHouse流程架构" class="headerlink" title="LightHouse流程架构"></a>LightHouse流程架构</h1><p>Lighthouse 是一个开源的自动化工具，提供了Node、Chrome Extension App、Chrome DevTool 三端，通过输入审查网址及配置项，通过一系列模拟测试特定环境下的运行状况和性能分析，最后生成性能结果页面供可视化浏览。</p>
+<p>为什么需要Lighthouse？一直以来，前端性能的分析指标过于泛化，得不到有效统一的标准，特别是近几年SPA、微服务、小程序、Flutter、webAssembly、SSR、ServerLess等前端技术方案百花齐放，得到高速发展的同时，一些传统的性能测量指标和方式落后跟不上脚步，无法支撑现有技术体系和新领域的迭代更新，再加上终端环境复杂、用户体验标准难以衡量、兼容性问题，审计指标越来越复杂。<br><br><br>例如阿里云ARMS针对 SPA 应用的FMP计量方式改成了依赖于MutationObserve计算权重变化最大的时间节点；淘宝前端团队的秒开率标准；岳鹰结合jssdk与Android内核查看汇集绘制指令来判断页面是否处于白屏….都表明在大前端趋势不可逆转，而测量性能的方式需要考虑更多环境和因素，变得愈加复杂。</p>
+<p>Lighthouse 一定不是大前端下性能统计标准，因为从目前而言仍只适用于web端，并且其统计的指标过于笼统。本身而言依赖于 DevTool 发送回来的综合报告按 Audit 分析，输出对应的抽象分数、核心点和优化项，分数低不一样代表性能差，但分数高一定是性能上佳。</p>
+<h1 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h1><p><img src="https://static.yuanziwen.cn/blog/lighthouse/1.png_plain" alt="image.png"><br></p>
+<h1 id="名词释义"><a href="#名词释义" class="headerlink" title="名词释义"></a>名词释义</h1><h2 id="Driver"><a href="#Driver" class="headerlink" title="Driver"></a>Driver</h2><p>根据 <a href="https://chromedevtools.github.io/devtools-protocol/" target="_blank" rel="noopener">Chrome Debugging Protocol</a> &lt;<a href="https://github.com/GoogleChrome/lighthouse/blob/master/docs/architecture.md#protocol" target="_blank" rel="noopener">URL</a>&gt;与浏览器交互的对象</p>
+<h2 id="Gatherers"><a href="#Gatherers" class="headerlink" title="Gatherers"></a>Gatherers</h2><p>驱动 Driver 收集到的网页基础信息，用于后续 Auditing 的审计逻辑。</p>
+<h2 id="Artifacts"><a href="#Artifacts" class="headerlink" title="Artifacts"></a>Artifacts</h2><p>一系列 Gatherers 信息集合。在 Auditing 里会被附加其他信息，被多个Audits共享。</p>
+<h2 id="Audits"><a href="#Audits" class="headerlink" title="Audits"></a>Audits</h2><p>以指定依赖的 Artifacts 作为输入，测试单个功能/优化/指标，审计测试评估分数，得到一组LHAR(LightHouse Audit Result Object) 标准数据对象。</p>
+<h2 id="Report"><a href="#Report" class="headerlink" title="Report"></a>Report</h2><p><a href="https://github.com/GoogleChrome/lighthouse/tree/master/lighthouse-core/report/html/renderer" target="_blank" rel="noopener">ReportRender</a> 使用LHR结果创建输出的UI报表。</p>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p>Lighthouse 驱动 Driver 通过 Chrome DevTool Protocol 与浏览器交互，执行一系列命令，先生成 Gatherers 模块用以收集 Artifacts 信息，这些 Artifacts 信息的聚合会在 Auditing 阶段作为 Audit case 逻辑的输入凭证，通过定义的一系列自定义的审计标准输出分数/优化/详情/描述/原因/展示形式/错误等信息，最终得到一系列LHR统计结果，按需生成指定文件。<br><br><br>基本常用的命令如下，具体命令就不贴了</p>
+<blockquote>
+<p><a href="https://github.com/GoogleChrome/lighthouse#cli-options" target="_blank" rel="noopener">文档传送门</a></p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span> lighthouse --help</span><br><span class="line"></span><br><span class="line">lighthouse &lt;url&gt; &lt;options&gt;</span><br><span class="line"></span><br><span class="line">Logging:</span><br><span class="line">  --verbose  是否显示详细的日志  [boolean] [default: false]</span><br><span class="line">  --quiet    不显示进度、调试、错误日志  [boolean] [default: false]</span><br><span class="line"></span><br><span class="line">Configuration:</span><br><span class="line">  --save-assets                  将跟踪内容和 devTools 日志保存到磁盘  [boolean] [default: false]</span><br><span class="line">  --list-all-audits              打印所有审计列表内容  [boolean] [default: false]</span><br><span class="line">  --list-trace-categories        打印所有必需跟踪类别的列表  [boolean] [default: false]</span><br><span class="line">  --print-config                 输出规范化的配置  [boolean] [default: false]</span><br><span class="line">  --additional-trace-categories  跟踪并捕获附加类别 (逗号分隔).  [string]</span><br><span class="line">  --config-path                  JSON配置路径 lighthouse-core/config/lr-desktop-config.js</span><br><span class="line">  --preset                       应用内置配置,与config-path冲突, [choices: "perf", "experimental", "desktop"]</span><br><span class="line">  --chrome-flags                 自定义flag 空格区分,省略则默认使用 Chrome桌面版或者金丝雀版,all flag List: https://bit.ly/chrome-flags</span><br><span class="line">  --port                         调试协议端口,0表示随机  [number] [default: 0]</span><br><span class="line">  --hostname                     调试协议的hostname  [string] [default: "localhost"]</span><br><span class="line">  --form-factor                  审计的模式,桌面/无线端  [string] [choices: "mobile", "desktop"]</span><br><span class="line">  --screenEmulation              设置模拟屏幕的参数. 见--preset, 使用 --screenEmulation.disabled 以禁用. 否则默认: --screenEmulation.mobile --screenEmulation.width=360 --screenEmulation.height=640 --screenEmulation.deviceScaleFactor=2</span><br><span class="line">  --emulatedUserAgent            设置用户UA  [string]</span><br><span class="line">  --max-wait-for-load            设置最大的加载时间,以审计较完整的过程,过大会导致评分审计方式偏差  [number]</span><br><span class="line">  --enable-error-reporting       启用错误报表覆盖偏好配置. --no-enable-error-reporting 相反. More: https://git.io/vFFTO  [boolean]</span><br><span class="line">  --gather-mode, -G              从交互的浏览器收集artifact保存到磁盘. </span><br><span class="line">  --audit-mode, -A               处理磁盘上保存的 artifacts. 默认 ./latest-run/</span><br><span class="line">  --only-audits                  仅执行指定的审计项  [array]</span><br><span class="line">  --only-categories              仅测量指定的功能: accessibility, best-practices, performance, pwa, seo  [array]</span><br><span class="line">  --skip-audits                  跳过指定的审计项  [array]</span><br><span class="line"></span><br><span class="line">Output:</span><br><span class="line">  --output       报表输出格式 "json", "html", "csv"  [array] [default: ["html"]]</span><br><span class="line">  --view         通过浏览器打开报表  [boolean] [default: false]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">	--extra-headers                      调试额外的HttpHeaders</span><br><span class="line">  --precomputed-lantern-data-path      模拟数据的文件路径, 覆盖对服务器延迟和RTT，可以降低受网络层面的影响.  [string]</span><br><span class="line">  --lantern-data-output-path           基于`precomputed-lantern-data-path` 输出文件的路径.  [string]</span><br><span class="line">  --plugins                            执行指定插件  [array]</span><br><span class="line">  --channel  													 通道 [string] [default: "cli"]</span><br><span class="line">  --chrome-ignore-default-flags  			 忽略掉浏览器默认的flag [boolean] [default: false]</span><br><span class="line"></span><br><span class="line">Examples:</span><br><span class="line">  lighthouse &lt;url&gt; --view                                                                          报表生成打开浏览器预览</span><br><span class="line">  lighthouse &lt;url&gt; --config-path=./myconfig.js                                                     自定义配置</span><br><span class="line">  lighthouse &lt;url&gt; --output=json --output-path=./report.json --save-assets                         保存跟踪、截图、JSON报表</span><br><span class="line">  lighthouse &lt;url&gt; --screenEmulation.disabled --throttling-method=provided --no-emulatedUserAgent  禁用设备模拟和限流</span><br><span class="line">  lighthouse &lt;url&gt; --chrome-flags="--window-size=412,660"                                          启用特定size窗口</span><br><span class="line">  lighthouse &lt;url&gt; --quiet --chrome-flags="--headless"                                             启用无头浏览器及忽略所有日志</span><br><span class="line">  lighthouse &lt;url&gt; --extra-headers "&#123;\"Cookie\":\"monster=blue\", \"x-men\":\"wolverine\"&#125;"        request添加请求头</span><br><span class="line">  lighthouse &lt;url&gt; --extra-headers=./path/to/file.json                                             request添加JSON请求头</span><br><span class="line">  lighthouse &lt;url&gt; --only-categories=performance,pwa                                               只测量Performance和PWA项</span><br><span class="line"></span><br><span class="line">For more information on Lighthouse, see https://developers.google.com/web/tools/lighthouse/.</span><br></pre></td></tr></table></figure>
+
+<p>Download Repo 到本地，运行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">lighthoust https://xixikf.com</span><br></pre></td></tr></table></figure>
+
+<h1 id="从入口开始"><a href="#从入口开始" class="headerlink" title="从入口开始"></a>从入口开始</h1><p>在入口处 <code>lighthouse-cli/bin.js</code> 收集命令行 cliFlags 生成配置，收集和合成配置完，生成flags如下，<br><img src="https://static.yuanziwen.cn/blog/lighthouse/2.png_plain" alt="image.png"><br><code>runLighthouse</code>负责唤起 ChromeLauncher 和调用 lighthouse 。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> launchedChrome; <span class="comment">// 浏览器实例</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> shouldGather = flags.gatherMode || flags.gatherMode === flags.auditMode;</span><br><span class="line">  <span class="comment">// 启动浏览器实例</span></span><br><span class="line">  <span class="keyword">if</span> (shouldGather) &#123;</span><br><span class="line">    launchedChrome = <span class="keyword">await</span> getDebuggableChrome(flags);</span><br><span class="line">    flags.port = launchedChrome.port; <span class="comment">// 原flags port可能会被占用，chromelauncher会自动更新</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 执行 lighthouse-core 核心逻辑，拿到 LHR</span></span><br><span class="line">  <span class="keyword">const</span> runnerResult = <span class="keyword">await</span> lighthouse(url, flags, config);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 仅执行 gatherMode 策略，不会有runnerResult, 需要额外保存.</span></span><br><span class="line">  <span class="keyword">if</span> (runnerResult) &#123;</span><br><span class="line">    <span class="keyword">await</span> saveResults(runnerResult, flags);</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">// 测量结束杀掉 Chrome 进程</span></span><br><span class="line">  <span class="keyword">await</span> potentiallyKillChrome(launchedChrome);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">// 有错误直接退出，不希望用让用户看到</span></span><br><span class="line">  <span class="keyword">if</span> (runnerResult &amp;&amp; runnerResult.lhr.runtimeError) &#123;</span><br><span class="line">   <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> runnerResult;</span><br><span class="line">&#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">  <span class="comment">// 过程出错，杀死进程退出</span></span><br><span class="line">  <span class="keyword">await</span> potentiallyKillChrome(launchedChrome).catch(<span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;);</span><br><span class="line">  <span class="keyword">return</span> printErrorAndExit(err);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="流程概览"><a href="#流程概览" class="headerlink" title="流程概览"></a>流程概览</h2><p>核心逻辑主要分五步</p>
+<ul>
+<li>生成 Runner Options，即准备需要测量的各功能/优化/指标项与调试配置</li>
+<li>通过 ChromeProtocol 协议约定 hostname/port 建立连接进行通信，获取到Connection实例</li>
+<li>执行 Runner 逻辑生成 Driver 控制 Connection 实例发送交互命令，执行Collect主流程<ul>
+<li>创建 Tab 后应用并预配置参数。</li>
+<li>对 passes 遍历每个 pass 的 Gatherers 实例，调用对应 lifecycle 拿到 GatherersResult。</li>
+</ul>
+</li>
+<li>将 GathererResult 传递给 Audits，遍历 Audits case，导入依赖执行审计逻辑最终输出标准LHR对象。</li>
+<li>LHR对象JSON化并统计各类 Categories 分值，根据配置偏好输出到本地。<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">lighthouse</span>(<span class="params">url, flags = &#123;&#125;, configJSON, userConnection</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 设置日志级别，一般情况吐出info</span></span><br><span class="line">  flags.logLevel = flags.logLevel || <span class="string">'error'</span>;</span><br><span class="line">  log.setLevel(flags.logLevel);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// configJSON: Lighthouse 运行配置，flags: 可选配置</span></span><br><span class="line">  <span class="keyword">const</span> config = generateConfig(configJSON, flags);</span><br><span class="line">  <span class="keyword">const</span> options = &#123; url, config &#125;;</span><br><span class="line">  <span class="keyword">const</span> connection = userConnection || <span class="keyword">new</span> ChromeProtocol(flags.port, flags.hostname);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> gatherFn = <span class="function">(<span class="params">&#123;requestedUrl&#125;</span>) =&gt;</span> &#123; <span class="comment">// 第3/4/5步</span></span><br><span class="line">    <span class="keyword">return</span> Runner._gatherArtifactsFromBrowser(requestedUrl, options, connection);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> Runner.run(gatherFn, options);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="生成Runner-Options"><a href="#生成Runner-Options" class="headerlink" title="生成Runner Options"></a>生成Runner Options</h2><p>假设没传入 configJSON 文件，将默认使用 <code>default-config.js</code> 。<a href="https://github.com/GoogleChrome/lighthouse/blob/a6738e0033e7e5ca308b97c1c36f298b7d399402/lighthouse-core%2Fconfig%2Fconstants.js#L95" target="_blank" rel="noopener">setting</a></p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// lighthouse-core/config/defaultConfig.js</span></span><br><span class="line"><span class="keyword">const</span> defaultConfig = &#123;</span><br><span class="line">  setting,</span><br><span class="line">	audits: [ <span class="comment">// 主要的审计项</span></span><br><span class="line">    <span class="string">'is-on-https'</span>, <span class="comment">// 是否使用了https</span></span><br><span class="line">    <span class="string">'service-worker'</span>, <span class="comment">// 是否包含SW</span></span><br><span class="line">    <span class="string">'metrics/first-contentful-paint'</span>, <span class="comment">// fcp 首次内容绘制</span></span><br><span class="line">    <span class="string">'metrics/largest-contentful-paint'</span>, <span class="comment">// lcp 最后内容绘制</span></span><br><span class="line">    <span class="string">'metrics/first-meaningful-paint'</span>,  <span class="comment">// fmp 首次主要内容绘制</span></span><br><span class="line">    <span class="string">'metrics/speed-index'</span>, <span class="comment">// SI 加载性能指标、填充速度</span></span><br><span class="line">    <span class="comment">// … </span></span><br><span class="line">  ],</span><br><span class="line">  categories:&#123; <span class="comment">// 需要测量的类别项</span></span><br><span class="line">  	performance: &#123;…&#125;, </span><br><span class="line">    accessibility: &#123;…&#125;, </span><br><span class="line">    best-practices: &#123;…&#125;, </span><br><span class="line">    seo: &#123;…&#125;, </span><br><span class="line">    pwa: &#123;…&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">  groups:&#123; <span class="comment">// 报表功能项标题的聚合及国际化</span></span><br><span class="line">    metrics: &#123;…&#125;, </span><br><span class="line">    seo-mobile: &#123;…&#125;, </span><br><span class="line">    diagnostics: &#123;…&#125;, </span><br><span class="line">    pwa-installable: &#123;…&#125;,</span><br><span class="line">    <span class="comment">// …</span></span><br><span class="line">  &#125;,</span><br><span class="line">  passes: [ <span class="comment">// 控制如何加载urlPage，及在加载过程中收集哪些信息</span></span><br><span class="line">  	&#123;</span><br><span class="line">      passName:<span class="string">'redirectPass'</span>, <span class="comment">// 唯一标示</span></span><br><span class="line">      blankPage:<span class="string">'about:blank'</span>,</span><br><span class="line">      <span class="comment">// 加载页面时要阻止的请求的URL, * 为放行all</span></span><br><span class="line">      blockedUrlPatterns:[<span class="string">'*.css'</span>, <span class="string">'*.jpg'</span>, <span class="string">'*.jpeg'</span>, <span class="string">'*.png'</span>, <span class="string">'*.gif'</span>, <span class="string">'*.svg'</span>, <span class="string">'*.ttf'</span>, <span class="string">'*.woff'</span>, <span class="string">'*.woff2'</span>],</span><br><span class="line">      cpuQuietThresholdMs:<span class="number">0</span>, <span class="comment">// Driver 选项，CPU空闲阈值</span></span><br><span class="line">      gatherers: [<span class="string">'http-redirect'</span>],<span class="comment">// 收集项</span></span><br><span class="line">      loadFailureMode:<span class="string">'warn'</span>, <span class="comment">// 加载失败的处理方式，影响后续pass</span></span><br><span class="line">      networkQuietThresholdMs:<span class="number">0</span>,<span class="comment">// 距离上个pass完成后安静时长,以确保所有请求瀑布流走完，默认5000</span></span><br><span class="line">      pauseAfterFcpMs:<span class="number">0</span>, <span class="comment">// 与 pauseAfterLoadMs 类似</span></span><br><span class="line">      pauseAfterLoadMs:<span class="number">0</span>, <span class="comment">// 页面加载后的阻塞的时间，以确保其他的JS脚本已经加载了</span></span><br><span class="line">      recordTrace:<span class="literal">false</span>, <span class="comment">// 是否启用上个pass跟踪记录</span></span><br><span class="line">      useThrottling:<span class="literal">false</span>,<span class="comment">// 是否启用限流</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      passName:<span class="string">'offlinePass'</span>, </span><br><span class="line">      blockedUrlPatterns: [],</span><br><span class="line">      gatherers: [<span class="string">'service-worker'</span>],</span><br><span class="line">      loadFailureMode:<span class="string">'ignore'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      passName: <span class="string">'slowPass'</span>,</span><br><span class="line">      recordTrace: <span class="literal">true</span>, </span><br><span class="line">      useThrottling: <span class="literal">true</span>, </span><br><span class="line">      networkQuietThresholdMs: <span class="number">5000</span>, </span><br><span class="line">      gatherers: [<span class="string">'slow-gatherer'</span>],</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  settings:&#123; <span class="comment">// 测量运行过程中的配置</span></span><br><span class="line">    output: <span class="string">'json'</span>,  <span class="comment">// 输出格式</span></span><br><span class="line">    maxWaitForFcp: <span class="number">30000</span>,  <span class="comment">// 最大等待绘制边界时间</span></span><br><span class="line">    maxWaitForLoad: <span class="number">45000</span>,  <span class="comment">// 最大等待加载时间</span></span><br><span class="line">    formFactor: <span class="string">'mobile'</span>, <span class="comment">// 无线端模式</span></span><br><span class="line">    throttling: &#123;…&#125;, <span class="comment">// 限流配置</span></span><br><span class="line">    <span class="comment">// …</span></span><br><span class="line">  &#125;,</span><br><span class="line">  UIStrings (<span class="keyword">get</span>):<span class="function"><span class="params">()</span> =&gt;</span> UIStrings <span class="comment">// 国际化相关</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>audits</code> ：<a href="https://github.com/GoogleChrome/lighthouse/blob/a6738e0033e7e5ca308b97c1c36f298b7d399402/types%2Fconfig.d.ts#L67" target="_blank" rel="noopener">AuditJSON[]</a>，包含了所有审计项</p>
+<ul>
+<li>网络层面的是否https、RTT 、服务器延迟/响应、prereload、preconnect</li>
+<li>页面加载周期相关的FCP(首次内容绘制)、FMP(首次主内容绘制)、LCP(最后内容绘制)、FCI(首次CPU空闲) 、最大内容元素绘制…</li>
+<li>性能情况：预加载脚本/字体、资源汇总、布局位移、长任务、未移除的监听事件…</li>
+<li>交互视觉：首次可交互时间、icon、响应式图片、非合成动画、未显示指定size的图片…</li>
+<li>可访问性：ARIA(无障碍)、HTML规范、逻辑制表符、ARIA( —— 无障碍)…</li>
+<li>解析效率：css/js minified、文本压缩、离屏元素隐藏、是否使用webp、重复脚本、sourcemap…</li>
+<li>web标准：pwa、long-cache-ttl、manifest、doctype、users-http2…</li>
+<li>SEO优化：Robots-txt、meta元信息、结构化数据、hreflang…</li>
+</ul>
+<p>在输出前每个 audit 会被注入 <code>lighthouse-core/audits</code> 下的审计逻辑，这些审计逻辑每个包含 audit(测试分数)、meta(相关信息及计算 Audit 所需要的 Artifact 模块)。 <br><br><br><code>categories</code> ：Record&lt;string, <a href="https://github.com/GoogleChrome/lighthouse/blob/a6738e0033e7e5ca308b97c1c36f298b7d399402/types%2Fconfig.d.ts#L55" target="_blank" rel="noopener">CategoryJSON</a>&gt;，也就是平常在DevTool里勾选的几个测试项，包含了要测试了类别。<br><img src="https://static.yuanziwen.cn/blog/lighthouse/3.png_plain" alt="image.png"><br><code>groups</code> ：Record&lt;string, <a href="https://github.com/GoogleChrome/lighthouse/blob/a6738e0033e7e5ca308b97c1c36f298b7d399402/types%2Fconfig.d.ts#L62" target="_blank" rel="noopener">GroupJSON</a>&gt;，聚合了每个审计项的 title 及 description，支持后续 UI Report 的国际化。<br><code>setting</code> ：<a href="https://github.com/GoogleChrome/lighthouse/blob/2bdf6cb4ef9a3a44570af49a13d6667cb72980a9/types%2Fexterns.d.ts#L147" target="_blank" rel="noopener">SharedFlagsSettings</a>，是应用整个测量流程的全局配置，包括网速限制、最大加载时长、report 输出格式、模拟平台、仿真参数、国际化、审计模式、执行通道、请求头等等…<br><code>passes</code> ：<a href="https://github.com/GoogleChrome/lighthouse/blob/a6738e0033e7e5ca308b97c1c36f298b7d399402/types%2Fconfig.d.ts#L29" target="_blank" rel="noopener">PASSJSON</a>[] ,控制了如何加载 url 请求，以及在加载过程中收集哪些信息，每一项都是页面的一次 load，比如上面passes.length 代表页面两次加载，默认 pass 提供了 <code>offlinePass</code> 、<code>defaultPass</code> 、<code>redirectPass</code> 针对无网、弱网、脚本实际执行代码量比例的 case，每个会被注入默认 <a href="https://github.com/GoogleChrome/lighthouse/blob/a6738e0033e7e5ca308b97c1c36f298b7d399402/lighthouse-core%2Fconfig%2Fconstants.js#L125" target="_blank" rel="noopener">passConfig</a> 以确保各配置项存在，每个 pass 都有对应的 gatherers，这些 gatherers 在输出前被注入对应位置下的实例引用，以在 gathering 阶段执行收集逻辑。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 将 Pass 的 defaultConfig 合并到每个 pass</span></span><br><span class="line"><span class="keyword">const</span> passesWithDefaults = Config.augmentPassesWithDefaults(configJSON.passes);</span><br><span class="line"><span class="comment">// 根据 throttlingMethod 判断是否需要5s来计算指标，默认情况下不需要</span></span><br><span class="line">Config.adjustDefaultPassForThrottling(settings, passesWithDefaults); </span><br><span class="line"><span class="comment">// 注入实例引用</span></span><br><span class="line"><span class="keyword">const</span> passes = Config.requireGatherers(passesWithDefaults, configDir);</span><br></pre></td></tr></table></figure>
+
+<p><br>然后应用 configJSON 拓展配置(目前只有官方默认的lighthouse:default)、合并配置插件与flags插件、校验flags(向下兼容旧版本)、初始化测量运行过程中的配置，最终产生一个集成gathers收集项、审计项、运行配置项的Runner options.</p>
+<p>详细过程过还有对 OnlyAudits/OnlyCategories/skipAudits 配置项的处理，以及对setting、pass、categories的校验每个audit、categorie 逻辑引用的审查。<br></p>
+<h2 id="ChromeProtocol-交互"><a href="#ChromeProtocol-交互" class="headerlink" title="ChromeProtocol 交互"></a>ChromeProtocol 交互</h2><figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> config = generateConfig(configJSON, flags); <span class="comment">// 生成Runner Options</span></span><br><span class="line"><span class="keyword">const</span> options = &#123; url, config &#125;; </span><br><span class="line"><span class="keyword">const</span> connection = userConnection || <span class="keyword">new</span> ChromeProtocol(flags.port, flags.hostname);</span><br></pre></td></tr></table></figure>
+
+<p>与 Chrome extension App 类似，通过维护的 Chrome Protocol 协议 <a href="https://chromedevtools.github.io/devtools-protocol/" target="_blank" rel="noopener">chrome.debuggger</a> API 连接通信。<br><br><br>Lighthouse 基于 Websocket 和底层依赖 EventEmit 搭建的 Connection 建立，通过 chrome.debuggger API 与 ChromeLauncher 实例进行通信。<br><img src="https://static.yuanziwen.cn/blog/lighthouse/4.png_plain" alt="image.png"><br>与ChromeLauncher的通信是在实例化Connection的过程中建立的，但仅仅是建立连接，大部分操作(e.g. 唤起实例是在Lighthouse初始化之前，首次创建tab窗口在实例化Driver之后(connect))。新建RequestUrl tab窗口后通过 ChromeLauncher 返回的 webSocketDebuggerUrl 创建 webSocket 连接，调用域能力，派发给 Driver 收集 Gatherers。<br><br><br>浏览器API Protocol：<a href="https://chromedevtools.github.io/devtools-protocol/" target="_blank" rel="noopener">https://chromedevtools.github.io/devtools-protocol/</a><br>域能力API Protocol：<a href="https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker/" target="_blank" rel="noopener">https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker/</a><br>域能力API MAP：<a href="https://github.com/ChromeDevTools/devtools-protocol/blob/master/types/protocol-mapping.d.ts#L625" target="_blank" rel="noopener">https://github.com/ChromeDevTools/devtools-protocol/blob/master/types/protocol-mapping.d.ts#L625</a><br>Driver Event Map: <a href="https://github.com/ChromeDevTools/devtools-protocol/blob/master/types/protocol-mapping.d.ts#L11" target="_blank" rel="noopener">https://github.com/ChromeDevTools/devtools-protocol/blob/master/types/protocol-mapping.d.ts#L11</a><br></p>
+<h2 id="收集Gatherer"><a href="#收集Gatherer" class="headerlink" title="收集Gatherer"></a>收集Gatherer</h2><p>requestUrl 仅支持以下几种协议类型的 href</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> allowedProtocols = [<span class="string">'https:'</span>, <span class="string">'http:'</span>, <span class="string">'chrome:'</span>, <span class="string">'chrome-extension:'</span>];</span><br></pre></td></tr></table></figure>
+
+<p>校验通过后，执行 <code>gatherFn</code> ，开始加载页面，尝试收集所有 passes 聚合的 Artifacts。但在收集过程中，还需要做初始化环境及收集 gatherers，主要逻辑在 <code>GatherRunner.run</code> 内执行。<br></p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">async</span> _gatherArtifactsFromBrowser(requestedUrl, runnerOpts, connection) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!runnerOpts.config.passes) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'No browser artifacts are either provided or requested.'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> driver = runnerOpts.driverMock || <span class="keyword">new</span> Driver(connection);</span><br><span class="line">  <span class="keyword">const</span> gatherOpts = &#123;</span><br><span class="line">    driver,</span><br><span class="line">    requestedUrl,</span><br><span class="line">    settings: runnerOpts.config.settings,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">const</span> artifacts = <span class="keyword">await</span> GatherRunner.run(runnerOpts.config.passes, gatherOpts);</span><br><span class="line">  <span class="keyword">return</span> artifacts;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Driver 作为 Connection 的驱动程序，控制 Connection 以 <a href="https://chromedevtools.github.io/devtools-protocol/" target="_blank" rel="noopener">Chrome.debugger API</a> 规范调用域能力。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> run(passConfigs, options) &#123;</span><br><span class="line">    <span class="keyword">const</span> driver = options.driver;</span><br><span class="line">    <span class="keyword">const</span> artifacts = &#123;&#125;;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// 创建新tab,与返回的 webSocketDebuggerUrl 建立 socket 连接</span></span><br><span class="line">      <span class="keyword">await</span> driver.connect(); </span><br><span class="line">      </span><br><span class="line">    	<span class="comment">// 加载about:blank 空白页，执行一次仿真逻辑</span></span><br><span class="line">      <span class="keyword">await</span> GatherRunner.loadBlank(driver); </span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 初始化 Artifacts 结构以便后续数据填充</span></span><br><span class="line">      <span class="keyword">const</span> baseArtifacts = <span class="keyword">await</span> GatherRunner.initializeBaseArtifacts(options);</span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 计算CPU基准性能? https://docs.google.com/spreadsheets/d/1E0gZwKsxegudkjJl8Fki_sOwHKpqgXwt8aBAfuUaB8A/edit#gid=0</span></span><br><span class="line">      baseArtifacts.BenchmarkIndex = <span class="keyword">await</span> options.driver.getBenchmarkIndex();</span><br><span class="line">			</span><br><span class="line">      <span class="comment">// 设定 Driver 偏好</span></span><br><span class="line">      <span class="keyword">await</span> GatherRunner.setupDriver(driver, options, baseArtifacts.LighthouseRunWarnings);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// ...跑pass</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">      GatherRunner.disposeDriver(driver, options);</span><br><span class="line">      <span class="keyword">throw</span> err;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>需要尽可能纯净的环境，摒弃Chrome程序本身带来的影响，为了防止其他服务/程序与Driver共享目标URL Tab，初次会自动导航到 about:blank，进行一次仿真模拟流程以初始化空白的上下文。在跑 pass 之前设定 Driver 偏好，setupDriver 主要做了以下几件事：</p>
+<ul>
+<li>检查是否有作用域当前origin的ServiceWork，屏蔽干扰。</li>
+<li>设置 UA 和仿真参数。</li>
+<li>启用 Runtime 上下文，为现有上下文立即执行事件。</li>
+<li>跳过 DebuggerPause 并且设异步Request跟踪深度处理过度嵌套的回调</li>
+<li>缓存原生对象 (Promise,Performance,Error,URL,ElementMatches) 以防止被外部引入的 polyfill 破坏。</li>
+<li>启用 PerformanceObserver，开始监听 longTask 及 CPU 空闲状况</li>
+<li>静默对话框 (alert/confirm/prompt) 保证流程通畅。</li>
+<li>利用 requestIdleCallback 进行CPU降速，也就是 Performance 面板的 CPU slowdown。</li>
+</ul>
+<p><br>完成准备工作后，开始跑pass用例。不指定passes情况下默认为 offlinePass、defaultPass、redirectPass。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> isFirstPass = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> passConfig of passConfigs) &#123;</span><br><span class="line">  <span class="keyword">const</span> passContext = &#123;</span><br><span class="line">    driver,</span><br><span class="line">    url: options.requestedUrl,</span><br><span class="line">    settings: options.settings,</span><br><span class="line">    passConfig,</span><br><span class="line">    baseArtifacts,</span><br><span class="line">    LighthouseRunWarnings: baseArtifacts.LighthouseRunWarnings,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">// 从about:blank开始加载目标页面并从 pass 中执行 gatherers 以收集 artifacts</span></span><br><span class="line">  <span class="keyword">const</span> passResults = <span class="keyword">await</span> GatherRunner.runPass(passContext);</span><br><span class="line">  <span class="built_in">Object</span>.assign(artifacts, passResults.artifacts);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 遇到页面加载错误直接退出</span></span><br><span class="line">  <span class="keyword">if</span> (passResults.pageLoadError &amp;&amp; passConfig.loadFailureMode === <span class="string">'fatal'</span>) &#123;</span><br><span class="line">    baseArtifacts.PageLoadError = passResults.pageLoadError;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isFirstPass) &#123;</span><br><span class="line">    <span class="comment">// 填充 manifest 相关信息</span></span><br><span class="line">    <span class="keyword">await</span> GatherRunner.populateBaseArtifacts(passContext);</span><br><span class="line">    isFirstPass = <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">	<span class="comment">// 禁用请求拦截器</span></span><br><span class="line">  <span class="keyword">await</span> driver.fetcher.disableRequestInterception();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每次runPass都是一次完整的加载页面</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> runPass(passContext) &#123;</span><br><span class="line">  <span class="keyword">const</span> gathererResults = &#123;&#125;;</span><br><span class="line">  <span class="keyword">const</span> &#123;driver, passConfig&#125; = passContext;</span><br><span class="line">  <span class="keyword">await</span> GatherRunner.loadBlank(driver, passConfig.blankPage);</span><br><span class="line">  <span class="keyword">await</span> GatherRunner.setupPassNetwork(passContext);</span><br><span class="line">  <span class="keyword">if</span> (GatherRunner.shouldClearCaches(passContext)) &#123;</span><br><span class="line">    <span class="keyword">await</span> driver.cleanBrowserCaches(); <span class="comment">// Clear disk &amp; memory cache if it's a perf run</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">await</span> GatherRunner.beforePass(passContext, gathererResults);</span><br><span class="line">  <span class="keyword">await</span> GatherRunner.beginRecording(passContext);</span><br><span class="line">  <span class="keyword">const</span> &#123;navigationError: possibleNavError&#125; = <span class="keyword">await</span> GatherRunner.loadPage(driver, passContext);</span><br><span class="line">  <span class="keyword">await</span> GatherRunner.pass(passContext, gathererResults);</span><br><span class="line">  <span class="keyword">const</span> loadData = <span class="keyword">await</span> GatherRunner.endRecording(passContext);</span><br><span class="line">  <span class="keyword">await</span> driver.setThrottling(passContext.settings, &#123;useThrottling: <span class="literal">false</span>&#125;);</span><br><span class="line">  GatherRunner._addLoadDataToBaseArtifacts(passContext, loadData, passConfig.passName);</span><br><span class="line">  <span class="keyword">await</span> GatherRunner.afterPass(passContext, loadData, gathererResults);</span><br><span class="line">  <span class="keyword">const</span> artifacts = GatherRunner.collectArtifacts(gathererResults);</span><br><span class="line">  <span class="keyword">return</span> artifacts</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>分为以下几个步骤</p>
+<ul>
+<li>先将页面导航到 about:blank。</li>
+<li>根据 pass 预配置网络环境。</li>
+<li>按需清除硬盘、内存中的缓存。</li>
+<li>执行 beforePass，过程中遍历当前 pass 的 Gatherers，执行每个 gatherer 实例的 beforePass Hook，拿到结果存到 gathererResults 供 pass 使用。</li>
+<li>记录 DevToolLog 和 Trace，后续 Auditing 分析可能用到。</li>
+<li>将页面导航到目标URL，处理重定向等待完整加载后更新 Navigation 信息。</li>
+<li>执行 pass Hook，执行时还未收集到相关 Log 及 Trace。</li>
+<li>停止 DevToolLog 监听，输出 DevToolLogs、NetworkLogs、TraceLogs。</li>
+<li>禁用网络节流，为 afterPass 分析提供准备。</li>
+<li>判断是否存在页面加载错误，如果存在，则不返回 Artifacts ，终止后续步骤。</li>
+<li>保存 DevtoolLogs 和 Trace 记录到 Artifacts。</li>
+<li>执行 afterPass Hook，遍历当前 pass 中每个 gatherer 实例并提供 DevtoolLogs 与 Trace 给 afterPass Hook。</li>
+<li>收集 gathererResult 每个 gatherer afterPass 结果。输出 Artifacts。<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> Gatherer &#123;</span><br><span class="line">  <span class="keyword">get</span> name() &#123; <span class="keyword">return</span> <span class="keyword">this</span>.<span class="keyword">constructor</span>.name;&#125;</span><br><span class="line">  <span class="comment">// 导航前调用</span></span><br><span class="line">  beforePass(passContext) &#123; &#125;</span><br><span class="line">  <span class="comment">// 页面加载后调用</span></span><br><span class="line">  pass(passContext) &#123; &#125;</span><br><span class="line">  <span class="comment">// gatherers 所有 pass 都执行完毕后执行。</span></span><br><span class="line">  afterPass(passContext, loadData) &#123; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>每个 gatherer 包含三个Hook，Artifact 取最后一次Hook输出的结果，e.g.当afterPass未吐出，则采用 pass 结果，以此类推。在每个 Hook 内控制 Driver 调用域能力获取采集结果，最终输出 Artifacts。<br>以 css-usage 为例</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> CSSUsage <span class="keyword">extends</span> Gatherer &#123;</span><br><span class="line">  <span class="keyword">async</span> afterPass(passContext) &#123;</span><br><span class="line">    <span class="keyword">const</span> driver = passContext.driver;</span><br><span class="line">    <span class="comment">/** @type &#123;Array&lt;LH.Crdp.CSS.StyleSheetAddedEvent&gt;&#125; */</span></span><br><span class="line">    <span class="keyword">const</span> stylesheets = [];</span><br><span class="line">    <span class="comment">/** @param &#123;LH.Crdp.CSS.StyleSheetAddedEvent&#125; sheet */</span></span><br><span class="line">    <span class="keyword">const</span> onStylesheetAdded = <span class="function"><span class="params">sheet</span> =&gt;</span> stylesheets.push(sheet);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 收集已注入的样式表</span></span><br><span class="line">    driver.on(<span class="string">'CSS.styleSheetAdded'</span>, onStylesheetAdded);</span><br><span class="line">    <span class="keyword">await</span> driver.sendCommand(<span class="string">'DOM.enable'</span>); <span class="comment">// 启用 DOM</span></span><br><span class="line">    <span class="keyword">await</span> driver.sendCommand(<span class="string">'CSS.enable'</span>); <span class="comment">// 启用 CSS</span></span><br><span class="line">    <span class="keyword">await</span> driver.sendCommand(<span class="string">'CSS.startRuleUsageTracking'</span>); <span class="comment">// 开始记录选择器使用率情况</span></span><br><span class="line">    <span class="keyword">await</span> driver.evaluateAsync(<span class="string">'getComputedStyle(document.body)'</span>); <span class="comment">// why do? 抄底？</span></span><br><span class="line">    driver.off(<span class="string">'CSS.styleSheetAdded'</span>, onStylesheetAdded);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 获取 styleSheet 文本内容</span></span><br><span class="line">    <span class="keyword">const</span> promises = stylesheets.map(<span class="function"><span class="params">sheet</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> styleSheetId = sheet.header.styleSheetId;</span><br><span class="line">      <span class="keyword">return</span> driver.sendCommand(<span class="string">'CSS.getStyleSheetText'</span>, &#123; styleSheetId &#125;).then(<span class="function"><span class="params">content</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">          header: sheet.header,</span><br><span class="line">          content: content.text,</span><br><span class="line">        &#125;;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">const</span> styleSheetInfo = <span class="keyword">await</span> <span class="built_in">Promise</span>.all(promises);</span><br><span class="line">    <span class="comment">// 停止记录，并获取CSS使用率情况</span></span><br><span class="line">    <span class="keyword">const</span> ruleUsageResponse = <span class="keyword">await</span> driver.sendCommand(<span class="string">'CSS.stopRuleUsageTracking'</span>);</span><br><span class="line">    <span class="comment">// 去重避免多次引入同一样式表使结果偏离预期</span></span><br><span class="line">    <span class="keyword">const</span> dedupedStylesheets = <span class="keyword">new</span> Map(styleSheetInfo.map(<span class="function"><span class="params">sheet</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> [sheet.content, sheet];</span><br><span class="line">    &#125;));</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      rules: ruleUsageResponse.ruleUsage,</span><br><span class="line">      stylesheets: <span class="built_in">Array</span>.from(dedupedStylesheets.values()),</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>收集完 Artifacts 后 Driver 完成了它的使命，被 disconnect。 baseArtifacts 也完成定稿，Gathering 阶段结束，开始执行审计逻辑。</p>
+<h2 id="执行审计"><a href="#执行审计" class="headerlink" title="执行审计"></a>执行审计</h2><p>审计的流程依赖于 Artifacts 收集的信息聚合，每个审计由 lighthouse-core/audits 下的内置 Audit 和 configPath 指定的组成，通过传递 Artifacts 给 Audit.audit 审计函数，audit 拿到自己想要的数据进行逻辑运算，返回该审计函数对结果评估的分数和一系列详情数据。该分数大部分情况下处于(0-1)之间，分值的范围取决于对应 Audit id 设置的权重。<br><br><br>audit 的数量远胜 gatherers，分开管理的原因是为了方便管理和拓展额外指标与audit，将两者责任与分工梳理清除。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> auditResultsById = <span class="keyword">await</span> Runner._runAudits(settings, runOpts.config.audits, artifacts, lighthouseRunWarnings);</span><br></pre></td></tr></table></figure>
+
+<p>每个 audit 的主要结构如下</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> Audit &#123;</span><br><span class="line">  <span class="comment">// 计分方式</span></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">get</span> SCORING_MODES() &#123;&#125;</span><br><span class="line">  <span class="comment">// 审计组件元信息 包含id标识、标题、失败标题、描述、审计所需Artifact模块、分数展示模式</span></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">get</span> meta() &#123;&#125;</span><br><span class="line">  <span class="comment">// 审计主逻辑</span></span><br><span class="line">  <span class="keyword">static</span> audit(artifacts, context) &#123;&#125;</span><br><span class="line">  <span class="comment">// 给定分数根据对数正态分布生成分数</span></span><br><span class="line">  <span class="keyword">static</span> computeLogNormalScore(controlPoints, value) &#123;&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 生成表形式的详情和总览</span></span><br><span class="line">  <span class="keyword">static</span> makeTableDetails(headings, results, summary) &#123;&#125;</span><br><span class="line">  <span class="comment">// 生成列表形式的详情</span></span><br><span class="line">  <span class="keyword">static</span> makeListDetails(items) &#123;&#125;</span><br><span class="line">  <span class="comment">// 生成片段详情</span></span><br><span class="line">	<span class="keyword">static</span> makeSnippetDetails() &#123;&#125;</span><br><span class="line">  <span class="comment">// 生成可能的优化点列表信息</span></span><br><span class="line">  <span class="keyword">static</span> makeOpportunityDetails(headings, items, overallSavingsMs, overallSavingsBytes) &#123;&#125;</span><br><span class="line">  <span class="comment">// 生成错误结果</span></span><br><span class="line">  <span class="keyword">static</span> generateErrorAuditResult(audit, errorMessage) &#123;&#125;</span><br><span class="line">  <span class="comment">// 生成Audit结果</span></span><br><span class="line">  <span class="keyword">static</span> generateAuditResult(audit, product) &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>审计过程：</p>
+<ul>
+<li>每个 Audit 导入所依赖的 Artifact 模块并检查是否是有效的模块。</li>
+<li>收集好 Artifact 依赖传递给 Audit.audit 执行审计主逻辑。</li>
+<li>将审计结果再传递给 generateAuditResult 返回 <a href="https://github.com/GoogleChrome/lighthouse/blob/99df40a3fe5fab4d8f5c14febd355e1ef804e444/types%2Faudit.d.ts#L107" target="_blank" rel="noopener">LHAR</a> 对象。</li>
+</ul>
+<p>以 longTask 为例</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// audit/longTasks.js</span></span><br><span class="line"><span class="keyword">class</span> LongTasks <span class="keyword">extends</span> Audit &#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">get</span> meta() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      id: <span class="string">'long-tasks'</span>,</span><br><span class="line">      scoreDisplayMode: Audit.SCORING_MODES.INFORMATIVE,</span><br><span class="line">      title: str_(UIStrings.title),</span><br><span class="line">      description: str_(UIStrings.description),</span><br><span class="line">      requiredArtifacts: [<span class="string">'traces'</span>, <span class="string">'devtoolsLogs'</span>],</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">async</span> audit(artifacts, context) &#123;</span><br><span class="line">    <span class="keyword">const</span> settings = context.settings || &#123;&#125;;</span><br><span class="line">    <span class="comment">// 获取页面加载跟踪信息</span></span><br><span class="line">    <span class="keyword">const</span> trace = artifacts.traces[Audit.DEFAULT_PASS];</span><br><span class="line">    <span class="comment">// 获取主线程上每个 task 记录,包含开始执行时间、耗时、结束时间 事件详情、归属栈、类型等信息</span></span><br><span class="line">    <span class="keyword">const</span> tasks = <span class="keyword">await</span> MainThreadTasks.request(trace, context);</span><br><span class="line">    <span class="comment">// 获取DevToolLog</span></span><br><span class="line">    <span class="keyword">const</span> devtoolsLog = artifacts.devtoolsLogs[LongTasks.DEFAULT_PASS];</span><br><span class="line">    <span class="comment">// 生成 network 记录,包含每个请求的url、timing、发起者、request/response Header、其他请求内容等信息</span></span><br><span class="line">    <span class="keyword">const</span> networkRecords = <span class="keyword">await</span> NetworkRecords.request(devtoolsLog, context);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** @type &#123;Map&lt;LH.TraceEvent, LH.Gatherer.Simulation.NodeTiming&gt;&#125; */</span></span><br><span class="line">    <span class="keyword">const</span> taskTimingsByEvent = <span class="keyword">new</span> Map();</span><br><span class="line">		</span><br><span class="line">    <span class="comment">// 网络模式为仿真情况下 需要进行配合模拟器评估以提高准确性</span></span><br><span class="line">    <span class="keyword">if</span> (settings.throttlingMethod === <span class="string">'simulate'</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> simulatorOptions = &#123;trace, devtoolsLog, settings: context.settings&#125;;</span><br><span class="line">      <span class="comment">// 分析 task 间依赖关系，并梳理每个 task 的类型/耗时</span></span><br><span class="line">      <span class="keyword">const</span> pageGraph = <span class="keyword">await</span> PageDependencyGraph.request(&#123;trace, devtoolsLog&#125;, context);</span><br><span class="line">      <span class="keyword">const</span> simulator = <span class="keyword">await</span> LoadSimulator.request(simulatorOptions, context);</span><br><span class="line">      <span class="keyword">const</span> simulation = <span class="keyword">await</span> simulator.simulate(pageGraph, &#123;label: <span class="string">'long-tasks-diagnostic'</span>&#125;);</span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 过滤掉非cpu操作</span></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">const</span> [node, timing] of simulation.nodeTimings.entries()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node.type !== <span class="string">'cpu'</span>) <span class="keyword">continue</span>;</span><br><span class="line">        taskTimingsByEvent.set(node.event, timing);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">const</span> task of tasks) &#123;</span><br><span class="line">        <span class="keyword">if</span> (task.unbounded || task.parent) <span class="keyword">continue</span>;</span><br><span class="line">        taskTimingsByEvent.set(task.event, task);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">		<span class="comment">// 找出所有外链脚本</span></span><br><span class="line">    <span class="keyword">const</span> jsURLs = BootupTime.getJavaScriptURLs(networkRecords);</span><br><span class="line">    <span class="comment">// 提取前20耗时超过50ms的基本操作</span></span><br><span class="line">    <span class="keyword">const</span> longtasks = tasks</span><br><span class="line">      .map(<span class="function"><span class="params">t</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> timing = taskTimingsByEvent.get(t.event) || DEFAULT_TIMING;</span><br><span class="line">        <span class="keyword">return</span> &#123;...t, duration: timing.duration, startTime: timing.startTime&#125;;</span><br><span class="line">      &#125;)</span><br><span class="line">      .filter(<span class="function"><span class="params">t</span> =&gt;</span> t.duration &gt;= <span class="number">50</span> &amp;&amp; !t.unbounded &amp;&amp; !t.parent)</span><br><span class="line">      .sort(<span class="function">(<span class="params">a, b</span>) =&gt;</span> b.duration - a.duration)</span><br><span class="line">      .slice(<span class="number">0</span>, <span class="number">20</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将长任务的来源按脚本进行分类，如果没有来源就算到 chrome 本身损耗上。</span></span><br><span class="line">    <span class="keyword">const</span> results = longtasks.map(<span class="function"><span class="params">task</span> =&gt;</span> (&#123;</span><br><span class="line">      url: BootupTime.getAttributableURLForTask(task, jsURLs),</span><br><span class="line">      duration: task.duration,</span><br><span class="line">      startTime: task.startTime,</span><br><span class="line">    &#125;));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> headings = [</span><br><span class="line">      &#123;key: <span class="string">'url'</span>, itemType: <span class="string">'url'</span>, text: str_(i18n.UIStrings.columnURL)&#125;,</span><br><span class="line">      &#123;key: <span class="string">'startTime'</span>, itemType: <span class="string">'ms'</span>, granularity: <span class="number">1</span>, text: str_(i18n.UIStrings.columnStartTime)&#125;,</span><br><span class="line">      &#123;key: <span class="string">'duration'</span>, itemType: <span class="string">'ms'</span>, granularity: <span class="number">1</span>, text: str_(i18n.UIStrings.columnDuration)&#125;,</span><br><span class="line">    ];</span><br><span class="line">		<span class="comment">// 合成表格信息以可视化</span></span><br><span class="line">    <span class="keyword">const</span> tableDetails = Audit.makeTableDetails(headings, results);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> displayValue;</span><br><span class="line">    <span class="keyword">if</span> (results.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      displayValue = str_(UIStrings.displayValue, &#123;itemCount: results.length&#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      score: results.length === <span class="number">0</span> ? <span class="number">1</span> : <span class="number">0</span>,</span><br><span class="line">      notApplicable: results.length === <span class="number">0</span>,</span><br><span class="line">      details: tableDetails,</span><br><span class="line">      displayValue,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>建立表将 LHAR 收集起来，供给 Categories 统计分值使用。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> _runAudits(settings, audits, artifacts, runWarnings) &#123;</span><br><span class="line">  <span class="keyword">const</span> auditResultsById = &#123;&#125;; <span class="comment">// auditResult聚合</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> auditDefn of audits) &#123;</span><br><span class="line">    <span class="keyword">const</span> auditId = auditDefn.implementation.meta.id;</span><br><span class="line">    <span class="keyword">const</span> auditResult = <span class="keyword">await</span> Runner._runAudit(auditDefn, artifacts, sharedAuditContext, runWarnings);</span><br><span class="line">    auditResultsById[auditId] = auditResult;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> auditResultsById;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> _runAudit(auditDefn, artifacts, sharedAuditContext, runWarnings) &#123;</span><br><span class="line">  <span class="keyword">const</span> audit = auditDefn.implementation;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> artifactName of audit.meta.requiredArtifacts) &#123;</span><br><span class="line">    <span class="comment">// ... 校验依赖</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> auditOptions = <span class="built_in">Object</span>.assign(&#123;&#125;, audit.defaultOptions, auditDefn.options);</span><br><span class="line">  <span class="keyword">const</span> auditContext = &#123;</span><br><span class="line">    options: auditOptions,</span><br><span class="line">    ...sharedAuditContext,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">// 引入依赖</span></span><br><span class="line">  <span class="keyword">const</span> requestedArtifacts = audit.meta.requiredArtifacts.concat(audit.meta.__internalOptionalArtifacts || []);</span><br><span class="line">  <span class="keyword">const</span> narrowedArtifacts = requestedArtifacts.reduce(<span class="function">(<span class="params">narrowedArtifacts, artifactName</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> requestedArtifact = artifacts[artifactName];</span><br><span class="line">    narrowedArtifacts[artifactName] = requestedArtifact;</span><br><span class="line">    <span class="keyword">return</span> narrowedArtifacts;</span><br><span class="line">  &#125;, &#123;&#125;);</span><br><span class="line">  <span class="comment">// 执行审计主流程</span></span><br><span class="line">  <span class="keyword">const</span> product = <span class="keyword">await</span> audit.audit(narrowedArtifacts, auditContext);</span><br><span class="line">  runWarnings.push(...product.runWarnings || []);</span><br><span class="line">  <span class="comment">// 生成LHR对象</span></span><br><span class="line">  auditResult = Audit.generateAuditResult(audit, product);</span><br><span class="line">	<span class="keyword">return</span> auditResult;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="JSON-amp-Output"><a href="#JSON-amp-Output" class="headerlink" title="JSON &amp; Output"></a>JSON &amp; Output</h2><p><a href="https://github.com/GoogleChrome/lighthouse/blob/99df40a3fe5fab4d8f5c14febd355e1ef804e444/types%2Faudit.d.ts#L107" target="_blank" rel="noopener">LHAR</a> score 仍属于对数正态分布生成的还未与经过映射运算，不算作最终展示的分值，分值是根据设置的 Categories 统计对应 Category 的 (weight(权重)*score(分数))/weight sum(权重总和)。权重声明在默认 <a href="https://github.com/GoogleChrome/lighthouse/blob/9dbb0a57ff523325bb04437c4202780756afda90/lighthouse-core%2Fconfig%2Fdefault-config.js#L420" target="_blank" rel="noopener">config文件</a>，也可以通过外部导入或者命令行参数 <code>--config-path</code> 指定配置文件来改变，分值则依赖于 Audit 审计返回的 AuditResult 聚合，取对应 Category id 标识 score，需要注意的是只有明确展示的 Categoies 才具备分值项。<br><img src="https://static.yuanziwen.cn/blog/lighthouse/5.png_plain" alt="image.png"><br>之后则是国际化与依赖 <a href="https://github.com/GoogleChrome/lighthouse/blob/a1571ba4bc5b7713248ea53e01db085389e634f8/lighthouse-core%2Freport%2Freport-generator.js#L100" target="_blank" rel="noopener">ReportRender</a> 输出JSON/HTML/CSV报告，至此流程over。现在再看整体流程图，清晰许多。<br><img src="https://static.yuanziwen.cn/blog/lighthouse/1.png_plain" alt="image.png"></p>
+<h1 id="自绘流程"><a href="#自绘流程" class="headerlink" title="自绘流程"></a>自绘流程</h1><p><img src="https://static.yuanziwen.cn/blog/lighthouse/6.png_plain" alt="image.png"><br><br><br>对Driver的学习能够梳理 DevTool 和 Chrome 之间的关系和认知，对 gatherers 和 audit 的学习能够让我们认清前端性能的最新标准，非常值得深挖。</p>
+<h1 id="文件依赖"><a href="#文件依赖" class="headerlink" title="文件依赖"></a>文件依赖</h1><p><img src="https://static.yuanziwen.cn/blog/lighthouse/7.png_plain" alt="image.png"><br></p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="blog.yuanziwen.cn">Seven</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="blog.yuanziwen.cn/2021/01/06/Lighthouse-流程/">blog.yuanziwen.cn/2021/01/06/Lighthouse-流程/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2021/05/06/数据管控路由实现状态持久化/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">数据管控路由实现状态持久化</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2020/06/30/实现简版eval/">
+        <span class="next-text nav-default">实现简版eval</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'cxeaTV5BFDCxPmxoCcG9QPxf-gzGzoHsz',
+        appKey: 's577OrPG5sB4Szom6mvHuI1X',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info: guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+<footer id="footer" class="footer"><div class="social-links"><a href="mailto:yuanziwen7489757@gmail.com" class="iconfont icon-email" title="email"></a>
+          <a href="https://juejin.im/user/59aa31a06fb9a02485103ddf" class="iconfont juejin" title="掘金"><div class="img"></div></a>
+        <a href="https://github.com/yzw7489757" class="iconfont icon-github" title="github"></a>
+        </div><div class="copyright">
+  <!--<span class="division">|</span>
+  <span class="theme-info">
+    footer.theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>-->
+  <span class="power-by">
+   <a href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备18011257号-1</a>
+  </span>
+  <span class="copyright-year">&copy;2017 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Seven</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1624262701310')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>
